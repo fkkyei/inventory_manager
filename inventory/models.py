@@ -1,0 +1,73 @@
+from django.db import models
+from django.contrib.auth.hashers import make_password, check_password
+from django.utils import timezone
+import secrets
+import random
+
+
+class User(models.Model):
+    ROLE_CHOICES = [
+        ("admin", "Admin"),
+        ("user", "User"),
+    ]
+
+    email = models.EmailField(unique=True)
+    password = models.CharField(max_length=255)
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default="user")
+    is_active = models.BooleanField(default=True)
+    date_joined = models.DateTimeField(auto_now_add=True)
+
+    # 2FA fields
+    phone_number = models.CharField(max_length=15)
+    two_factor_enabled = models.BooleanField(default=False)
+
+    def set_password(self, raw_password):
+        self.password = make_password(raw_password)
+
+    def check_password(self, raw_password):
+        return check_password(raw_password, self.password)
+
+    def __str__(self):
+        return self.email
+
+    class Meta:
+        app_label = "inventory"
+
+
+class OTPCode(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="otp_codes")
+    code = models.CharField(max_length=6)
+    created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField()
+    is_used = models.BooleanField(default=False)
+
+    @staticmethod
+    def generate_code():
+        return str(random.randint(100000, 999999))
+
+    def is_valid(self):
+        return not self.is_used and self.expires_at > timezone.now()
+
+    def __str__(self):
+        return f"OTP({self.user.email})"
+
+    class Meta:
+        app_label = "inventory"
+
+
+class SessionToken(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sessions")
+    token = models.CharField(max_length=64, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField()
+    is_active = models.BooleanField(default=True)
+
+    @staticmethod
+    def generate_token():
+        return secrets.token_hex(32)
+
+    def __str__(self):
+        return f"Session({self.user.email})"
+
+    class Meta:
+        app_label = "inventory"
