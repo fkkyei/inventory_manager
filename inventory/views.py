@@ -251,3 +251,19 @@ class PasswordResetVerifyView(APIView):
         user.sessions.filter(is_active=True).update(is_active=False)
 
         return Response({"message": "Password reset successful. Please log in with your new password."})
+    
+
+def admin_dashboard(request):
+    return render(request, "admin_dashboard.html")
+    
+def login_view(request):
+    return render(request, "login.html")
+    
+def signup_view(request):
+    return render(request, "signup.html")
+
+
+def user_dashboard(request):
+    return render(request, "user_dashboard.html")
+    
+
