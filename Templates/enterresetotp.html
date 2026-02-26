@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verify OTP</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#f4f7fb;
+    padding:20px;
+}
+.card{
+    width:100%;
+    max-width:400px;
+    background:white;
+    padding:40px 30px;
+    border-radius:15px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.08);
+}
+h2{text-align:center;margin-bottom:10px;color:#1e3a8a;}
+p{text-align:center;margin-bottom:20px;color:#555;}
+.otp-boxes{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:20px;
+}
+.otp-boxes input{
+    width:45px;
+    height:50px;
+    text-align:center;
+    font-size:18px;
+    border:1px solid #ccc;
+    border-radius:8px;
+}
+button{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:8px;
+    background:#2563eb;
+    color:white;
+    cursor:pointer;
+    font-size:15px;
+    font-weight:600;
+}
+button:hover{opacity:0.9;}
+.error{color:red;text-align:center;margin-bottom:10px;font-size:14px;}
+.success{color:green;text-align:center;margin-bottom:10px;font-size:14px;}
+@media(max-width:480px){
+    .otp-boxes input{width:38px;height:45px;}
+}
+</style>
+</head>
+<body>
+<div class="card">
+    <h2>Verify OTP</h2>
+    <p>Enter the 6-digit OTP sent to your email</p>
+    <form id="verifyOtpForm">
+        <div class="otp-boxes">
+            <input type="text" maxlength="1">
+            <input type="text" maxlength="1">
+            <input type="text" maxlength="1">
+            <input type="text" maxlength="1">
+            <input type="text" maxlength="1">
+            <input type="text" maxlength="1">
+        </div>
+
+        <div id="errorMessage" class="error"></div>
+        <div id="successMessage" class="success"></div>
+
+        <button type="submit" id="submitBtn">Verify OTP</button>
+    </form>
+</div>
+
+<script>
+    const inputs = document.querySelectorAll(".otp-boxes input");
+    inputs.forEach((input, index) => {
+        input.addEventListener("input", () => {
+            if(input.value.length === 1 && index < inputs.length - 1){
+                inputs[index + 1].focus();
+            }
+        });
+    });
+
+    document.getElementById('verifyOtpForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const email = urlParams.get('email');
+        const otp = Array.from(inputs).map(input => input.value).join('');
+        const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
+        const btn = document.getElementById('submitBtn');
+
+        errorMessage.textContent = '';
+        successMessage.textContent = '';
+
+        if (otp.length !== 6) {
+            errorMessage.textContent = 'Please enter all 6 digits.';
+            return;
+        }
+
+        btn.textContent = 'Verifying...';
+        btn.disabled = true;
+
+        try {
+            const response = await fetch('/password-reset/verify/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: email,
+                    code: otp,
+                })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                successMessage.textContent = 'OTP verified successfully!';
+                setTimeout(() => {
+                    window.location.href = `/setpassword/?email=${encodeURIComponent(email)}&otp=${otp}`;
+                }, 2000);
+            } else {
+                errorMessage.textContent = data.error || 'Invalid or expired OTP.';
+            }
+
+        } catch (error) {
+            errorMessage.textContent = 'Something went wrong. Please try again.';
+        } finally {
+            btn.textContent = 'Verify OTP';
+            btn.disabled = false;
+        }
+    });
+</script>
+
+</body>
+</html>

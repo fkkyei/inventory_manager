@@ -7,11 +7,12 @@ from django.utils import timezone
 from datetime import timedelta
 from django.conf import settings
 from .models import User, SessionToken, OTPCode, PasswordResetOTP
-from .serializer import RegisterSerializer, UserSerializer,PasswordResetRequestSerializer,PasswordResetVerifySerializer
+from .serializer import RegisterSerializer, UserSerializer,PasswordResetRequestSerializer,PasswordResetVerifySerializer,SetPasswordSerializer
 from .authentication import SessionTokenAuthentication
 from .permissions import IsAdmin, IsRegularUser
 from .sms import send_otp_sms
 from django.shortcuts import render
+import random
 
 class RegisterView(APIView):
     permission_classes = [AllowAny]
@@ -185,7 +186,7 @@ def complete_login(user):
         "message":"Login Successful",
         "session_token": session.token,
         "role": user.role,
-        "redirect": "/admin/dashboard" if user.role == "admin" else "/dashboard",
+        "redirect": "/admin/dashboard" if user.role == "admin" else "/user-dashboard",
     })
 
 
@@ -203,54 +204,75 @@ class PasswordResetRequestView(APIView):
         # Invalidate any previous unused reset OTPs
         user.password_reset_otps.filter(is_used=False).update(is_used=True)
 
+        otp = str(random.randint(100000, 999999))
+        OTPCode.objects.create(
+            user=user,
+            otp=otp,
+            expires_at=timezone.now() + timedelta(minutes=5)
+        )
+            
+        
+        send_mail(
+            subject="Password Reset OTP",
+            message=f"Hi {user.email},\n\nYour password reset OTP is: {otp}\n\nThis OTP expires in 5 minutes.\n\nIf you did not request this, please ignore this email.",
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[user.email],
+        )
+
+
         
 
         return Response({
             "message": "Password reset OTP sent to your registered email.",
             "email": user.email,
+
         }, status=status.HTTP_200_OK)
 
 
+from django.utils import timezone
+
 class PasswordResetVerifyView(APIView):
-    permission_classes = [AllowAny]
-
     def post(self, request):
-
-        serializer = PasswordResetVerifySerializer(data=request.data)
-        if not serializer.is_valid():
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-        email = serializer.validated_data["email"]
-        otp = serializer.validated_data["code"]
-        new_password = serializer.validated_data["new_password"]
+        email = request.data.get("email")
+        code = request.data.get("code")
 
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
-            return Response(
-                {"error": "Invalid request"},
-                status=status.HTTP_400_BAD_REQUEST
-            )
+            return Response({"error": "User not found"}, status=404)
 
-        otp = user.password_reset_otps.filter(code=otp, is_used=False).last()
+        otp_obj = user.otp_codes.filter(
+            otp=code,
+            is_used=False,
+            expires_at__gt=timezone.now()
+        ).last()
 
-        if not otp or not otp.is_valid():
+        if not otp_obj:
             return Response(
                 {"error": "Invalid or expired OTP code"},
                 status=status.HTTP_401_UNAUTHORIZED
             )
 
-        # Mark OTP as used and update password
-        otp.is_used = True
-        otp.save()
+        otp_obj.is_used = True
+        otp_obj.save()
 
-        user.set_password(new_password)
-        user.save()
+        return Response({"message": "OTP verified successfully"})
+        
+class SetPasswordView(APIView):
+    def post(self, request):
+        serializer = SetPasswordSerializer(data=request.data)
 
-        # Invalidate all active sessions so user must log in with new password
-        user.sessions.filter(is_active=True).update(is_active=False)
+        if serializer.is_valid():
+            serializer.save()
 
-        return Response({"message": "Password reset successful. Please log in with your new password."})
+            
+            return Response(
+                {"message": "Password set successfully. Please login."},
+                status=status.HTTP_200_OK
+            )
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
     
 
 def admin_dashboard(request):
@@ -265,5 +287,14 @@ def signup_view(request):
 
 def user_dashboard(request):
     return render(request, "user_dashboard.html")
+
+def reset_otp(request):
+    return render(request, "enterresetotp.html")
+
+def request_otp(request):
+    return render(request, "requestotp.html")
+
+def set_password(request):
+    return render(request, "setpassword.html")
     
 
