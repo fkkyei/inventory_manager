@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from inventory.views import RegisterView,LoginView,LogoutView
+from inventory.views import RegisterView,LoginView,LogoutView,PasswordResetRequestView,PasswordResetVerifyView
 from django.urls import path
 
 urlpatterns = [
@@ -23,5 +23,8 @@ urlpatterns = [
     path("auth/register/", RegisterView.as_view(), name="register"),
     path("auth/login/", LoginView.as_view(), name="login"),
     path("auth/logout/", LogoutView.as_view(), name="logout"),
+     path("password-reset/", PasswordResetRequestView.as_view(), name="password_reset_request"),
+    path("password-reset/verify/", PasswordResetVerifyView.as_view(), name="password_reset_verify")
+    
     
 ]

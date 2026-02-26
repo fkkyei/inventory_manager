@@ -2,10 +2,10 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
-
+from django.core.mail import send_mail
 from django.utils import timezone
 from datetime import timedelta
-
+from django.conf import settings
 from .models import User, SessionToken, OTPCode, PasswordResetOTP
 from .serializer import RegisterSerializer, UserSerializer,PasswordResetRequestSerializer,PasswordResetVerifySerializer
 from .authentication import SessionTokenAuthentication
@@ -21,6 +21,14 @@ class RegisterView(APIView):
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
+
+            send_mail(
+                subject="Account Created Successfully",
+                message=f"Hi {user.email},\n\nYour account has been created successfully.\n\nWelcome aboard!",
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[user.email],
+            )
+
             return Response({
                 "message": "User Registered Successfully",
                 "user": UserSerializer(user).data,
@@ -174,7 +182,7 @@ def complete_login(user):
         expires_at=timezone.now() + timedelta(days=7),
     )
     return Response({
-        "user": UserSerializer(user).data,
+        "message":"Login Successful",
         "session_token": session.token,
         "role": user.role,
         "redirect": "/admin/dashboard" if user.role == "admin" else "/dashboard",
@@ -198,7 +206,7 @@ class PasswordResetRequestView(APIView):
         
 
         return Response({
-            "message": "Password reset OTP sent to your registered phone number.",
+            "message": "Password reset OTP sent to your registered email.",
             "email": user.email,
         }, status=status.HTTP_200_OK)
 
@@ -213,7 +221,7 @@ class PasswordResetVerifyView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         email = serializer.validated_data["email"]
-        code = serializer.validated_data["code"]
+        otp = serializer.validated_data["code"]
         new_password = serializer.validated_data["new_password"]
 
         try:
@@ -224,7 +232,7 @@ class PasswordResetVerifyView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        otp = user.password_reset_otps.filter(code=code, is_used=False).last()
+        otp = user.password_reset_otps.filter(code=otp, is_used=False).last()
 
         if not otp or not otp.is_valid():
             return Response(

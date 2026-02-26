@@ -36,7 +36,7 @@ class User(models.Model):
 
 class OTPCode(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="otp_codes")
-    code = models.CharField(max_length=6)
+    otp = models.CharField(max_length=6)
     created_at = models.DateTimeField(auto_now_add=True)
     expires_at = models.DateTimeField()
     is_used = models.BooleanField(default=False)
