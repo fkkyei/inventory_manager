@@ -11,10 +11,12 @@ from .serializer import RegisterSerializer, UserSerializer,PasswordResetRequestS
 from .authentication import SessionTokenAuthentication
 from .permissions import IsAdmin, IsRegularUser
 from .sms import send_otp_sms
-
+from django.shortcuts import render
 
 class RegisterView(APIView):
     permission_classes = [AllowAny]
+    def get(self, request):
+        return render(request, 'signup.html')
     def post(self, request):
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid():
@@ -28,7 +30,8 @@ class RegisterView(APIView):
 
 class LoginView(APIView):
     permission_classes = [AllowAny]
-
+    def get(self, request):
+        return render(request, 'login.html')
     def post(self, request):
         email = request.data.get("email")
         password = request.data.get("password")

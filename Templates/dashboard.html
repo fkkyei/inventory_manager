@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="sidebar">
+    <h2>Admin Panel</h2>
+    <ul>
+        <li>Dashboard</li>
+        <li>Load Stock (CSV)</li>
+        <li>Stock Overview</li>
+        <li>User Allocations</li>
+        <li>Export Report</li>
+        <li>Logout</li>
+    </ul>
+</div>
+
+<div class="main">
+
+    <div class="header">
+        <h1>Admin Dashboard</h1>
+        <button>Logout</button>
+    </div>
+
+    <!-- Dashboard Stats -->
+    <div class="stats">
+        <div class="stat-box">
+            <p>Total Items</p>
+            <h3>150</h3>
+        </div>
+        <div class="stat-box">
+            <p>Total Allocated</p>
+            <h3>60</h3>
+        </div>
+        <div class="stat-box">
+            <p>Available Stock</p>
+            <h3>90</h3>
+        </div>
+    </div>
+
+    <!-- Upload CSV -->
+    <div class="card">
+        <h2>Load Stock via CSV</h2>
+        <input type="file">
+        <button>Upload</button>
+    </div>
+
+    <!-- Stock Overview -->
+    <div class="card">
+        <h2>Stock Overview</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Total</th>
+                    <th>Allocated</th>
+                    <th>Available</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>USB Keyboard</td>
+                    <td>50</td>
+                    <td>20</td>
+                    <td>30</td>
+                </tr>
+                <tr>
+                    <td>HDMI Cable</td>
+                    <td>100</td>
+                    <td>40</td>
+                    <td>60</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- User Allocations -->
+    <div class="card">
+        <h2>User Allocations</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>User Email</th>
+                    <th>Item</th>
+                    <th>Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>user1@test.com</td>
+                    <td>USB Keyboard</td>
+                    <td>5</td>
+                </tr>
+                <tr>
+                    <td>user2@test.com</td>
+                    <td>HDMI Cable</td>
+                    <td>10</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <button style="margin-top:15px;">Export CSV Report</button>
+    </div>
+
+</div>
+
+</body>
+</html>
