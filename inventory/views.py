@@ -6,8 +6,8 @@ from rest_framework.permissions import AllowAny
 from django.utils import timezone
 from datetime import timedelta
 
-from .models import User, SessionToken, OTPCode
-from .serializer import RegisterSerializer, UserSerializer
+from .models import User, SessionToken, OTPCode, PasswordResetOTP
+from .serializer import RegisterSerializer, UserSerializer,PasswordResetRequestSerializer,PasswordResetVerifySerializer
 from .authentication import SessionTokenAuthentication
 from .permissions import IsAdmin, IsRegularUser
 from .sms import send_otp_sms
@@ -15,12 +15,12 @@ from .sms import send_otp_sms
 
 class RegisterView(APIView):
     permission_classes = [AllowAny]
-
     def post(self, request):
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
             return Response({
+                "message": "User Registered Successfully",
                 "user": UserSerializer(user).data,
             }, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -59,23 +59,8 @@ class LoginView(APIView):
                 status=status.HTTP_403_FORBIDDEN
             )
 
-        # If 2FA is enabled send OTP and pause login
-        if user.two_factor_enabled:
-            # Invalidate any previous unused OTPs
-            user.otp_codes.filter(is_used=False).update(is_used=True)
-
-            otp = OTPCode.objects.create(
-                user=user,
-                code=OTPCode.generate_code(),
-                expires_at=timezone.now() + timedelta(minutes=10),
-            )
-            send_otp_sms(user.phone_number, otp.code)
-            return Response({
-                "message": "OTP sent to your registered phone number.",
-                "requires_otp": True,
-                "email": user.email,
-            }, status=status.HTTP_200_OK)
-
+    
+       
         # No 2FA — complete login normally
         return complete_login(user)
 
@@ -193,3 +178,67 @@ def complete_login(user):
         "role": user.role,
         "redirect": "/admin/dashboard" if user.role == "admin" else "/dashboard",
     })
+
+
+class PasswordResetRequestView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+
+        serializer = PasswordResetRequestSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        user = User.objects.get(email=serializer.validated_data["email"])
+
+        # Invalidate any previous unused reset OTPs
+        user.password_reset_otps.filter(is_used=False).update(is_used=True)
+
+        
+
+        return Response({
+            "message": "Password reset OTP sent to your registered phone number.",
+            "email": user.email,
+        }, status=status.HTTP_200_OK)
+
+
+class PasswordResetVerifyView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+
+        serializer = PasswordResetVerifySerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        email = serializer.validated_data["email"]
+        code = serializer.validated_data["code"]
+        new_password = serializer.validated_data["new_password"]
+
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return Response(
+                {"error": "Invalid request"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        otp = user.password_reset_otps.filter(code=code, is_used=False).last()
+
+        if not otp or not otp.is_valid():
+            return Response(
+                {"error": "Invalid or expired OTP code"},
+                status=status.HTTP_401_UNAUTHORIZED
+            )
+
+        # Mark OTP as used and update password
+        otp.is_used = True
+        otp.save()
+
+        user.set_password(new_password)
+        user.save()
+
+        # Invalidate all active sessions so user must log in with new password
+        user.sessions.filter(is_active=True).update(is_active=False)
+
+        return Response({"message": "Password reset successful. Please log in with your new password."})

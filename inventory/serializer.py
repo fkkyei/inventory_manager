@@ -35,3 +35,18 @@ class UserSerializer(serializers.Serializer):
     phone_number = serializers.CharField(read_only=True)
     two_factor_enabled = serializers.BooleanField(read_only=True)
     date_joined = serializers.DateTimeField(read_only=True)
+
+
+class PasswordResetRequestSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+    def validate_email(self, value):
+        if not User.objects.filter(email=value).exists():
+            raise serializers.ValidationError("No account found with this email.")
+        return value
+
+
+class PasswordResetVerifySerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    code = serializers.CharField(max_length=6)
+    new_password = serializers.CharField(write_only=True, min_length=8)
