@@ -151,10 +151,8 @@ class AdminDashboardView(APIView):
     permission_classes = [IsAdmin]
 
     def get(self, request):
-        return Response({
-            "message": f"Welcome to the admin dashboard, {request.user.email}",
-            "role": request.user.role,
-        })
+        return render(request,'dashboard.html',{{"message":request.user.email,"role":request.user.role,"name":request.user}})
+
 
 
 class UserDashboardView(APIView):

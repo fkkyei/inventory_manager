@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StockVault — My Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue-700: #1d4ed8;
+  --blue-600: #2563eb;
+  --blue-500: #3b82f6;
+  --blue-400: #60a5fa;
+  --blue-300: #93c5fd;
+  --blue-100: #dbeafe;
+  --blue-50:  #eff6ff;
+  --blue-20:  #f5f9ff;
+  --white: #ffffff;
+  --gray-900: #111827;
+  --gray-800: #1f2937;
+  --gray-700: #374151;
+  --gray-600: #4b5563;
+  --gray-500: #6b7280;
+  --gray-400: #9ca3af;
+  --gray-300: #d1d5db;
+  --gray-200: #e5e7eb;
+  --gray-100: #f3f4f6;
+  --gray-50:  #f9fafb;
+  --emerald:  #059669;
+  --emerald-bg: #ecfdf5;
+  --amber:    #d97706;
+  --amber-bg: #fffbeb;
+  --rose:     #e11d48;
+  --rose-bg:  #fff1f2;
+  --border: #e8ecf4;
+  --shadow-xs: 0 1px 2px rgba(0,0,0,.05);
+  --shadow-sm: 0 1px 4px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-md: 0 4px 12px rgba(0,0,0,.07), 0 2px 6px rgba(0,0,0,.04);
+  --shadow-lg: 0 8px 28px rgba(0,0,0,.1), 0 4px 10px rgba(0,0,0,.05);
+  --sidebar-w: 248px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:15px}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--gray-50);color:var(--gray-900);min-height:100vh;display:flex;-webkit-font-smoothing:antialiased}
+
+/* ── SIDEBAR ───────────────────────────────────────── */
+.sidebar{width:var(--sidebar-w);background:var(--white);border-right:1px solid var(--border);position:fixed;inset:0 auto 0 0;display:flex;flex-direction:column;z-index:200}
+.sidebar-top{padding:22px 20px 18px;border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.logo-icon{width:36px;height:36px;border-radius:9px;background:var(--blue-600);display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(37,99,235,.35)}
+.logo-icon svg{color:white}
+.logo-name{font-size:16px;font-weight:800;letter-spacing:-.4px;color:var(--gray-900)}
+.logo-name span{color:var(--blue-600)}
+.sidebar-profile{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:var(--blue-50);border:1px solid var(--blue-100)}
+.profile-avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#059669,#34d399);display:flex;align-items:center;justify-content:center;color:white;font-size:13px;font-weight:700;flex-shrink:0}
+.profile-name{font-size:13px;font-weight:700;color:var(--gray-900);line-height:1.2}
+.profile-role{font-size:11px;color:var(--emerald);font-weight:500}
+
+.nav{padding:12px 12px 0;flex:1;overflow-y:auto}
+.nav-section{margin-bottom:20px}
+.nav-section-label{font-size:10.5px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--gray-400);padding:0 8px;margin-bottom:4px}
+.nav-link{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;cursor:pointer;color:var(--gray-600);font-size:13.5px;font-weight:500;transition:all .15s;margin-bottom:2px;user-select:none}
+.nav-link svg{flex-shrink:0}
+.nav-link:hover{background:var(--gray-100);color:var(--gray-900)}
+.nav-link.active{background:var(--blue-600);color:white;box-shadow:0 3px 10px rgba(37,99,235,.3)}
+.nav-link.active svg{color:white}
+.nav-badge{margin-left:auto;font-size:10.5px;font-weight:700;padding:2px 6px;border-radius:20px;background:var(--blue-100);color:var(--blue-600)}
+.nav-link.active .nav-badge{background:rgba(255,255,255,.2);color:white}
+
+.sidebar-footer{padding:14px 12px;border-top:1px solid var(--border)}
+.signout-btn{width:100%;display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:8px;background:transparent;border:1px solid var(--border);color:var(--gray-500);font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s}
+.signout-btn:hover{background:var(--rose-bg);border-color:#fda4af;color:var(--rose)}
+
+/* ── MAIN ──────────────────────────────────────────── */
+.main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column}
+.topbar{position:sticky;top:0;z-index:100;height:60px;padding:0 28px;background:rgba(255,255,255,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.topbar-title{font-size:16px;font-weight:700;color:var(--gray-900);letter-spacing:-.2px}
+.topbar-right{display:flex;align-items:center;gap:8px}
+.search-wrap{position:relative}
+.search-wrap input{padding:8px 14px 8px 36px;border-radius:8px;border:1px solid var(--border);background:var(--gray-50);font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;color:var(--gray-900);width:196px;outline:none;transition:all .2s}
+.search-wrap input:focus{border-color:var(--blue-400);background:white;box-shadow:0 0 0 3px rgba(59,130,246,.1)}
+.search-wrap input::placeholder{color:var(--gray-400)}
+.search-ico{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--gray-400);pointer-events:none}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 15px;border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;border:none;white-space:nowrap}
+.btn-primary{background:var(--blue-600);color:white;box-shadow:0 2px 6px rgba(37,99,235,.3)}
+.btn-primary:hover{background:var(--blue-700);box-shadow:0 3px 10px rgba(37,99,235,.4)}
+.btn-ghost{background:transparent;color:var(--gray-600);border:1px solid var(--border)}
+.btn-ghost:hover{background:var(--gray-100);border-color:var(--gray-300);color:var(--gray-900)}
+.btn-success{background:var(--emerald);color:white;box-shadow:0 2px 6px rgba(5,150,105,.3)}
+.btn-success:hover{background:#047857}
+.btn-full{width:100%;justify-content:center;padding:10px 15px;font-size:14px}
+.icon-btn{width:36px;height:36px;border-radius:8px;border:1px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;position:relative;color:var(--gray-600)}
+.icon-btn:hover{background:var(--gray-100);border-color:var(--gray-300)}
+.notif-dot{position:absolute;top:6px;right:6px;width:6px;height:6px;border-radius:50%;background:var(--rose);border:1.5px solid white}
+
+/* ── CONTENT ───────────────────────────────────────── */
+.content{padding:24px 28px;flex:1}
+.page{display:none;animation:fadeUp .25s ease both}
+.page.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.page-header{margin-bottom:22px}
+.page-heading{font-size:22px;font-weight:800;letter-spacing:-.4px;color:var(--gray-900);margin-bottom:3px}
+.page-sub{font-size:13.5px;color:var(--gray-500)}
+
+/* ── STAT CARDS ────────────────────────────────────── */
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:22px}
+.stat-card{background:white;border:1px solid var(--border);border-radius:14px;padding:20px;box-shadow:var(--shadow-sm);transition:box-shadow .2s,transform .2s;overflow:hidden;position:relative}
+.stat-card:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}
+.stat-stripe{position:absolute;top:0;left:0;right:0;height:3px;border-radius:14px 14px 0 0}
+.stat-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px}
+.stat-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center}
+.stat-val{font-size:28px;font-weight:800;letter-spacing:-1px;color:var(--gray-900);line-height:1;margin-bottom:4px}
+.stat-lbl{font-size:13px;color:var(--gray-500);font-weight:400}
+
+/* ── CARD ──────────────────────────────────────────── */
+.card{background:white;border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow-sm);overflow:hidden}
+.card-pad{padding:22px}
+.card-head{padding:16px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.card-title{font-size:14.5px;font-weight:700;color:var(--gray-900);letter-spacing:-.2px}
+.card-desc{font-size:12px;color:var(--gray-500);margin-top:2px}
+.card-link{font-size:12px;font-weight:600;color:var(--blue-600);cursor:pointer;display:flex;align-items:center;gap:4px}
+.card-link:hover{color:var(--blue-700)}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;align-items:start}
+
+/* ── RESERVATION CARDS ─────────────────────────────── */
+.res-card{display:flex;align-items:center;gap:13px;padding:14px 16px;border:1px solid var(--border);border-radius:11px;background:white;transition:all .15s;margin-bottom:9px}
+.res-card:hover{border-color:var(--blue-300);background:var(--blue-20);box-shadow:var(--shadow-xs)}
+.res-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.res-info{flex:1}
+.res-name{font-size:14px;font-weight:700;color:var(--gray-900)}
+.res-meta{font-size:11.5px;color:var(--gray-500);margin-top:2px}
+.res-qty{font-size:22px;font-weight:800;letter-spacing:-.5px;text-align:right}
+.res-unit{font-size:10px;color:var(--gray-400);text-align:right}
+
+/* ── BADGES ────────────────────────────────────────── */
+.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:20px;font-size:11.5px;font-weight:600}
+.badge-dot{width:5px;height:5px;border-radius:50%;background:currentColor}
+.badge-green{background:var(--emerald-bg);color:var(--emerald)}
+.badge-amber{background:var(--amber-bg);color:var(--amber)}
+.badge-blue{background:var(--blue-50);color:var(--blue-600)}
+
+/* ── TABLE ─────────────────────────────────────────── */
+.table-toolbar{padding:14px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px}
+.tbl-search{position:relative}
+.tbl-search input{padding:8px 12px 8px 34px;border-radius:8px;border:1px solid var(--border);background:var(--gray-50);font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;color:var(--gray-900);width:200px;outline:none;transition:all .2s}
+.tbl-search input:focus{border-color:var(--blue-400);background:white;box-shadow:0 0 0 3px rgba(59,130,246,.1)}
+.tbl-search input::placeholder{color:var(--gray-400)}
+.tbl-search-ico{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--gray-400)}
+table{width:100%;border-collapse:collapse}
+thead tr{background:var(--gray-50)}
+th{padding:10px 18px;text-align:left;font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--gray-400);border-bottom:1px solid var(--border);white-space:nowrap}
+td{padding:13px 18px;font-size:13.5px;color:var(--gray-700);border-bottom:1px solid var(--gray-100)}
+tbody tr{transition:background .1s}
+tbody tr:hover{background:var(--blue-20)}
+tbody tr:last-child td{border-bottom:none}
+.code-tag{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--blue-600);background:var(--blue-50);padding:2px 7px;border-radius:5px;letter-spacing:.3px}
+.avail-num{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:600;color:var(--emerald)}
+
+/* ── RESERVE FORM ──────────────────────────────────── */
+.fg{margin-bottom:16px}
+.fg label{font-size:12px;font-weight:600;color:var(--gray-700);margin-bottom:6px;display:block;letter-spacing:.1px}
+.fg input,.fg select{width:100%;padding:9px 13px;border-radius:8px;border:1.5px solid var(--border);background:white;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;color:var(--gray-900);outline:none;transition:all .2s}
+.fg input:focus,.fg select:focus{border-color:var(--blue-500);box-shadow:0 0 0 3px rgba(59,130,246,.1)}
+.fg input::placeholder{color:var(--gray-400)}
+.fg select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239ca3af' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 11px center;padding-right:34px;cursor:pointer}
+.qty-row{display:flex;border-radius:8px;overflow:hidden;border:1.5px solid var(--border)}
+.qty-btn{width:40px;height:42px;display:flex;align-items:center;justify-content:center;background:var(--gray-50);border:none;font-size:18px;color:var(--gray-700);cursor:pointer;transition:all .15s;flex-shrink:0}
+.qty-btn:hover{background:var(--blue-50);color:var(--blue-600)}
+.qty-inp{flex:1;height:42px;text-align:center;border:none;background:white;font-family:'JetBrains Mono',monospace;font-size:17px;font-weight:600;color:var(--gray-900);outline:none}
+.info-callout{background:var(--blue-50);border:1px solid var(--blue-100);border-radius:9px;padding:11px 14px;font-size:12.5px;color:var(--blue-700);display:flex;gap:8px;align-items:flex-start;margin-bottom:16px;line-height:1.6}
+
+/* ── PROGRESS ──────────────────────────────────────── */
+.prog-wrap{display:flex;align-items:center;gap:8px}
+.prog-track{height:5px;border-radius:3px;background:var(--gray-100);width:78px;overflow:hidden}
+.prog-fill{height:100%;border-radius:3px}
+.prog-pct{font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--gray-500)}
+
+/* ── SUMMARY BOX ───────────────────────────────────── */
+.summary-box{background:var(--blue-50);border:1px solid var(--blue-100);border-radius:12px;padding:20px;text-align:center}
+.summary-icon{width:48px;height:48px;border-radius:12px;background:white;border:1px solid var(--blue-100);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;color:var(--blue-500);box-shadow:var(--shadow-xs)}
+.summary-title{font-size:14px;font-weight:700;color:var(--gray-900);margin-bottom:4px}
+.summary-sub{font-size:12.5px;color:var(--gray-500)}
+
+/* ── TOAST ─────────────────────────────────────────── */
+#toast{position:fixed;bottom:24px;right:24px;z-index:9999;background:var(--gray-900);color:white;border-radius:10px;padding:13px 18px;display:flex;align-items:center;gap:10px;box-shadow:var(--shadow-lg);font-size:13.5px;font-weight:500;min-width:240px;transform:translateY(56px);opacity:0;transition:all .3s cubic-bezier(.16,1,.3,1)}
+#toast.show{transform:translateY(0);opacity:1}
+.t-ic{display:flex;align-items:center}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-top">
+    <div class="logo">
+      <div class="logo-icon">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+      </div>
+      <div class="logo-name">Stock<span>Vault</span></div>
+    </div>
+    <div class="sidebar-profile">
+      <div class="profile-avatar">JD</div>
+      <div>
+        <div class="profile-name">John Doe</div>
+        <div class="profile-role">Warehouse User</div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="nav">
+    <div class="nav-section">
+      <div class="nav-section-label">My Space</div>
+      <div class="nav-link active" onclick="goPage('home',this)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        My Dashboard
+      </div>
+      <div class="nav-link" onclick="goPage('browse',this)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        Browse Stock
+      </div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">Reservations</div>
+      <div class="nav-link" onclick="goPage('reserve',this)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+        Reserve Items
+      </div>
+      <div class="nav-link" onclick="goPage('my-alloc',this)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        My Allocations
+        <span class="nav-badge">3</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="sidebar-footer">
+    <button class="signout-btn">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+      Sign Out
+    </button>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <header class="topbar">
+    <div class="topbar-title" id="page-title">My Dashboard</div>
+    <div class="topbar-right">
+      <div class="search-wrap">
+        <span class="search-ico">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        </span>
+        <input placeholder="Search stock…">
+      </div>
+      <div class="icon-btn" title="Notifications">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+        <div class="notif-dot"></div>
+      </div>
+      <button class="btn btn-primary" onclick="goPage('reserve',document.querySelector('.nav-link:nth-child(1)'))">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="5" y2="19"/><line x1="5" x2="19" y1="12" y2="12"/></svg>
+        New Reservation
+      </button>
+    </div>
+  </header>
+
+  <div class="content">
+
+    <!-- ── MY DASHBOARD ────────────────────────────── -->
+    <div class="page active" id="page-home">
+      <div class="page-header">
+        <div class="page-heading">Welcome back, John 👋</div>
+        <div class="page-sub">You have 2 pending reservations ready to check out.</div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-stripe" style="background:linear-gradient(90deg,#2563eb,#93c5fd)"></div>
+          <div class="stat-header">
+            <div class="stat-icon" style="background:#eff6ff;color:#2563eb">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+          </div>
+          <div class="stat-val">2</div>
+          <div class="stat-lbl">Active Reservations</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-stripe" style="background:linear-gradient(90deg,#059669,#6ee7b7)"></div>
+          <div class="stat-header">
+            <div class="stat-icon" style="background:#ecfdf5;color:#059669">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+          </div>
+          <div class="stat-val">12</div>
+          <div class="stat-lbl">Items Checked Out</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-stripe" style="background:linear-gradient(90deg,#0891b2,#67e8f9)"></div>
+          <div class="stat-header">
+            <div class="stat-icon" style="background:#ecfeff;color:#0891b2">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2Z"/><path d="M12 12h.01"/><path d="M17 12h.01"/><path d="M7 12h.01"/></svg>
+            </div>
+          </div>
+          <div class="stat-val">1,644</div>
+          <div class="stat-lbl">Available in Warehouse</div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="card card-pad">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+            <div class="card-title">Pending Reservations</div>
+            <span class="card-link" onclick="goPage('reserve',null)">
+              Reserve more
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </span>
+          </div>
+          <div class="res-card">
+            <div class="res-icon" style="background:#eff6ff;color:#2563eb">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="M6 8h.01M10 8h4"/></svg>
+            </div>
+            <div class="res-info">
+              <div class="res-name">USB Keyboard</div>
+              <div class="res-meta">ITEM001 · Reserved Jan 15</div>
+            </div>
+            <div>
+              <div class="res-qty" style="color:#2563eb">5</div>
+              <div class="res-unit">units</div>
+            </div>
+            <button class="btn btn-success" style="font-size:12px;padding:7px 13px" onclick="doCheckout('USB Keyboard')">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              Checkout
+            </button>
+          </div>
+          <div class="res-card">
+            <div class="res-icon" style="background:#eff6ff;color:#2563eb">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div class="res-info">
+              <div class="res-name">Wireless Mouse</div>
+              <div class="res-meta">ITEM003 · Reserved Jan 16</div>
+            </div>
+            <div>
+              <div class="res-qty" style="color:#2563eb">2</div>
+              <div class="res-unit">units</div>
+            </div>
+            <button class="btn btn-success" style="font-size:12px;padding:7px 13px" onclick="doCheckout('Wireless Mouse')">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              Checkout
+            </button>
+          </div>
+        </div>
+
+        <div class="card card-pad">
+          <div style="margin-bottom:16px">
+            <div class="card-title">Recently Checked Out</div>
+          </div>
+          <div class="res-card" style="cursor:default">
+            <div class="res-icon" style="background:var(--emerald-bg);color:var(--emerald)">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M15 2H9a1 1 0 0 0-1 1v2c0 .6.4 1 1 1h6c.6 0 1-.4 1-1V3c0-.6-.4-1-1-1z"/><path d="m9 12 2 2 4-4"/></svg>
+            </div>
+            <div class="res-info">
+              <div class="res-name">Monitor Stand</div>
+              <div class="res-meta">ITEM004 · Jan 10</div>
+            </div>
+            <div>
+              <div class="res-qty" style="color:var(--emerald)">1</div>
+              <div class="res-unit">unit</div>
+            </div>
+            <span class="badge badge-green"><div class="badge-dot"></div>Done</span>
+          </div>
+          <div class="res-card" style="cursor:default">
+            <div class="res-icon" style="background:var(--emerald-bg);color:var(--emerald)">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12V8a4 4 0 0 1 4-4h12"/><path d="M4 12v4a4 4 0 0 0 4 4h12"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>
+            </div>
+            <div class="res-info">
+              <div class="res-name">USB-C Hub</div>
+              <div class="res-meta">ITEM005 · Jan 12</div>
+            </div>
+            <div>
+              <div class="res-qty" style="color:var(--emerald)">3</div>
+              <div class="res-unit">units</div>
+            </div>
+            <span class="badge badge-green"><div class="badge-dot"></div>Done</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── BROWSE STOCK ─────────────────────────────── -->
+    <div class="page" id="page-browse">
+      <div class="page-header">
+        <div class="page-heading">Browse Available Stock</div>
+        <div class="page-sub">All items currently available for reservation.</div>
+      </div>
+      <div class="card">
+        <div class="table-toolbar">
+          <div class="card-title">Warehouse Inventory</div>
+          <div class="tbl-search">
+            <span class="tbl-search-ico">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            </span>
+            <input placeholder="Search items…" oninput="filterTbl(this,'browse-body')">
+          </div>
+        </div>
+        <table>
+          <thead><tr><th>Code</th><th>Item Name</th><th>Available</th><th>Status</th><th>Action</th></tr></thead>
+          <tbody id="browse-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── RESERVE ITEMS ────────────────────────────── -->
+    <div class="page" id="page-reserve">
+      <div class="page-header">
+        <div class="page-heading">Reserve Stock</div>
+        <div class="page-sub">Select an item and quantity to reserve from the warehouse.</div>
+      </div>
+      <div class="two-col">
+        <div class="card card-pad">
+          <div class="card-title" style="margin-bottom:16px">Reservation Form</div>
+          <div class="info-callout">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+            Reserving stock immediately reduces available warehouse quantity. You can check out at any time.
+          </div>
+          <div class="fg">
+            <label>Select Item</label>
+            <select id="res-select" onchange="updateSummary()">
+              <option value="">Choose a stock item…</option>
+              <option value="USB Keyboard|30">USB Keyboard — Available: 30</option>
+              <option value="HDMI Cable|60">HDMI Cable — Available: 60</option>
+              <option value="Wireless Mouse|45">Wireless Mouse — Available: 45</option>
+              <option value="Monitor Stand|25">Monitor Stand — Available: 25</option>
+              <option value="USB-C Hub|90">USB-C Hub — Available: 90</option>
+              <option value="Laptop Stand|28">Laptop Stand — Available: 28</option>
+            </select>
+          </div>
+          <div class="fg">
+            <label>Quantity</label>
+            <div class="qty-row">
+              <button class="qty-btn" onclick="adjQty(-1)">−</button>
+              <input class="qty-inp" id="res-qty" type="number" value="1" min="1" oninput="updateSummary()">
+              <button class="qty-btn" onclick="adjQty(1)">+</button>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-full" onclick="doReserve()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Confirm Reservation
+          </button>
+        </div>
+        <div class="card card-pad" id="reserve-summary">
+          <div class="card-title" style="margin-bottom:16px">Reservation Summary</div>
+          <div class="summary-box" id="summary-empty">
+            <div class="summary-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+            </div>
+            <div class="summary-title">No item selected</div>
+            <div class="summary-sub">Choose an item on the left to see details</div>
+          </div>
+          <div id="summary-details" style="display:none">
+            <div style="background:var(--gray-50);border:1px solid var(--border);border-radius:10px;padding:18px;margin-bottom:14px">
+              <div style="font-size:13px;color:var(--gray-500);margin-bottom:8px;font-weight:600;letter-spacing:.3px;text-transform:uppercase;font-size:11px">Selected Item</div>
+              <div style="font-size:17px;font-weight:800;color:var(--gray-900);margin-bottom:4px" id="sum-name">—</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--blue-600);margin-bottom:14px" id="sum-code">—</div>
+              <div style="display:flex;justify-content:space-between;font-size:13px">
+                <span style="color:var(--gray-500)">Qty to Reserve</span>
+                <span style="font-weight:700;font-family:'JetBrains Mono',monospace" id="sum-qty">—</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:13px;margin-top:6px">
+                <span style="color:var(--gray-500)">Available After</span>
+                <span style="font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--emerald)" id="sum-after">—</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MY ALLOCATIONS ──────────────────────────── -->
+    <div class="page" id="page-my-alloc">
+      <div class="page-header">
+        <div class="page-heading">My Allocations</div>
+        <div class="page-sub">Your current reservations and checked-out items.</div>
+      </div>
+      <div class="card">
+        <div class="table-toolbar">
+          <div class="card-title">All My Items</div>
+          <div class="tbl-search">
+            <span class="tbl-search-ico">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            </span>
+            <input placeholder="Search items…" oninput="filterTbl(this,'alloc-body')">
+          </div>
+        </div>
+        <table>
+          <thead><tr><th>Item</th><th>Code</th><th>Quantity</th><th>Status</th><th>Date</th><th>Action</th></tr></thead>
+          <tbody id="alloc-body">
+            <tr>
+              <td style="font-weight:600;color:var(--gray-900)">USB Keyboard</td>
+              <td><span class="code-tag">ITEM001</span></td>
+              <td style="font-family:'JetBrains Mono',monospace;font-weight:600">5</td>
+              <td><span class="badge badge-amber"><div class="badge-dot"></div>Reserved</span></td>
+              <td style="color:var(--gray-400);font-family:'JetBrains Mono',monospace;font-size:12px">2025-01-15</td>
+              <td>
+                <button class="btn btn-success" style="font-size:12px;padding:6px 12px" onclick="doCheckout('USB Keyboard')">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                  Checkout
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td style="font-weight:600;color:var(--gray-900)">Wireless Mouse</td>
+              <td><span class="code-tag">ITEM003</span></td>
+              <td style="font-family:'JetBrains Mono',monospace;font-weight:600">2</td>
+              <td><span class="badge badge-amber"><div class="badge-dot"></div>Reserved</span></td>
+              <td style="color:var(--gray-400);font-family:'JetBrains Mono',monospace;font-size:12px">2025-01-16</td>
+              <td>
+                <button class="btn btn-success" style="font-size:12px;padding:6px 12px" onclick="doCheckout('Wireless Mouse')">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                  Checkout
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td style="font-weight:600;color:var(--gray-900)">Monitor Stand</td>
+              <td><span class="code-tag">ITEM004</span></td>
+              <td style="font-family:'JetBrains Mono',monospace;font-weight:600">1</td>
+              <td><span class="badge badge-green"><div class="badge-dot"></div>Checked Out</span></td>
+              <td style="color:var(--gray-400);font-family:'JetBrains Mono',monospace;font-size:12px">2025-01-10</td>
+              <td><span style="color:var(--gray-300);font-size:13px">—</span></td>
+            </tr>
+            <tr>
+              <td style="font-weight:600;color:var(--gray-900)">USB-C Hub</td>
+              <td><span class="code-tag">ITEM005</span></td>
+              <td style="font-family:'JetBrains Mono',monospace;font-weight:600">3</td>
+              <td><span class="badge badge-green"><div class="badge-dot"></div>Checked Out</span></td>
+              <td style="color:var(--gray-400);font-family:'JetBrains Mono',monospace;font-size:12px">2025-01-12</td>
+              <td><span style="color:var(--gray-300);font-size:13px">—</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div id="toast"><span class="t-ic" id="t-ic"></span><span id="t-msg"></span></div>
+
+<script>
+const STOCK = [
+  {code:'ITEM001',name:'USB Keyboard',   total:50,  allocated:20},
+  {code:'ITEM002',name:'HDMI Cable',     total:100, allocated:40},
+  {code:'ITEM003',name:'Wireless Mouse', total:75,  allocated:30},
+  {code:'ITEM004',name:'Monitor Stand',  total:30,  allocated:5},
+  {code:'ITEM005',name:'USB-C Hub',      total:120, allocated:30},
+  {code:'ITEM006',name:'Laptop Stand',   total:40,  allocated:12},
+  {code:'ITEM007',name:'Webcam HD',      total:60,  allocated:25},
+  {code:'ITEM008',name:'Headset',        total:55,  allocated:18},
+];
+
+const PAGES = {home:'My Dashboard', browse:'Browse Stock', reserve:'Reserve Items', 'my-alloc':'My Allocations'};
+
+function goPage(id, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-'+id)?.classList.add('active');
+  document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
+  el?.classList.add('active');
+  document.getElementById('page-title').textContent = PAGES[id] || id;
+}
+
+window.addEventListener('load', buildBrowse);
+
+function buildBrowse() {
+  const tb = document.getElementById('browse-body'); if(!tb) return;
+  tb.innerHTML = STOCK.map(d => {
+    const av = d.total - d.allocated;
+    const badge = av > 20
+      ? `<span class="badge badge-green"><div class="badge-dot"></div>Available</span>`
+      : `<span class="badge badge-amber"><div class="badge-dot"></div>Limited</span>`;
+    return `<tr>
+      <td><span class="code-tag">${d.code}</span></td>
+      <td style="font-weight:600;color:var(--gray-900)">${d.name}</td>
+      <td><span class="avail-num">${av}</span></td>
+      <td>${badge}</td>
+      <td>
+        <button class="btn btn-primary" style="font-size:12px;padding:6px 12px" onclick="quickReserve('${d.name}')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="5" y2="19"/><line x1="5" x2="19" y1="12" y2="12"/></svg>
+          Reserve
+        </button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function filterTbl(input, id) {
+  const q = input.value.toLowerCase();
+  document.querySelectorAll('#'+id+' tr').forEach(r => { r.style.display = r.textContent.toLowerCase().includes(q)?'':'none'; });
+}
+
+function adjQty(d) {
+  const el = document.getElementById('res-qty');
+  el.value = Math.max(1, parseInt(el.value||1)+d);
+  updateSummary();
+}
+
+function updateSummary() {
+  const sel = document.getElementById('res-select');
+  const qty = parseInt(document.getElementById('res-qty').value)||1;
+  const empty = document.getElementById('summary-empty');
+  const details = document.getElementById('summary-details');
+  if (!sel.value) { empty.style.display='block'; details.style.display='none'; return; }
+  const [name, avail] = sel.value.split('|');
+  const after = parseInt(avail) - qty;
+  empty.style.display='none';
+  details.style.display='block';
+  document.getElementById('sum-name').textContent = name;
+  document.getElementById('sum-code').textContent = 'ITEM00' + (sel.selectedIndex);
+  document.getElementById('sum-qty').textContent = qty;
+  document.getElementById('sum-after').textContent = after >= 0 ? after : '⚠ Exceeds stock';
+  document.getElementById('sum-after').style.color = after >= 0 ? 'var(--emerald)' : 'var(--rose)';
+}
+
+function doReserve() {
+  const sel = document.getElementById('res-select');
+  if (!sel.value) { toast('warn','Please select an item first'); return; }
+  const [name] = sel.value.split('|');
+  const qty = document.getElementById('res-qty').value;
+  toast('success', `${qty}× ${name} reserved successfully`);
+  sel.value=''; document.getElementById('res-qty').value=1; updateSummary();
+}
+
+function doCheckout(name) {
+  toast('success', `${name} checked out successfully`);
+}
+
+function quickReserve(name) {
+  toast('success', `${name} added to your reservations`);
+}
+
+let _t;
+const icons = {
+  success:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`,
+  warn:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>`,
+};
+function toast(type, msg) {
+  clearTimeout(_t);
+  document.getElementById('t-ic').innerHTML = icons[type]||icons.success;
+  document.getElementById('t-msg').textContent = msg;
+  document.getElementById('toast').classList.add('show');
+  _t = setTimeout(()=>document.getElementById('toast').classList.remove('show'), 3400);
+}
+</script>
+</body>
+</html>
