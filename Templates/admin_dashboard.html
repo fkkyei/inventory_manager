@@ -44,147 +44,59 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 html { font-size: 15px; }
-
-body {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  background: var(--gray-50);
-  color: var(--gray-900);
-  min-height: 100vh;
-  display: flex;
-  -webkit-font-smoothing: antialiased;
-}
+body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--gray-50); color: var(--gray-900); min-height: 100vh; display: flex; -webkit-font-smoothing: antialiased; }
 
 /* ── SIDEBAR ─────────────────────────────────────────── */
-.sidebar {
-  width: var(--sidebar-w);
-  background: var(--white);
-  border-right: 1px solid var(--border);
-  position: fixed; inset: 0 auto 0 0;
-  display: flex; flex-direction: column;
-  z-index: 200;
-}
-
-.sidebar-top {
-  padding: 22px 20px 18px;
-  border-bottom: 1px solid var(--border);
-}
-
-.logo {
-  display: flex; align-items: center; gap: 10px; margin-bottom: 18px;
-}
-.logo-icon {
-  width: 36px; height: 36px; border-radius: 9px;
-  background: var(--blue-600);
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 3px 10px rgba(37,99,235,.35);
-}
+.sidebar { width: var(--sidebar-w); background: var(--white); border-right: 1px solid var(--border); position: fixed; inset: 0 auto 0 0; display: flex; flex-direction: column; z-index: 200; transition: transform .3s ease; }
+.sidebar-top { padding: 22px 20px 18px; border-bottom: 1px solid var(--border); }
+.logo { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+.logo-icon { width: 36px; height: 36px; border-radius: 9px; background: var(--blue-600); display: flex; align-items: center; justify-content: center; box-shadow: 0 3px 10px rgba(37,99,235,.35); }
 .logo-icon svg { color: white; }
-.logo-name {
-  font-size: 16px; font-weight: 800; letter-spacing: -.4px; color: var(--gray-900);
-}
+.logo-name { font-size: 16px; font-weight: 800; letter-spacing: -.4px; color: var(--gray-900); }
 .logo-name span { color: var(--blue-600); }
-
-.sidebar-profile {
-  display: flex; align-items: center; gap: 10px;
-  padding: 10px 12px; border-radius: 10px;
-  background: var(--blue-50); border: 1px solid var(--blue-100);
-}
-.profile-avatar {
-  width: 34px; height: 34px; border-radius: 50%;
-  background: linear-gradient(135deg, var(--blue-600), var(--blue-400));
-  display: flex; align-items: center; justify-content: center;
-  color: white; font-size: 13px; font-weight: 700; flex-shrink: 0;
-}
+.sidebar-profile { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; background: var(--blue-50); border: 1px solid var(--blue-100); }
+.profile-avatar { width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg, var(--blue-600), var(--blue-400)); display: flex; align-items: center; justify-content: center; color: white; font-size: 13px; font-weight: 700; flex-shrink: 0; }
 .profile-name { font-size: 13px; font-weight: 700; color: var(--gray-900); line-height: 1.2; }
 .profile-role { font-size: 11px; color: var(--blue-500); font-weight: 500; }
-
 .nav { padding: 12px 12px 0; flex: 1; overflow-y: auto; }
 .nav-section { margin-bottom: 20px; }
-.nav-section-label {
-  font-size: 10.5px; font-weight: 700; letter-spacing: .8px;
-  text-transform: uppercase; color: var(--gray-400);
-  padding: 0 8px; margin-bottom: 4px;
-}
-.nav-link {
-  display: flex; align-items: center; gap: 10px;
-  padding: 9px 10px; border-radius: 8px;
-  cursor: pointer; color: var(--gray-600);
-  font-size: 13.5px; font-weight: 500;
-  transition: all .15s; margin-bottom: 2px;
-  user-select: none;
-}
+.nav-section-label { font-size: 10.5px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; color: var(--gray-400); padding: 0 8px; margin-bottom: 4px; }
+.nav-link { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 8px; cursor: pointer; color: var(--gray-600); font-size: 13.5px; font-weight: 500; transition: all .15s; margin-bottom: 2px; user-select: none; }
 .nav-link svg { flex-shrink: 0; transition: color .15s; }
 .nav-link:hover { background: var(--gray-100); color: var(--gray-900); }
-.nav-link.active {
-  background: var(--blue-600); color: white;
-  box-shadow: 0 3px 10px rgba(37,99,235,.3);
-}
+.nav-link.active { background: var(--blue-600); color: white; box-shadow: 0 3px 10px rgba(37,99,235,.3); }
 .nav-link.active svg { color: white; }
-.nav-badge {
-  margin-left: auto; font-size: 10.5px; font-weight: 700;
-  padding: 2px 6px; border-radius: 20px;
-  background: var(--blue-100); color: var(--blue-600);
-}
+.nav-badge { margin-left: auto; font-size: 10.5px; font-weight: 700; padding: 2px 6px; border-radius: 20px; background: var(--blue-100); color: var(--blue-600); }
 .nav-link.active .nav-badge { background: rgba(255,255,255,.2); color: white; }
-
-.sidebar-footer {
-  padding: 14px 12px;
-  border-top: 1px solid var(--border);
-}
-.signout-btn {
-  width: 100%; display: flex; align-items: center; gap: 8px;
-  padding: 9px 12px; border-radius: 8px;
-  background: transparent; border: 1px solid var(--border);
-  color: var(--gray-500); font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 13px; font-weight: 500; cursor: pointer;
-  transition: all .15s;
-}
+.sidebar-footer { padding: 14px 12px; border-top: 1px solid var(--border); }
+.signout-btn { width: 100%; display: flex; align-items: center; gap: 8px; padding: 9px 12px; border-radius: 8px; background: transparent; border: 1px solid var(--border); color: var(--gray-500); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; transition: all .15s; }
 .signout-btn:hover { background: var(--rose-50); border-color: #fda4af; color: var(--rose); }
+
+/* ── OVERLAY ───────────────────────────────────────── */
+.sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 199; }
+.sidebar-overlay.show { display: block; }
+
+/* ── HAMBURGER ─────────────────────────────────────── */
+.hamburger { display: none; width: 36px; height: 36px; border-radius: 8px; border: 1px solid var(--border); background: white; align-items: center; justify-content: center; cursor: pointer; color: var(--gray-600); flex-shrink: 0; }
 
 /* ── MAIN ──────────────────────────────────────────── */
 .main { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; }
-
-.topbar {
-  position: sticky; top: 0; z-index: 100;
-  height: 60px; padding: 0 28px;
-  background: rgba(255,255,255,.95);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: space-between;
-}
-.topbar-title { font-size: 16px; font-weight: 700; color: var(--gray-900); letter-spacing: -.2px; }
-
+.topbar { position: sticky; top: 0; z-index: 100; height: 60px; padding: 0 28px; background: rgba(255,255,255,.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.topbar-title { font-size: 16px; font-weight: 700; color: var(--gray-900); letter-spacing: -.2px; white-space: nowrap; }
 .topbar-right { display: flex; align-items: center; gap: 8px; }
-
 .search-wrap { position: relative; }
-.search-wrap input {
-  padding: 8px 14px 8px 36px;
-  border-radius: 8px; border: 1px solid var(--border);
-  background: var(--gray-50);
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 13px; color: var(--gray-900);
-  width: 196px; outline: none;
-  transition: all .2s;
-}
+.search-wrap input { padding: 8px 14px 8px 36px; border-radius: 8px; border: 1px solid var(--border); background: var(--gray-50); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; color: var(--gray-900); width: 196px; outline: none; transition: all .2s; }
 .search-wrap input:focus { border-color: var(--blue-400); background: white; box-shadow: 0 0 0 3px rgba(59,130,246,.1); }
 .search-wrap input::placeholder { color: var(--gray-400); }
 .search-ico { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--gray-400); pointer-events: none; }
-
 .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 15px; border-radius: 8px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .15s; border: none; white-space: nowrap; }
 .btn-primary { background: var(--blue-600); color: white; box-shadow: 0 2px 6px rgba(37,99,235,.3); }
 .btn-primary:hover { background: var(--blue-700); box-shadow: 0 3px 10px rgba(37,99,235,.4); }
 .btn-ghost { background: transparent; color: var(--gray-600); border: 1px solid var(--border); }
 .btn-ghost:hover { background: var(--gray-100); border-color: var(--gray-300); color: var(--gray-900); }
 .btn-full { width: 100%; justify-content: center; padding: 10px 15px; font-size: 14px; }
-
-.icon-btn {
-  width: 36px; height: 36px; border-radius: 8px;
-  border: 1px solid var(--border); background: white;
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer; transition: all .15s; position: relative; color: var(--gray-600);
-}
+.icon-btn { width: 36px; height: 36px; border-radius: 8px; border: 1px solid var(--border); background: white; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all .15s; position: relative; color: var(--gray-600); }
 .icon-btn:hover { background: var(--gray-100); border-color: var(--gray-300); }
 .notif-dot { position: absolute; top: 6px; right: 6px; width: 6px; height: 6px; border-radius: 50%; background: var(--rose); border: 1.5px solid white; }
 
@@ -193,31 +105,21 @@ body {
 .page { display: none; animation: fadeUp .25s ease both; }
 .page.active { display: block; }
 @keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
-
 .page-header { margin-bottom: 22px; }
 .page-heading { font-size: 22px; font-weight: 800; letter-spacing: -.4px; color: var(--gray-900); margin-bottom: 3px; }
 .page-sub { font-size: 13.5px; color: var(--gray-500); }
 
 /* ── STAT CARDS ────────────────────────────────────── */
 .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 22px; }
-
-.stat-card {
-  background: white; border: 1px solid var(--border);
-  border-radius: 14px; padding: 20px;
-  box-shadow: var(--shadow-sm);
-  transition: box-shadow .2s, transform .2s;
-  overflow: hidden; position: relative;
-}
+.stat-card { background: white; border: 1px solid var(--border); border-radius: 14px; padding: 20px; box-shadow: var(--shadow-sm); transition: box-shadow .2s, transform .2s; overflow: hidden; position: relative; }
 .stat-card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
 .stat-stripe { position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: 14px 14px 0 0; }
-
 .stat-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 14px; }
 .stat-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
 .stat-pill { font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 20px; display: flex; align-items: center; gap: 2px; }
 .pill-up   { background: var(--emerald-50); color: var(--emerald); }
 .pill-info { background: var(--blue-50);    color: var(--blue-600); }
 .pill-warn { background: var(--amber-50);   color: var(--amber); }
-
 .stat-val { font-size: 28px; font-weight: 800; letter-spacing: -1px; color: var(--gray-900); line-height: 1; margin-bottom: 4px; }
 .stat-lbl { font-size: 13px; color: var(--gray-500); font-weight: 400; }
 .sparkline { display: flex; align-items: flex-end; gap: 2.5px; height: 26px; margin-top: 12px; }
@@ -226,7 +128,7 @@ body {
 
 /* ── CARD ──────────────────────────────────────────── */
 .card { background: white; border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--shadow-sm); overflow: hidden; }
-.card-head { padding: 16px 22px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.card-head { padding: 16px 22px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
 .card-title { font-size: 14.5px; font-weight: 700; color: var(--gray-900); letter-spacing: -.2px; }
 .card-desc { font-size: 12px; color: var(--gray-500); margin-top: 2px; }
 .card-body { padding: 22px; }
@@ -235,7 +137,6 @@ body {
 
 /* ── CHARTS ────────────────────────────────────────── */
 .charts-row { display: grid; grid-template-columns: 1fr 320px; gap: 16px; margin-bottom: 20px; }
-
 .bar-grid { display: flex; align-items: flex-end; gap: 10px; height: 148px; }
 .bar-group { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1; }
 .bar-cols { display: flex; gap: 3px; align-items: flex-end; flex: 1; width: 100%; }
@@ -245,8 +146,6 @@ body {
 .chart-legend { display: flex; gap: 14px; margin-top: 14px; flex-wrap: wrap; }
 .leg-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--gray-500); }
 .leg-swatch { width: 8px; height: 8px; border-radius: 2px; }
-
-/* Donut */
 .donut-outer { display: flex; flex-direction: column; align-items: center; padding: 18px 22px; }
 .donut-ring { position: relative; width: 150px; height: 150px; margin-bottom: 18px; }
 .donut-svg { width: 100%; height: 100%; transform: rotate(-90deg); }
@@ -260,37 +159,33 @@ body {
 .donut-num { font-size: 12.5px; font-family: 'JetBrains Mono', monospace; font-weight: 500; color: var(--gray-900); }
 
 /* ── TABLE ─────────────────────────────────────────── */
-.table-toolbar { padding: 14px 22px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.table-toolbar { padding: 14px 22px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .tbl-search { position: relative; }
 .tbl-search input { padding: 8px 12px 8px 34px; border-radius: 8px; border: 1px solid var(--border); background: var(--gray-50); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; color: var(--gray-900); width: 200px; outline: none; transition: all .2s; }
 .tbl-search input:focus { border-color: var(--blue-400); background: white; box-shadow: 0 0 0 3px rgba(59,130,246,.1); }
 .tbl-search input::placeholder { color: var(--gray-400); }
 .tbl-search-ico { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--gray-400); }
-
-table { width: 100%; border-collapse: collapse; }
+table { width: 100%; border-collapse: collapse; min-width: 500px; }
 thead tr { background: var(--gray-50); }
 th { padding: 10px 18px; text-align: left; font-size: 11px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; color: var(--gray-400); border-bottom: 1px solid var(--border); white-space: nowrap; }
 td { padding: 13px 18px; font-size: 13.5px; color: var(--gray-700); border-bottom: 1px solid var(--gray-100); }
 tbody tr { transition: background .1s; }
 tbody tr:hover { background: var(--blue-20); }
 tbody tr:last-child td { border-bottom: none; }
-
 .code-tag { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: var(--blue-600); background: var(--blue-50); padding: 2px 7px; border-radius: 5px; letter-spacing: .3px; }
-
 .badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 20px; font-size: 11.5px; font-weight: 600; }
 .badge-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
 .badge-green  { background: var(--emerald-50); color: var(--emerald); }
 .badge-amber  { background: var(--amber-50);   color: var(--amber); }
 .badge-rose   { background: var(--rose-50);    color: var(--rose); }
 .badge-blue   { background: var(--blue-50);    color: var(--blue-600); }
-
 .prog-wrap { display: flex; align-items: center; gap: 8px; }
 .prog-track { height: 5px; border-radius: 3px; background: var(--gray-100); width: 78px; overflow: hidden; }
 .prog-fill { height: 100%; border-radius: 3px; transition: width .3s; }
 .prog-pct { font-size: 11px; font-family: 'JetBrains Mono', monospace; color: var(--gray-500); }
 
 /* ── ACTIVITY ──────────────────────────────────────── */
-.feed { }
 .feed-item { display: flex; gap: 12px; padding: 13px 22px; border-bottom: 1px solid var(--gray-100); align-items: flex-start; transition: background .12s; }
 .feed-item:last-child { border-bottom: none; }
 .feed-item:hover { background: var(--blue-20); }
@@ -300,18 +195,13 @@ tbody tr:last-child td { border-bottom: none; }
 .feed-time { font-size: 11px; color: var(--gray-400); margin-top: 2px; font-family: 'JetBrains Mono', monospace; }
 
 /* ── UPLOAD ────────────────────────────────────────── */
-.upload-zone {
-  border: 2px dashed var(--blue-200); border-radius: 12px;
-  padding: 40px 22px; text-align: center; cursor: pointer;
-  background: var(--blue-20); transition: all .2s;
-}
+.upload-zone { border: 2px dashed var(--blue-200); border-radius: 12px; padding: 40px 22px; text-align: center; cursor: pointer; background: var(--blue-20); transition: all .2s; }
 .upload-zone:hover { border-color: var(--blue-400); background: var(--blue-50); }
 .upload-icon { color: var(--blue-400); margin-bottom: 10px; display: flex; justify-content: center; }
 .upload-title { font-size: 15px; font-weight: 700; color: var(--gray-900); margin-bottom: 4px; }
 .upload-sub { font-size: 13px; color: var(--gray-500); }
 .upload-chips { display: flex; gap: 6px; justify-content: center; margin-top: 12px; }
 .upload-chip { padding: 3px 10px; border-radius: 6px; background: var(--blue-100); color: var(--blue-600); font-size: 11px; font-weight: 600; font-family: 'JetBrains Mono', monospace; }
-
 .code-block { background: var(--gray-950); border-radius: 10px; overflow: hidden; margin-top: 14px; }
 .cb-head { padding: 10px 16px; border-bottom: 1px solid rgba(255,255,255,.07); display: flex; align-items: center; justify-content: space-between; }
 .cb-file { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: var(--blue-300); }
@@ -321,22 +211,17 @@ pre.cb-body { padding: 16px; font-family: 'JetBrains Mono', monospace; font-size
 .two-col-form { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; margin-bottom: 20px; }
 .fg { margin-bottom: 16px; }
 .fg label { font-size: 12px; font-weight: 600; color: var(--gray-700); margin-bottom: 6px; display: block; letter-spacing: .1px; }
-.fg input, .fg select {
-  width: 100%; padding: 9px 13px; border-radius: 8px;
-  border: 1.5px solid var(--border); background: white;
-  font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px;
-  color: var(--gray-900); outline: none; transition: all .2s;
-}
+.fg input, .fg select { width: 100%; padding: 9px 13px; border-radius: 8px; border: 1.5px solid var(--border); background: white; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; color: var(--gray-900); outline: none; transition: all .2s; }
 .fg input:focus, .fg select:focus { border-color: var(--blue-500); box-shadow: 0 0 0 3px rgba(59,130,246,.1); }
 .fg input::placeholder { color: var(--gray-400); }
 .fg select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239ca3af' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 11px center; padding-right: 34px; cursor: pointer; }
 .info-callout { background: var(--blue-50); border: 1px solid var(--blue-100); border-radius: 9px; padding: 11px 14px; font-size: 12.5px; color: var(--blue-700); display: flex; gap: 8px; align-items: flex-start; margin-bottom: 16px; line-height: 1.6; }
 
 /* ── MODAL ─────────────────────────────────────────── */
-.overlay { position: fixed; inset: 0; z-index: 5000; background: rgba(15,23,42,.45); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; }
+.overlay { position: fixed; inset: 0; z-index: 5000; background: rgba(15,23,42,.45); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; padding: 16px; }
 .overlay.open { display: flex; animation: fadeIn .18s ease; }
 @keyframes fadeIn { from{opacity:0} to{opacity:1} }
-.modal { background: white; border-radius: 16px; padding: 28px; width: 440px; box-shadow: var(--shadow-lg); animation: scaleIn .22s cubic-bezier(.16,1,.3,1); }
+.modal { background: white; border-radius: 16px; padding: 28px; width: 100%; max-width: 440px; box-shadow: var(--shadow-lg); animation: scaleIn .22s cubic-bezier(.16,1,.3,1); }
 @keyframes scaleIn { from{opacity:0;transform:scale(.96)} to{opacity:1;transform:scale(1)} }
 .modal-title { font-size: 17px; font-weight: 800; color: var(--gray-900); margin-bottom: 3px; }
 .modal-sub { font-size: 13px; color: var(--gray-500); margin-bottom: 22px; }
@@ -351,6 +236,12 @@ pre.cb-body { padding: 16px; font-family: 'JetBrains Mono', monospace; font-size
 #toast.show { transform: translateY(0); opacity: 1; }
 .toast-ic { display: flex; align-items: center; }
 
+/* ── BOTTOM NAV ────────────────────────────────────── */
+.bottom-nav { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 1px solid var(--border); z-index: 300; padding: 8px 0 env(safe-area-inset-bottom); }
+.bottom-nav-items { display: flex; justify-content: space-around; align-items: center; }
+.bnav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 6px 8px; border-radius: 8px; cursor: pointer; color: var(--gray-400); font-size: 10px; font-weight: 600; transition: all .15s; min-width: 52px; }
+.bnav-item.active { color: var(--blue-600); }
+
 /* ── ALLOC ITEMS ────────────────────────────────────── */
 .alloc-item { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border: 1px solid var(--border); border-radius: 10px; background: white; transition: all .15s; margin-bottom: 8px; }
 .alloc-item:hover { border-color: var(--blue-300); background: var(--blue-20); box-shadow: var(--shadow-xs); }
@@ -360,12 +251,51 @@ pre.cb-body { padding: 16px; font-family: 'JetBrains Mono', monospace; font-size
 .alloc-meta { font-size: 11.5px; color: var(--gray-500); margin-top: 1px; }
 .alloc-qty { font-size: 20px; font-weight: 800; color: var(--blue-600); text-align: right; letter-spacing: -.5px; }
 .alloc-unit { font-size: 10px; color: var(--gray-400); text-align: right; }
+
+/* ── RESPONSIVE ─────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .stats-grid { grid-template-columns: repeat(2,1fr); }
+  .charts-row { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); }
+  .main { margin-left: 0; }
+  .topbar { padding: 0 16px; height: 54px; }
+  .topbar-title { font-size: 15px; }
+  .search-wrap { display: none; }
+  .hamburger { display: flex; }
+  .btn-upload-text, .btn-export-text { display: none; }
+  .content { padding: 16px; padding-bottom: 80px; }
+  .stats-grid { grid-template-columns: repeat(2,1fr); gap: 10px; margin-bottom: 16px; }
+  .stat-val { font-size: 22px; }
+  .stat-lbl { font-size: 11.5px; }
+  .stat-card { padding: 14px; }
+  .charts-row { grid-template-columns: 1fr; gap: 14px; }
+  .two-col-form { grid-template-columns: 1fr; }
+  .page-heading { font-size: 18px; }
+  .page-sub { font-size: 12.5px; }
+  .bottom-nav { display: block; }
+  #toast { left: 16px; right: 16px; bottom: 80px; min-width: unset; }
+  .upload-grid { grid-template-columns: 1fr !important; }
+  .table-toolbar { flex-wrap: wrap; }
+  .modal { padding: 22px; }
+}
+
+@media (max-width: 480px) {
+  .stats-grid { grid-template-columns: 1fr; }
+  .tbl-search input { width: 140px; }
+}
 </style>
 </head>
 <body>
 
+<!-- SIDEBAR OVERLAY -->
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+
 <!-- SIDEBAR -->
-<aside class="sidebar">
+<aside class="sidebar" id="sidebar">
   <div class="sidebar-top">
     <div class="logo">
       <div class="logo-icon">
@@ -423,6 +353,9 @@ pre.cb-body { padding: 16px; font-family: 'JetBrains Mono', monospace; font-size
 <!-- MAIN -->
 <div class="main">
   <header class="topbar">
+    <div class="hamburger" onclick="openSidebar()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" x2="21" y1="6" y2="6"/><line x1="3" x2="21" y1="12" y2="12"/><line x1="3" x2="21" y1="18" y2="18"/></svg>
+    </div>
     <div class="topbar-title" id="page-title">Dashboard</div>
     <div class="topbar-right">
       <div class="search-wrap">
@@ -437,11 +370,11 @@ pre.cb-body { padding: 16px; font-family: 'JetBrains Mono', monospace; font-size
       </div>
       <button class="btn btn-ghost" onclick="goPage('upload',null)">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
-        Upload CSV
+        <span class="btn-upload-text">Upload CSV</span>
       </button>
       <button class="btn btn-primary" onclick="exportCSV()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
-        Export
+        <span class="btn-export-text">Export</span>
       </button>
     </div>
   </header>
@@ -554,12 +487,9 @@ pre.cb-body { padding: 16px; font-family: 'JetBrains Mono', monospace; font-size
       <div class="card">
         <div class="card-head">
           <div class="card-title">Recent Activity</div>
-          <span class="card-link">
-            View all
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-          </span>
+          <span class="card-link">View all <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
         </div>
-        <div class="feed" id="activity-feed"></div>
+        <div id="activity-feed"></div>
       </div>
     </div>
 
@@ -572,11 +502,9 @@ pre.cb-body { padding: 16px; font-family: 'JetBrains Mono', monospace; font-size
       <div class="card">
         <div class="table-toolbar">
           <div class="card-title">Warehouse Inventory</div>
-          <div style="display:flex;gap:8px;align-items:center">
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
             <div class="tbl-search">
-              <span class="tbl-search-ico">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-              </span>
+              <span class="tbl-search-ico"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span>
               <input placeholder="Search items…" oninput="filterTbl(this,'stock-body')">
             </div>
             <button class="btn btn-primary" onclick="openModal()">
@@ -585,10 +513,12 @@ pre.cb-body { padding: 16px; font-family: 'JetBrains Mono', monospace; font-size
             </button>
           </div>
         </div>
-        <table>
-          <thead><tr><th>Code</th><th>Item</th><th>Total</th><th>Allocated</th><th>Available</th><th>Utilization</th><th>Status</th></tr></thead>
-          <tbody id="stock-body"></tbody>
-        </table>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Code</th><th>Item</th><th>Total</th><th>Allocated</th><th>Available</th><th>Utilization</th><th>Status</th></tr></thead>
+            <tbody id="stock-body"></tbody>
+          </table>
+        </div>
       </div>
     </div>
 
@@ -598,7 +528,7 @@ pre.cb-body { padding: 16px; font-family: 'JetBrains Mono', monospace; font-size
         <div class="page-heading">Load Stock via CSV</div>
         <div class="page-sub">Upload a CSV file to insert new items or update existing quantities.</div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start">
+      <div class="upload-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start">
         <div class="card card-body">
           <div class="info-callout">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
@@ -606,9 +536,7 @@ pre.cb-body { padding: 16px; font-family: 'JetBrains Mono', monospace; font-size
           </div>
           <div class="upload-zone" onclick="document.getElementById('csv-in').click()">
             <input type="file" id="csv-in" accept=".csv" style="display:none" onchange="handleCSV(this)">
-            <div class="upload-icon">
-              <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
-            </div>
+            <div class="upload-icon"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg></div>
             <div class="upload-title">Drop your CSV here</div>
             <div class="upload-sub">or click to browse files</div>
             <div class="upload-chips"><span class="upload-chip">.csv</span><span class="upload-chip">UTF-8</span><span class="upload-chip">Max 10MB</span></div>
@@ -651,11 +579,9 @@ ITEM005, USB-C Hub, 120</pre>
       <div class="card">
         <div class="table-toolbar">
           <div class="card-title">All Allocations</div>
-          <div style="display:flex;gap:8px">
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
             <div class="tbl-search">
-              <span class="tbl-search-ico">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-              </span>
+              <span class="tbl-search-ico"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span>
               <input placeholder="Search users, items…" oninput="filterTbl(this,'alloc-body')">
             </div>
             <button class="btn btn-ghost" onclick="exportCSV()">
@@ -664,10 +590,12 @@ ITEM005, USB-C Hub, 120</pre>
             </button>
           </div>
         </div>
-        <table>
-          <thead><tr><th>User Email</th><th>Item</th><th>Code</th><th>Quantity</th><th>Status</th><th>Date</th></tr></thead>
-          <tbody id="alloc-body"></tbody>
-        </table>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>User Email</th><th>Item</th><th>Code</th><th>Quantity</th><th>Status</th><th>Date</th></tr></thead>
+            <tbody id="alloc-body"></tbody>
+          </table>
+        </div>
       </div>
     </div>
 
@@ -703,8 +631,34 @@ user2@test.com,ITEM005,USB-C Hub,8</pre>
       </div>
     </div>
 
-  </div><!-- /content -->
-</div><!-- /main -->
+  </div>
+</div>
+
+<!-- BOTTOM NAV (mobile only) -->
+<nav class="bottom-nav">
+  <div class="bottom-nav-items">
+    <div class="bnav-item active" id="bnav-dashboard" onclick="goPage('dashboard',this);setBottomNav('bnav-dashboard')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+      Home
+    </div>
+    <div class="bnav-item" id="bnav-stock" onclick="goPage('stock',this);setBottomNav('bnav-stock')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/></svg>
+      Stock
+    </div>
+    <div class="bnav-item" id="bnav-upload" onclick="goPage('upload',this);setBottomNav('bnav-upload')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+      Upload
+    </div>
+    <div class="bnav-item" id="bnav-allocations" onclick="goPage('allocations',this);setBottomNav('bnav-allocations')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+      Users
+    </div>
+    <div class="bnav-item" id="bnav-export" onclick="goPage('export',this);setBottomNav('bnav-export')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+      Export
+    </div>
+  </div>
+</nav>
 
 <!-- ADD ITEM MODAL -->
 <div class="overlay" id="modal">
@@ -721,7 +675,6 @@ user2@test.com,ITEM005,USB-C Hub,8</pre>
   </div>
 </div>
 
-<!-- TOAST -->
 <div id="toast"><span class="toast-ic" id="t-ic"></span><span id="t-msg"></span></div>
 
 <script>
@@ -762,11 +715,26 @@ function goPage(id, el) {
   document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
   el?.classList.add('active');
   document.getElementById('page-title').textContent = PAGES[id] || id;
+  closeSidebar();
+}
+
+function openSidebar() {
+  document.getElementById('sidebar').classList.add('open');
+  document.getElementById('sidebar-overlay').classList.add('show');
+}
+
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('show');
+}
+
+function setBottomNav(activeId) {
+  document.querySelectorAll('.bnav-item').forEach(i => i.classList.remove('active'));
+  document.getElementById(activeId)?.classList.add('active');
 }
 
 window.addEventListener('load', () => { buildCharts(); buildTables(); });
 
-// Sparklines
 function buildCharts() {
   const spSets = [[30,45,40,60,55,70,65,80],[20,30,25,40,45,50,48,55],[60,50,55,40,45,35,40,30],[8,10,12,11,14,15,16,18]];
   const spColors = ['#93c5fd','#67e8f9','#6ee7b7','#fcd34d'];
@@ -776,7 +744,6 @@ function buildCharts() {
     el.innerHTML = d.map(v => `<div class="sp-bar" style="height:${Math.round(v/mx*100)}%;background:${spColors[i]}"></div>`).join('');
   });
 
-  // Bar chart
   const bc = document.getElementById('bar-chart'); if(!bc) return;
   const mx = Math.max(...STOCK.map(d=>d.total));
   bc.innerHTML = STOCK.slice(0,6).map(d => {
@@ -791,7 +758,6 @@ function buildCharts() {
     </div>`;
   }).join('');
 
-  // Donut
   const svg = document.getElementById('donut'); if(!svg) return;
   const segs = [{v:57.7,c:'#2563eb'},{v:18.3,c:'#0891b2'},{v:24,c:'#059669'}];
   const R=38, C=2*Math.PI*R; let cum=0;
@@ -800,7 +766,6 @@ function buildCharts() {
     return `<circle cx="50" cy="50" r="${R}" fill="none" stroke="${s.c}" stroke-width="10" stroke-dasharray="${d} ${C-d}" stroke-dashoffset="${off}" stroke-linecap="round"/>`;
   }).join('');
 
-  // Feed
   const feed = document.getElementById('activity-feed'); if(!feed) return;
   feed.innerHTML = FEED.map(f => `
     <div class="feed-item">
@@ -810,7 +775,6 @@ function buildCharts() {
 }
 
 function buildTables() {
-  // Stock
   const sb = document.getElementById('stock-body'); if(sb) sb.innerHTML = STOCK.map(d => {
     const av=d.total-d.allocated, pct=Math.round(d.allocated/d.total*100);
     const badge = av>20 ? `<span class="badge badge-green"><div class="badge-dot"></div>In Stock</span>` : av>5 ? `<span class="badge badge-amber"><div class="badge-dot"></div>Low Stock</span>` : `<span class="badge badge-rose"><div class="badge-dot"></div>Critical</span>`;
@@ -826,7 +790,6 @@ function buildTables() {
     </tr>`;
   }).join('');
 
-  // Allocs
   const ab = document.getElementById('alloc-body'); if(ab) ab.innerHTML = ALLOCS.map(a => `
     <tr>
       <td style="font-size:13px;color:var(--gray-700)">${a.email}</td>
@@ -845,16 +808,6 @@ function filterTbl(input, tbodyId) {
 
 function handleCSV(inp) {
   const f=inp.files[0]; if(!f) return;
-  new FileReader().onload = e => {
-    document.getElementById('csv-preview').style.display='block';
-    document.getElementById('csv-text').textContent = e.target.result;
-    toast('success','File loaded — review then click Process Upload');
-  };
-  (new FileReader()).addEventListener('load', e => {
-    document.getElementById('csv-preview').style.display='block';
-    document.getElementById('csv-text').textContent = e.target.result;
-    toast('success','File loaded — review then click Process Upload');
-  });
   const r=new FileReader(); r.onload=e=>{
     document.getElementById('csv-preview').style.display='block';
     document.getElementById('csv-text').textContent=e.target.result;
@@ -863,12 +816,14 @@ function handleCSV(inp) {
 }
 
 function processCSV() { document.getElementById('csv-preview').style.display='none'; document.getElementById('csv-in').value=''; toast('success','Stock updated from CSV!'); }
+
 function dlSample() {
   const a=document.createElement('a');
   a.href=URL.createObjectURL(new Blob(['stock_code,stock_name,quantity\nITEM001,USB Keyboard,50\nITEM002,HDMI Cable,100'],{type:'text/csv'}));
   a.download='sample_stock.csv'; a.click();
   toast('success','Sample CSV downloaded');
 }
+
 function exportCSV() {
   const csv='user_email,stock_code,stock_name,qty_allocated\n'+ALLOCS.map(a=>`${a.email},${a.code},${a.item},${a.qty}`).join('\n');
   const a=document.createElement('a');
