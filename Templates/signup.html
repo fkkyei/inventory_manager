@@ -194,7 +194,7 @@ document.getElementById('registerForm').addEventListener('submit', async functio
         if (response.ok) {
             successMessage.textContent = data.message || 'Account created successfully!';
             setTimeout(() => {
-                window.location.href = '/auth/login/';
+                window.location.href = '/';
             }, 2000);
         } else {
             errorMessage.textContent = data.email?.[0] || data.password?.[0] || data.error || 'Registration failed.';
