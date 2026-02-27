@@ -186,7 +186,7 @@ def complete_login(user):
         "message":"Login Successful",
         "session_token": session.token,
         "role": user.role,
-        "redirect": "/admin/dashboard" if user.role == "admin" else "/user-dashboard",
+        "redirect": "/admin-dashboard" if user.role == "admin" else "/user-dashboard",
     })
 
 
