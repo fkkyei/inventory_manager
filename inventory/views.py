@@ -160,7 +160,7 @@ class AdminDashboardView(APIView):
     permission_classes = [IsAdmin]
 
     def get(self, request):
-        return render(request,'dashboard.html',{{"message":request.user.email,"role":request.user.role,"name":request.user}})
+        return render(request,'dashboard.html',{"message":request.user.email,"role":request.user.role,"name":request.user})
 
 
 
@@ -186,7 +186,8 @@ def complete_login(user):
         "message":"Login Successful",
         "session_token": session.token,
         "role": user.role,
-        "redirect": "/admin-dashboard" if user.role == "admin" else "/user-dashboard",
+        "email": user.email.split('@',1)[0],
+        "redirect": "/admin-dashboard" if user.role == "admin" else "/user-dashboard"
     })
 
 
@@ -276,9 +277,12 @@ class SetPasswordView(APIView):
     
 
 def admin_dashboard(request):
-    return render(request, "admin_dashboard.html")
+    print(request.user.email)
+
+    return render(request, "admin_dashboard.html",)
     
 def login_view(request):
+
     return render(request, "login.html")
     
 def signup_view(request):
@@ -286,7 +290,9 @@ def signup_view(request):
 
 
 def user_dashboard(request):
-    return render(request, "user_dashboard.html")
+
+    return render(request, "user_dashboard.html",)
+
 
 def reset_otp(request):
     return render(request, "enterresetotp.html")

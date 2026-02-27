@@ -214,10 +214,12 @@
             });
 
             const data = await response.json();
+            console.log(data)
 
             if (response.ok) {
                 localStorage.setItem('session_token', data.session_token);
                 localStorage.setItem('role', data.role);
+                localStorage.setItem('email', data.email);
                 window.location.href = data.redirect;
             } else {
                 errorMessage.textContent = data.error || 'Login failed. Please try again.';

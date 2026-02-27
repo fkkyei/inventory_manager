@@ -277,9 +277,9 @@ tbody tr:last-child td{border-bottom:none}
       <div class="logo-name">Stock<span>Vault</span></div>
     </div>
     <div class="sidebar-profile">
-      <div class="profile-avatar">JD</div>
+      <div class="profile-avatar" id="profile-avatar"></div>
       <div>
-        <div class="profile-name">Daniel Mensah</div>
+        <div class="profile-name" id="username1"></div>
         <div class="profile-role">Warehouse User</div>
       </div>
     </div>
@@ -350,7 +350,7 @@ tbody tr:last-child td{border-bottom:none}
     <!-- ── MY DASHBOARD ────────────────────────────── -->
     <div class="page active" id="page-home">
       <div class="page-header">
-        <div class="page-heading">Welcome back, Daniel 👋</div>
+        <div class="page-heading" id="username"> </div>
         <div class="page-sub">You have 2 pending reservations ready to check out.</div>
       </div>
 
@@ -655,6 +655,10 @@ tbody tr:last-child td{border-bottom:none}
 <div id="toast"><span class="t-ic" id="t-ic"></span><span id="t-msg"></span></div>
 
 <script>
+  const email = localStorage.getItem("email");
+  document.getElementById("username").innerText = "Welcome back, " + email + " 👋";
+  document.getElementById("username1").innerText=email
+  document.getElementById("profile-avatar").innerHTML=email.charAt(0).toUpperCase()
 const STOCK = [
   {code:'ITEM001',name:'USB Keyboard',   total:50,  allocated:20},
   {code:'ITEM002',name:'HDMI Cable',     total:100, allocated:40},
