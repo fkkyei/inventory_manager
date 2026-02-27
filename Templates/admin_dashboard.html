@@ -69,7 +69,11 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--gray-50);
 .nav-link.active svg { color: white; }
 .nav-badge { margin-left: auto; font-size: 10.5px; font-weight: 700; padding: 2px 6px; border-radius: 20px; background: var(--blue-100); color: var(--blue-600); }
 .nav-link.active .nav-badge { background: rgba(255,255,255,.2); color: white; }
-.sidebar-footer { padding: 14px 12px; border-top: 1px solid var(--border); }
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: 20px;
+  padding-bottom: 70px; /* Adds extra space specifically for mobile browsers */
+}
 .signout-btn { width: 100%; display: flex; align-items: center; gap: 8px; padding: 9px 12px; border-radius: 8px; background: transparent; border: 1px solid var(--border); color: var(--gray-500); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; transition: all .15s; }
 .signout-btn:hover { background: var(--rose-50); border-color: #fda4af; color: var(--rose); }
 
@@ -343,11 +347,11 @@ pre.cb-body { padding: 16px; font-family: 'JetBrains Mono', monospace; font-size
   </nav>
 
   <div class="sidebar-footer">
-    <button class="signout-btn">
+    <button class="signout-btn" onclick="handleSignOut()">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
       Sign Out
     </button>
-  </div>
+</div>
 </aside>
 
 <!-- MAIN -->
@@ -678,6 +682,21 @@ user2@test.com,ITEM005,USB-C Hub,8</pre>
 <div id="toast"><span class="toast-ic" id="t-ic"></span><span id="t-msg"></span></div>
 
 <script>
+function handleSignOut() {
+    // 1. Ask for confirmation
+    const confirmLogout = confirm("Are you sure you want to sign out?");
+    
+    if (confirmLogout) {
+        // 2. Clear local storage (security best practice)
+        localStorage.removeItem("access");
+        localStorage.removeItem("refresh");
+        localStorage.removeItem("session_token");
+        
+        // 3. Redirect to /login
+        window.location.href = "/";
+    }
+  }
+
 const STOCK = [
   {code:'ITEM001',name:'USB Keyboard',   total:50,  allocated:20},
   {code:'ITEM002',name:'HDMI Cable',     total:100, allocated:40},
