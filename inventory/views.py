@@ -277,7 +277,6 @@ class SetPasswordView(APIView):
     
 
 def admin_dashboard(request):
-    print(request.user.email)
 
     return render(request, "admin_dashboard.html",)
     

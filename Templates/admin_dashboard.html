@@ -308,9 +308,9 @@ pre.cb-body { padding: 16px; font-family: 'JetBrains Mono', monospace; font-size
       <div class="logo-name">Stock<span>Vault</span></div>
     </div>
     <div class="sidebar-profile">
-      <div class="profile-avatar">SA</div>
+      <div class="profile-avatar" id="profile-avatar"></div>
       <div>
-        <div class="profile-name">Sarah Admin</div>
+        <div class="profile-name" id="username1"></div>
         <div class="profile-role">Administrator</div>
       </div>
     </div>
@@ -388,7 +388,7 @@ pre.cb-body { padding: 16px; font-family: 'JetBrains Mono', monospace; font-size
     <!-- ── DASHBOARD ───────────────────────────────── -->
     <div class="page active" id="page-dashboard">
       <div class="page-header">
-        <div class="page-heading">Good morning, Sarah 👋</div>
+        <div class="page-heading" id="username"></div>
         <div class="page-sub">Here's what's happening in your warehouse today.</div>
       </div>
 
@@ -682,6 +682,10 @@ user2@test.com,ITEM005,USB-C Hub,8</pre>
 <div id="toast"><span class="toast-ic" id="t-ic"></span><span id="t-msg"></span></div>
 
 <script>
+  email= localStorage.getItem("email")
+   document.getElementById("username").innerText = "Welcome back, " + email.charAt(0).toUpperCase()+email.slice(1) + " 👋";
+   document.getElementById("username1").innerText = email.charAt(0).toUpperCase()+email.slice(1) ;
+   document.getElementById("profile-avatar").innerText = email.charAt(0).toUpperCase();
 function handleSignOut() {
     // 1. Ask for confirmation
     const confirmLogout = confirm("Are you sure you want to sign out?");
