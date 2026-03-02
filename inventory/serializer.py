@@ -76,6 +76,7 @@ class SetPasswordSerializer(serializers.Serializer):
         return user
     
 class inventoryserializer(serializers.ModelSerializer):
+    total = serializers.IntegerField(required=True)
     class Meta:
         model=inventory
         fields=['code','item','total']
