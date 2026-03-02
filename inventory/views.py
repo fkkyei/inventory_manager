@@ -7,7 +7,7 @@ from django.utils import timezone
 from datetime import timedelta
 from django.conf import settings
 from .models import User, SessionToken, OTPCode, PasswordResetOTP
-from .serializer import RegisterSerializer, UserSerializer,PasswordResetRequestSerializer,PasswordResetVerifySerializer,SetPasswordSerializer
+from .serializer import RegisterSerializer, UserSerializer,PasswordResetRequestSerializer,PasswordResetVerifySerializer,SetPasswordSerializer,inventoryserializer
 from .authentication import SessionTokenAuthentication
 from .permissions import IsAdmin, IsRegularUser
 from .sms import send_otp_sms
@@ -301,5 +301,19 @@ def request_otp(request):
 
 def set_password(request):
     return render(request, "setpassword.html")
+    
+
+class InventoryView(APIView):
+    permission_classes=[AllowAny]
+    def get(self,request):
+        return render(request,'admin_dashboard.html')
+    
+    def post(self,request):
+        serializer=inventoryserializer(data=request.data)
+        if serializer.is_valid():
+            record=serializer.save()
+
+            return Response({'message':'recorded successfully'})
+        return Response(serializer.errors, status=400)
     
 

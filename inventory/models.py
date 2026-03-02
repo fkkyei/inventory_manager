@@ -93,3 +93,53 @@ class PasswordResetOTP(models.Model):
         app_label = "inventory"
 
         
+
+class inventory(models.Model):
+    
+    status_choices =[
+        ("In Stock","in stock"),
+        ("Out Of Stock","out of stock")
+         
+    ]
+    
+    code= models.CharField(max_length=12, unique=True,null=False)
+    item = models.CharField(max_length=250,null=False)
+    total= models.IntegerField(null=False,default=0)
+    allocated = models.IntegerField(null=False, default=0)
+    available= models.IntegerField(null=False,default=0)
+    utilization= models.IntegerField(null=False)
+    status= models.CharField(max_length=250,choices=status_choices,default="In Stock")
+
+    def save(self,*args,**kwargs):
+        
+        if self.pk:
+            old=inventory.objects.get(pk=self.pk)
+            self.total=old.total+self.total
+            self.allocated = old.allocated + self.allocated
+        else:
+            self.allocated = 0
+        self.cascade_update()
+        super().save(*args,**kwargs)
+    
+    def cascade_update(self):
+        if self.total is not None and self.allocated is not None:
+            self.available = self.total - self.allocated
+            self.utilization = int((self.allocated / self.total) * 100) if self.total > 0 else 0
+        
+
+        
+        self.status = "In Stock" if self.available > 0 else "Out Of Stock"
+
+    
+
+
+    
+    
+
+    
+
+
+                             
+
+
+

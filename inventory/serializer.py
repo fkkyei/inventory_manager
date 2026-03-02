@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User,OTPCode
+from .models import User,OTPCode,inventory
 
 
 class RegisterSerializer(serializers.Serializer):
@@ -75,3 +75,16 @@ class SetPasswordSerializer(serializers.Serializer):
 
         return user
     
+class inventoryserializer(serializers.ModelSerializer):
+    class Meta:
+        model=inventory
+        fields=['code','item','total']
+    def create(self, validated_data):
+        record = inventory.objects.create(**validated_data) 
+        return record
+
+
+
+
+
+
