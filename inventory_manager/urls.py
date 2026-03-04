@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from inventory.views import RegisterView,LoginView,LogoutView,PasswordResetRequestView,PasswordResetVerifyView,SetPasswordView,set_password,request_otp,login_view,admin_dashboard,signup_view,user_dashboard,reset_otp,InventoryView
+from inventory.views import RegisterView,LoginView,LogoutView,PasswordResetRequestView,PasswordResetVerifyView,SetPasswordView,set_password,request_otp,login_view,admin_dashboard,signup_view,user_dashboard,reset_otp,InventoryView,RequestReportView
 from django.urls import path
 
 
@@ -34,7 +34,8 @@ urlpatterns = [
     path("request-otp/", request_otp, name="request-otp"),
     path("setpassword/", set_password, name="setpassword"),
     path("set-password/", SetPasswordView.as_view(), name="set-password"),
-    path("inventory_record/",InventoryView.as_view(),name='record-inventory')
+    path("inventory_record/",InventoryView.as_view(),name='record-inventory'),
+    path("request_report", RequestReportView.as_view(),name='request_report')
 
     
 ]

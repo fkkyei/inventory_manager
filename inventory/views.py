@@ -6,13 +6,14 @@ from django.core.mail import send_mail
 from django.utils import timezone
 from datetime import timedelta
 from django.conf import settings
-from .models import User, SessionToken, OTPCode, PasswordResetOTP
-from .serializer import RegisterSerializer, UserSerializer,PasswordResetRequestSerializer,PasswordResetVerifySerializer,SetPasswordSerializer,inventoryserializer
+from .models import User, SessionToken, OTPCode, PasswordResetOTP,report_request,inventory
+from .serializer import RegisterSerializer, UserSerializer,PasswordResetRequestSerializer,PasswordResetVerifySerializer,SetPasswordSerializer,inventoryserializer,ReportRequestSerializer
 from .authentication import SessionTokenAuthentication
 from .permissions import IsAdmin, IsRegularUser
 from .sms import send_otp_sms
 from django.shortcuts import render
 import random
+import csv
 
 class RegisterView(APIView):
     permission_classes = [AllowAny]
@@ -309,6 +310,7 @@ class InventoryView(APIView):
         return render(request,'admin_dashboard.html')
     
     def post(self,request):
+    
         serializer=inventoryserializer(data=request.data)
         if serializer.is_valid():
             record=serializer.save()
@@ -317,3 +319,48 @@ class InventoryView(APIView):
         return Response(serializer.errors, status=400)
     
 
+class RequestReportView(APIView):
+    def post(self, request):
+        serializer = ReportRequestSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def get(self,request):
+        serializer = ReportRequestSerializer(data=request.GET)
+
+        if serializer.is_valid():
+            report_configuration = serializer.validated_data.get('report_configuration')
+            date_range  = serializer.validated_data.get('date_range')
+            now         = timezone.now() 
+
+            report = inventory.objects.all()
+
+            # ── Map report type ───────────────────────────────────
+            if report_configuration == 'Available Stock Summary':
+                report = report.filter(status='In Stock')
+
+            elif report_configuration == 'User Specific Report':
+                user_email = request.GET.get('user_email')
+                report = report.filter(allocated_to__email=user_email)
+
+            # ── Map date range ────────────────────────────────────
+            if date_range == 'Last 7 Days':
+                report = report.filter(created_at__gte=now - timedelta(days=7))
+
+            elif date_range == 'Last 30 Days':
+                report = report.filter(created_at__gte=now - timedelta(days=30))
+
+            elif date_range == 'This Month':
+                report = report.filter(created_at__gte=now.replace(day=1, hour=0, minute=0, second=0, microsecond=0))
+
+            inventory_serializer = inventoryserializer(report, many=True)
+            return Response(inventory_serializer.data, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+    

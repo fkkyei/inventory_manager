@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User,OTPCode,inventory
+from .models import User,OTPCode,inventory,report_request
 
 
 class RegisterSerializer(serializers.Serializer):
@@ -78,13 +78,19 @@ class SetPasswordSerializer(serializers.Serializer):
 class inventoryserializer(serializers.ModelSerializer):
     total = serializers.IntegerField(required=True)
     class Meta:
-        model=inventory
-        fields=['code','item','total']
+        model  = inventory
+        fields = ['code', 'item', 'total', 'allocated', 'available', 'utilization', 'status', 'created_at']
+        read_only_fields = ['allocated', 'available', 'utilization', 'status', 'created_at']
+        
     def create(self, validated_data):
         record = inventory.objects.create(**validated_data) 
         return record
 
 
+class ReportRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=report_request
+        fields=['report_configuration','date_range','export_format']
 
 
 

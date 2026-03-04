@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User,OTPCode,SessionToken
+from .models import User,OTPCode,SessionToken,inventory
 from django.contrib.auth.hashers import make_password, check_password
 
 # Register your models here.
@@ -15,3 +15,10 @@ class UserAdmin(admin.ModelAdmin):
         super().save_model(request, obj, form, change)
 
 admin.site.register(User, UserAdmin)
+
+class InventoryAdmin(admin.ModelAdmin):
+    list_display = ('code','item','total','allocated','available','utilization','status')
+    fields=('code','item','total','allocated','available','utilization','status')
+
+admin.site.register(inventory,InventoryAdmin)
+
