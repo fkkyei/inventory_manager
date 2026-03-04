@@ -109,6 +109,7 @@ class inventory(models.Model):
     available= models.IntegerField(null=False,default=0)
     utilization= models.IntegerField(null=False,default=0)
     status= models.CharField(max_length=250,choices=status_choices,default="In Stock")
+    created_at  = models.DateTimeField(auto_now_add=True, null=True)
 
     def save(self,*args,**kwargs):
         
@@ -131,6 +132,33 @@ class inventory(models.Model):
         self.status = "In Stock" if self.available > 0 else "Out Of Stock"
 
     
+
+class report_request(models.Model):
+
+    request_choices = [
+        ('Full Allocation Report', 'Full Allocation Report'),
+        ('Available Stock Summary', 'Available Stock Summary'),
+        ('User Specific Report', 'User Specific Report'),
+    ]
+
+    date_range_choices = [
+        ('All Time', 'All Time'),
+        ('Last 7 Days', 'Last 7 Days'),
+        ('Last 30 Days', 'Last 30 Days'),
+        ('This Month', 'This Month'),
+    ]
+
+    export_format_choices = [
+        ('csv', '.csv — Comma Separated'),
+        ('xlsx', '.xlsx — Excel'),
+        ('pdf', '.pdf — PDF'),
+    ]
+
+    report_configuration = models.CharField(max_length=256, choices=request_choices, default='Full Allocation Report')
+    date_range           = models.CharField(max_length=256, choices=date_range_choices, default='All Time')
+    export_format        = models.CharField(max_length=50,  choices=export_format_choices, default='csv')
+
+
 
 
     
