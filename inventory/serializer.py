@@ -78,8 +78,8 @@ class SetPasswordSerializer(serializers.Serializer):
 class inventoryserializer(serializers.ModelSerializer):
     total = serializers.IntegerField(required=True)
     class Meta:
-        model=inventory
-        fields=['code','item','total']
+        model = inventory
+        fields = ['code', 'item', 'total', 'allocated', 'available', 'utilization', 'status']
     def create(self, validated_data):
         record = inventory.objects.create(**validated_data) 
         return record

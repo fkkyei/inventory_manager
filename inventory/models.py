@@ -107,7 +107,7 @@ class inventory(models.Model):
     total= models.IntegerField(null=False,default=0)
     allocated = models.IntegerField(null=False, default=0)
     available= models.IntegerField(null=False,default=0)
-    utilization= models.IntegerField(null=False)
+    utilization= models.IntegerField(null=False,default=0)
     status= models.CharField(max_length=250,choices=status_choices,default="In Stock")
 
     def save(self,*args,**kwargs):

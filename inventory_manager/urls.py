@@ -19,14 +19,20 @@ from inventory.views import RegisterView,LoginView,LogoutView,PasswordResetReque
 from django.urls import path
 
 
+from inventory.views import (
+    RegisterView, LoginView, LogoutView,
+    PasswordResetRequestView, PasswordResetVerifyView, SetPasswordView,
+    set_password, request_otp, login_view, admin_dashboard,
+    signup_view, user_dashboard, reset_otp, InventoryView
+)
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("auth/register/", RegisterView.as_view(), name="register"),
     path("auth/login/", LoginView.as_view(), name="login"),
     path("auth/logout/", LogoutView.as_view(), name="logout"),
-     path("password-reset/", PasswordResetRequestView.as_view(), name="password_reset_request"),
+    path("password-reset/", PasswordResetRequestView.as_view(), name="password_reset_request"),
     path("password-reset/verify/", PasswordResetVerifyView.as_view(), name="password_reset_verify"),
-    path("admin-dashboard/", admin_dashboard, name="admin_dashboard"),
     path("", login_view, name="login"),
     path("signup/", signup_view, name="signup"),
     path("user-dashboard/", user_dashboard, name="user_dashboard"),
@@ -34,7 +40,10 @@ urlpatterns = [
     path("request-otp/", request_otp, name="request-otp"),
     path("setpassword/", set_password, name="setpassword"),
     path("set-password/", SetPasswordView.as_view(), name="set-password"),
-    path("inventory_record/",InventoryView.as_view(),name='record-inventory')
 
-    
+    # HTML page (browser navigation)
+    path("admin-dashboard/", admin_dashboard, name="admin_dashboard"),
+
+    # Pure JSON API endpoint (used by the dashboard JS)
+    path("inventory_record/", InventoryView.as_view(), name="record-inventory"),
 ]

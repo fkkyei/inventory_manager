@@ -6,7 +6,7 @@ from django.core.mail import send_mail
 from django.utils import timezone
 from datetime import timedelta
 from django.conf import settings
-from .models import User, SessionToken, OTPCode, PasswordResetOTP
+from .models import User, SessionToken, OTPCode, PasswordResetOTP,inventory
 from .serializer import RegisterSerializer, UserSerializer,PasswordResetRequestSerializer,PasswordResetVerifySerializer,SetPasswordSerializer,inventoryserializer
 from .authentication import SessionTokenAuthentication
 from .permissions import IsAdmin, IsRegularUser
@@ -304,16 +304,19 @@ def set_password(request):
     
 
 class InventoryView(APIView):
-    permission_classes=[AllowAny]
-    def get(self,request):
-        return render(request,'admin_dashboard.html')
-    
-    def post(self,request):
-        serializer=inventoryserializer(data=request.data)
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        items = inventory.objects.all()
+        serializer = inventoryserializer(items, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = inventoryserializer(data=request.data)
         if serializer.is_valid():
-            record=serializer.save()
-
-            return Response({'message':'recorded successfully'})
-        return Response(serializer.errors, status=400)
-    
-
+            record = serializer.save()
+            return Response(
+                {'message': 'recorded successfully', 'data': inventoryserializer(record).data},
+                status=status.HTTP_201_CREATED
+            )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

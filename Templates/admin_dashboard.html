@@ -69,11 +69,7 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--gray-50);
 .nav-link.active svg { color: white; }
 .nav-badge { margin-left: auto; font-size: 10.5px; font-weight: 700; padding: 2px 6px; border-radius: 20px; background: var(--blue-100); color: var(--blue-600); }
 .nav-link.active .nav-badge { background: rgba(255,255,255,.2); color: white; }
-.sidebar-footer {
-  margin-top: auto;
-  padding-top: 20px;
-  padding-bottom: 70px; /* Adds extra space specifically for mobile browsers */
-}
+.sidebar-footer { margin-top: auto; padding: 12px; padding-bottom: 70px; }
 .signout-btn { width: 100%; display: flex; align-items: center; gap: 8px; padding: 9px 12px; border-radius: 8px; background: transparent; border: 1px solid var(--border); color: var(--gray-500); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; transition: all .15s; }
 .signout-btn:hover { background: var(--rose-50); border-color: #fda4af; color: var(--rose); }
 
@@ -97,6 +93,7 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--gray-50);
 .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 15px; border-radius: 8px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .15s; border: none; white-space: nowrap; }
 .btn-primary { background: var(--blue-600); color: white; box-shadow: 0 2px 6px rgba(37,99,235,.3); }
 .btn-primary:hover { background: var(--blue-700); box-shadow: 0 3px 10px rgba(37,99,235,.4); }
+.btn-primary:disabled { opacity: .6; cursor: not-allowed; }
 .btn-ghost { background: transparent; color: var(--gray-600); border: 1px solid var(--border); }
 .btn-ghost:hover { background: var(--gray-100); border-color: var(--gray-300); color: var(--gray-900); }
 .btn-full { width: 100%; justify-content: center; padding: 10px 15px; font-size: 14px; }
@@ -129,6 +126,11 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--gray-50);
 .sparkline { display: flex; align-items: flex-end; gap: 2.5px; height: 26px; margin-top: 12px; }
 .sp-bar { flex: 1; border-radius: 2px 2px 0 0; transition: opacity .2s; }
 .sp-bar:hover { opacity: .7; }
+
+/* ── SKELETON LOADER ───────────────────────────────── */
+.skeleton { background: linear-gradient(90deg, var(--gray-100) 25%, var(--gray-200) 50%, var(--gray-100) 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; border-radius: 6px; }
+@keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+.skeleton-row td { padding: 13px 18px; }
 
 /* ── CARD ──────────────────────────────────────────── */
 .card { background: white; border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--shadow-sm); overflow: hidden; }
@@ -201,6 +203,7 @@ tbody tr:last-child td { border-bottom: none; }
 /* ── UPLOAD ────────────────────────────────────────── */
 .upload-zone { border: 2px dashed var(--blue-200); border-radius: 12px; padding: 40px 22px; text-align: center; cursor: pointer; background: var(--blue-20); transition: all .2s; }
 .upload-zone:hover { border-color: var(--blue-400); background: var(--blue-50); }
+.upload-zone.drag-over { border-color: var(--blue-600); background: var(--blue-50); transform: scale(1.01); }
 .upload-icon { color: var(--blue-400); margin-bottom: 10px; display: flex; justify-content: center; }
 .upload-title { font-size: 15px; font-weight: 700; color: var(--gray-900); margin-bottom: 4px; }
 .upload-sub { font-size: 13px; color: var(--gray-500); }
@@ -233,7 +236,8 @@ pre.cb-body { padding: 16px; font-family: 'JetBrains Mono', monospace; font-size
 .btn-cancel { flex: 1; padding: 10px; border-radius: 8px; background: var(--gray-100); border: none; color: var(--gray-700); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13.5px; font-weight: 600; cursor: pointer; transition: background .15s; }
 .btn-cancel:hover { background: var(--gray-200); }
 .btn-ok { flex: 2; padding: 10px; border-radius: 8px; background: var(--blue-600); border: none; color: white; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13.5px; font-weight: 700; cursor: pointer; transition: background .15s; }
-.btn-ok:hover { background: var(--blue-700); }
+.btn-ok:hover:not(:disabled) { background: var(--blue-700); }
+.btn-ok:disabled { opacity: .6; cursor: not-allowed; }
 
 /* ── TOAST ─────────────────────────────────────────── */
 #toast { position: fixed; bottom: 24px; right: 24px; z-index: 9999; background: var(--gray-900); color: white; border-radius: 10px; padding: 13px 18px; display: flex; align-items: center; gap: 10px; box-shadow: var(--shadow-lg); font-size: 13.5px; font-weight: 500; min-width: 240px; transform: translateY(56px); opacity: 0; transition: all .3s cubic-bezier(.16,1,.3,1); }
@@ -246,22 +250,16 @@ pre.cb-body { padding: 16px; font-family: 'JetBrains Mono', monospace; font-size
 .bnav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 6px 8px; border-radius: 8px; cursor: pointer; color: var(--gray-400); font-size: 10px; font-weight: 600; transition: all .15s; min-width: 52px; }
 .bnav-item.active { color: var(--blue-600); }
 
-/* ── ALLOC ITEMS ────────────────────────────────────── */
-.alloc-item { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border: 1px solid var(--border); border-radius: 10px; background: white; transition: all .15s; margin-bottom: 8px; }
-.alloc-item:hover { border-color: var(--blue-300); background: var(--blue-20); box-shadow: var(--shadow-xs); }
-.alloc-ic { width: 38px; height: 38px; border-radius: 9px; background: var(--blue-50); display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--blue-500); }
-.alloc-info { flex: 1; }
-.alloc-name { font-size: 13.5px; font-weight: 600; color: var(--gray-900); }
-.alloc-meta { font-size: 11.5px; color: var(--gray-500); margin-top: 1px; }
-.alloc-qty { font-size: 20px; font-weight: 800; color: var(--blue-600); text-align: right; letter-spacing: -.5px; }
-.alloc-unit { font-size: 10px; color: var(--gray-400); text-align: right; }
+/* ── EMPTY STATE ─────────────────────────────────────── */
+.empty-state { text-align: center; padding: 48px 24px; color: var(--gray-400); }
+.empty-state svg { margin-bottom: 12px; opacity: .4; }
+.empty-state p { font-size: 14px; font-weight: 500; }
 
 /* ── RESPONSIVE ─────────────────────────────────────── */
 @media (max-width: 1024px) {
   .stats-grid { grid-template-columns: repeat(2,1fr); }
   .charts-row { grid-template-columns: 1fr; }
 }
-
 @media (max-width: 768px) {
   .sidebar { transform: translateX(-100%); }
   .sidebar.open { transform: translateX(0); }
@@ -286,7 +284,6 @@ pre.cb-body { padding: 16px; font-family: 'JetBrains Mono', monospace; font-size
   .table-toolbar { flex-wrap: wrap; }
   .modal { padding: 22px; }
 }
-
 @media (max-width: 480px) {
   .stats-grid { grid-template-columns: 1fr; }
   .tbl-search input { width: 140px; }
@@ -308,9 +305,9 @@ pre.cb-body { padding: 16px; font-family: 'JetBrains Mono', monospace; font-size
       <div class="logo-name">Stock<span>Vault</span></div>
     </div>
     <div class="sidebar-profile">
-      <div class="profile-avatar" id="profile-avatar"></div>
+      <div class="profile-avatar" id="profile-avatar">A</div>
       <div>
-        <div class="profile-name" id="username1"></div>
+        <div class="profile-name" id="username1">Admin</div>
         <div class="profile-role">Administrator</div>
       </div>
     </div>
@@ -326,7 +323,7 @@ pre.cb-body { padding: 16px; font-family: 'JetBrains Mono', monospace; font-size
       <div class="nav-link" onclick="goPage('stock',this)">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
         Stock Overview
-        <span class="nav-badge">8</span>
+        <span class="nav-badge" id="stock-badge">—</span>
       </div>
     </div>
     <div class="nav-section">
@@ -351,7 +348,7 @@ pre.cb-body { padding: 16px; font-family: 'JetBrains Mono', monospace; font-size
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
       Sign Out
     </button>
-</div>
+  </div>
 </aside>
 
 <!-- MAIN -->
@@ -366,7 +363,7 @@ pre.cb-body { padding: 16px; font-family: 'JetBrains Mono', monospace; font-size
         <span class="search-ico">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
         </span>
-        <input placeholder="Search stock, users…">
+        <input placeholder="Search stock, users…" oninput="globalSearch(this.value)">
       </div>
       <div class="icon-btn" title="Notifications">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
@@ -388,7 +385,7 @@ pre.cb-body { padding: 16px; font-family: 'JetBrains Mono', monospace; font-size
     <!-- ── DASHBOARD ───────────────────────────────── -->
     <div class="page active" id="page-dashboard">
       <div class="page-header">
-        <div class="page-heading" id="username"></div>
+        <div class="page-heading" id="username">Welcome back 👋</div>
         <div class="page-sub">Here's what's happening in your warehouse today.</div>
       </div>
 
@@ -399,9 +396,9 @@ pre.cb-body { padding: 16px; font-family: 'JetBrains Mono', monospace; font-size
             <div class="stat-icon" style="background:#eff6ff;color:#2563eb">
               <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
             </div>
-            <div class="stat-pill pill-up">↑ 12%</div>
+            <div class="stat-pill pill-up" id="pill-total">—</div>
           </div>
-          <div class="stat-val">2,847</div>
+          <div class="stat-val" id="stat-total">—</div>
           <div class="stat-lbl">Total Stock Items</div>
           <div class="sparkline" id="sp1"></div>
         </div>
@@ -411,9 +408,9 @@ pre.cb-body { padding: 16px; font-family: 'JetBrains Mono', monospace; font-size
             <div class="stat-icon" style="background:#ecfeff;color:#0891b2">
               <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
             </div>
-            <div class="stat-pill pill-info">42.3%</div>
+            <div class="stat-pill pill-info" id="pill-allocated">—</div>
           </div>
-          <div class="stat-val">1,203</div>
+          <div class="stat-val" id="stat-allocated">—</div>
           <div class="stat-lbl">Units Allocated</div>
           <div class="sparkline" id="sp2"></div>
         </div>
@@ -423,9 +420,9 @@ pre.cb-body { padding: 16px; font-family: 'JetBrains Mono', monospace; font-size
             <div class="stat-icon" style="background:#ecfdf5;color:#059669">
               <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2Z"/><path d="M12 12h.01"/><path d="M17 12h.01"/><path d="M7 12h.01"/></svg>
             </div>
-            <div class="stat-pill pill-up">57.7%</div>
+            <div class="stat-pill pill-up" id="pill-available">—</div>
           </div>
-          <div class="stat-val">1,644</div>
+          <div class="stat-val" id="stat-available">—</div>
           <div class="stat-lbl">Available Stock</div>
           <div class="sparkline" id="sp3"></div>
         </div>
@@ -435,10 +432,10 @@ pre.cb-body { padding: 16px; font-family: 'JetBrains Mono', monospace; font-size
             <div class="stat-icon" style="background:#fffbeb;color:#d97706">
               <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
             </div>
-            <div class="stat-pill pill-up">↑ 3</div>
+            <div class="stat-pill pill-info" id="pill-skus">—</div>
           </div>
-          <div class="stat-val">18</div>
-          <div class="stat-lbl">Active Users</div>
+          <div class="stat-val" id="stat-skus">—</div>
+          <div class="stat-lbl">Unique SKUs</div>
           <div class="sparkline" id="sp4"></div>
         </div>
       </div>
@@ -450,9 +447,6 @@ pre.cb-body { padding: 16px; font-family: 'JetBrains Mono', monospace; font-size
               <div class="card-title">Stock Distribution</div>
               <div class="card-desc">Total · Allocated · Available per item</div>
             </div>
-            <select style="font-size:12px;border:1px solid var(--border);border-radius:7px;padding:5px 10px;background:white;color:var(--gray-700);outline:none;cursor:pointer;">
-              <option>This Week</option><option>This Month</option>
-            </select>
           </div>
           <div style="padding:18px 22px 10px">
             <div class="bar-grid" id="bar-chart"></div>
@@ -475,14 +469,14 @@ pre.cb-body { padding: 16px; font-family: 'JetBrains Mono', monospace; font-size
             <div class="donut-ring">
               <svg class="donut-svg" viewBox="0 0 100 100" id="donut"></svg>
               <div class="donut-center">
-                <div class="donut-val">57%</div>
+                <div class="donut-val" id="donut-pct">—</div>
                 <div class="donut-sub">Available</div>
               </div>
             </div>
             <div class="donut-rows">
-              <div class="donut-row"><div class="donut-label"><div class="donut-swatch" style="background:#2563eb"></div>Available</div><div class="donut-num">1,644</div></div>
-              <div class="donut-row"><div class="donut-label"><div class="donut-swatch" style="background:#0891b2"></div>Reserved</div><div class="donut-num">520</div></div>
-              <div class="donut-row"><div class="donut-label"><div class="donut-swatch" style="background:#059669"></div>Checked Out</div><div class="donut-num">683</div></div>
+              <div class="donut-row"><div class="donut-label"><div class="donut-swatch" style="background:#059669"></div>Available</div><div class="donut-num" id="d-avail">—</div></div>
+              <div class="donut-row"><div class="donut-label"><div class="donut-swatch" style="background:#0891b2"></div>Allocated</div><div class="donut-num" id="d-alloc">—</div></div>
+              <div class="donut-row"><div class="donut-label"><div class="donut-swatch" style="background:#e11d48"></div>Out of Stock</div><div class="donut-num" id="d-oos">—</div></div>
             </div>
           </div>
         </div>
@@ -491,9 +485,14 @@ pre.cb-body { padding: 16px; font-family: 'JetBrains Mono', monospace; font-size
       <div class="card">
         <div class="card-head">
           <div class="card-title">Recent Activity</div>
-          <span class="card-link">View all <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+          <span class="card-link" onclick="goPage('stock',null)">View stock <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
         </div>
-        <div id="activity-feed"></div>
+        <div id="activity-feed">
+          <div class="empty-state">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+            <p>No recent activity</p>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -511,6 +510,10 @@ pre.cb-body { padding: 16px; font-family: 'JetBrains Mono', monospace; font-size
               <span class="tbl-search-ico"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span>
               <input placeholder="Search items…" oninput="filterTbl(this,'stock-body')">
             </div>
+            <button class="btn btn-ghost btn-sm" onclick="fetchStock()">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+              Refresh
+            </button>
             <button class="btn btn-primary" onclick="openModal()">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="5" y2="19"/><line x1="5" x2="19" y1="12" y2="12"/></svg>
               Add Item
@@ -520,7 +523,12 @@ pre.cb-body { padding: 16px; font-family: 'JetBrains Mono', monospace; font-size
         <div class="table-wrap">
           <table>
             <thead><tr><th>Code</th><th>Item</th><th>Total</th><th>Allocated</th><th>Available</th><th>Utilization</th><th>Status</th></tr></thead>
-            <tbody id="stock-body"></tbody>
+            <tbody id="stock-body">
+              <!-- skeleton rows shown while loading -->
+              <tr class="skeleton-row"><td colspan="7"><div class="skeleton" style="height:16px;width:80%"></div></td></tr>
+              <tr class="skeleton-row"><td colspan="7"><div class="skeleton" style="height:16px;width:65%"></div></td></tr>
+              <tr class="skeleton-row"><td colspan="7"><div class="skeleton" style="height:16px;width:75%"></div></td></tr>
+            </tbody>
           </table>
         </div>
       </div>
@@ -538,7 +546,7 @@ pre.cb-body { padding: 16px; font-family: 'JetBrains Mono', monospace; font-size
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
             Format: <strong style="font-family:'JetBrains Mono',monospace;margin:0 4px">stock_code, stock_name, quantity</strong> — Existing items will have quantity added.
           </div>
-          <div class="upload-zone" onclick="document.getElementById('csv-in').click()">
+          <div class="upload-zone" id="drop-zone" onclick="document.getElementById('csv-in').click()">
             <input type="file" id="csv-in" accept=".csv" style="display:none" onchange="handleCSV(this)">
             <div class="upload-icon"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg></div>
             <div class="upload-title">Drop your CSV here</div>
@@ -548,8 +556,8 @@ pre.cb-body { padding: 16px; font-family: 'JetBrains Mono', monospace; font-size
           <div id="csv-preview" style="display:none">
             <div class="code-block">
               <div class="cb-head">
-                <span class="cb-file">preview.csv</span>
-                <button class="btn btn-primary" onclick="processCSV()" style="font-size:12px;padding:5px 11px">Process Upload</button>
+                <span class="cb-file" id="csv-filename">preview.csv</span>
+                <button class="btn btn-primary" id="process-btn" onclick="processCSV()" style="font-size:12px;padding:5px 11px">Process Upload</button>
               </div>
               <pre class="cb-body" id="csv-text"></pre>
             </div>
@@ -559,12 +567,12 @@ pre.cb-body { padding: 16px; font-family: 'JetBrains Mono', monospace; font-size
           <div class="card-title" style="margin-bottom:12px">Sample Format</div>
           <div class="code-block">
             <div class="cb-head"><span class="cb-file">sample_stock.csv</span></div>
-            <pre class="cb-body">stock_code, stock_name, quantity
-ITEM001, USB Keyboard, 50
-ITEM002, HDMI Cable, 100
-ITEM003, Wireless Mouse, 75
-ITEM004, Monitor Stand, 30
-ITEM005, USB-C Hub, 120</pre>
+            <pre class="cb-body">stock_code,stock_name,quantity
+ITEM001,USB Keyboard,50
+ITEM002,HDMI Cable,100
+ITEM003,Wireless Mouse,75
+ITEM004,Monitor Stand,30
+ITEM005,USB-C Hub,120</pre>
           </div>
           <button class="btn btn-ghost" onclick="dlSample()" style="margin-top:12px;font-size:13px">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
@@ -597,7 +605,9 @@ ITEM005, USB-C Hub, 120</pre>
         <div class="table-wrap">
           <table>
             <thead><tr><th>User Email</th><th>Item</th><th>Code</th><th>Quantity</th><th>Status</th><th>Date</th></tr></thead>
-            <tbody id="alloc-body"></tbody>
+            <tbody id="alloc-body">
+              <tr><td colspan="6" style="text-align:center;padding:32px;color:var(--gray-400);font-size:13px">Allocation data coming soon</td></tr>
+            </tbody>
           </table>
         </div>
       </div>
@@ -607,14 +617,21 @@ ITEM005, USB-C Hub, 120</pre>
     <div class="page" id="page-export">
       <div class="page-header">
         <div class="page-heading">Export Reports</div>
-        <div class="page-sub">Generate and download allocation reports in your preferred format.</div>
+        <div class="page-sub">Generate and download stock reports in CSV format.</div>
       </div>
       <div class="two-col-form">
         <div class="card card-body">
           <div class="card-title" style="margin-bottom:18px">Report Configuration</div>
-          <div class="fg"><label>Report Type</label><select><option>Full Allocation Report</option><option>Available Stock Summary</option><option>User-specific Report</option></select></div>
-          <div class="fg"><label>Date Range</label><select><option>All Time</option><option>Last 7 Days</option><option>Last 30 Days</option><option>This Month</option></select></div>
-          <div class="fg"><label>Export Format</label><select><option>.csv — Comma Separated</option><option>.xlsx — Excel</option></select></div>
+          <div class="fg"><label>Report Type</label>
+            <select id="export-type">
+              <option value="full">Full Stock Report</option>
+              <option value="instock">In-Stock Items Only</option>
+              <option value="oos">Out-of-Stock Items Only</option>
+            </select>
+          </div>
+          <div class="fg"><label>Export Format</label>
+            <select><option>.csv — Comma Separated</option></select>
+          </div>
           <button class="btn btn-primary btn-full" onclick="exportCSV()">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
             Download Report
@@ -623,20 +640,16 @@ ITEM005, USB-C Hub, 120</pre>
         <div class="card card-body">
           <div class="card-title" style="margin-bottom:12px">Report Preview</div>
           <div class="code-block">
-            <div class="cb-head"><span class="cb-file">allocation_report.csv</span></div>
-            <pre class="cb-body">user_email,stock_code,stock_name,qty
-user1@test.com,ITEM001,USB Keyboard,5
-user1@test.com,ITEM003,Wireless Mouse,2
-user2@test.com,ITEM002,HDMI Cable,10
-user3@test.com,ITEM004,Monitor Stand,1
-user2@test.com,ITEM005,USB-C Hub,8</pre>
+            <div class="cb-head"><span class="cb-file">stock_report.csv</span></div>
+            <pre class="cb-body" id="export-preview">stock_code,stock_name,total,allocated,available,utilization,status
+(load data to preview…)</pre>
           </div>
         </div>
       </div>
     </div>
 
-  </div>
-</div>
+  </div><!-- /content -->
+</div><!-- /main -->
 
 <!-- BOTTOM NAV (mobile only) -->
 <nav class="bottom-nav">
@@ -674,7 +687,7 @@ user2@test.com,ITEM005,USB-C Hub,8</pre>
     <div class="fg"><label>Quantity</label><input id="m-qty" type="number" placeholder="50" min="1"></div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeModal()">Cancel</button>
-      <button class="btn-ok" onclick="addItem()">Add to Warehouse</button>
+      <button class="btn-ok" id="modal-submit-btn" onclick="addItem()">Add to Warehouse</button>
     </div>
   </div>
 </div>
@@ -682,204 +695,545 @@ user2@test.com,ITEM005,USB-C Hub,8</pre>
 <div id="toast"><span class="toast-ic" id="t-ic"></span><span id="t-msg"></span></div>
 
 <script>
-  email= localStorage.getItem("email")
-   document.getElementById("username").innerText = "Welcome back, " + email.charAt(0).toUpperCase()+email.slice(1) + " 👋";
-   document.getElementById("username1").innerText = email.charAt(0).toUpperCase()+email.slice(1) ;
-   document.getElementById("profile-avatar").innerText = email.charAt(0).toUpperCase();
-function handleSignOut() {
-    // 1. Ask for confirmation
-    const confirmLogout = confirm("Are you sure you want to sign out?");
-    
-    if (confirmLogout) {
-        // 2. Clear local storage (security best practice)
-        localStorage.removeItem("access");
-        localStorage.removeItem("refresh");
-        localStorage.removeItem("session_token");
-        
-        // 3. Redirect to /login
-        window.location.href = "/";
+/* ═══════════════════════════════════════════════════════
+   CONFIGURATION
+   ═══════════════════════════════════════════════════════ */
+
+const API_BASE = "";   // Django serves from the same origin — no prefix needed
+                       // If you add a prefix later (e.g. /api), set it here.
+
+/* ═══════════════════════════════════════════════════════
+   STATE
+   ═══════════════════════════════════════════════════════ */
+
+let STOCK = [];   // filled by fetchStock() on load
+
+const PAGES = {
+  dashboard:   'Dashboard',
+  stock:       'Stock Overview',
+  upload:      'Load CSV',
+  allocations: 'User Allocations',
+  export:      'Export Reports'
+};
+
+/* ═══════════════════════════════════════════════════════
+   HTTP HELPER
+   ═══════════════════════════════════════════════════════ */
+
+function getToken() {
+  return localStorage.getItem("session_token");
+}
+
+/**
+ * Fetches API_BASE + path, attaches the session token, returns parsed JSON.
+ * Throws an Error with the server's message on non-2xx responses.
+ */
+async function apiFetch(path, options = {}) {
+  const token = getToken();
+  const headers = {
+    "Content-Type": "application/json",
+    "X-CSRFToken": getCookie("csrftoken"),   // Django CSRF
+    ...(token ? { "Authorization": `Token ${token}` } : {}),
+    ...(options.headers || {}),
+  };
+
+  const res = await fetch(`${API_BASE}${path}`, { ...options, headers });
+
+  let data = {};
+  try { data = await res.json(); } catch (_) { /* non-JSON body */ }
+
+  if (!res.ok) {
+    const msg = data.message || data.error || data.detail
+      || Object.values(data).flat().join(" ")
+      || `HTTP ${res.status}`;
+    throw new Error(msg);
+  }
+  return data;
+}
+
+/** Reads a cookie by name (used for Django CSRF token). */
+function getCookie(name) {
+  const v = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+  return v ? v.pop() : '';
+}
+
+/* ═══════════════════════════════════════════════════════
+   INVENTORY API
+   ═══════════════════════════════════════════════════════ */
+
+/**
+ * GET /inventory_record/
+ * Fetches all stock items, stores them in STOCK, refreshes UI.
+ *
+ * ⚠️  Requires a GET handler in InventoryView (views.py) — see notes below.
+ */
+async function fetchStock() {
+  try {
+    const data = await apiFetch("/inventory_record/", { method: "GET" });
+
+    // Normalise backend field names → frontend names
+    STOCK = (Array.isArray(data) ? data : data.results ?? []).map(d => ({
+      code:        d.code,
+      name:        d.item,          // backend: "item"  → frontend: "name"
+      total:       d.total      ?? 0,
+      allocated:   d.allocated  ?? 0,
+      available:   d.available  ?? (d.total - d.allocated),
+      utilization: d.utilization ?? (d.total > 0 ? Math.round((d.allocated / d.total) * 100) : 0),
+      status:      d.status     ?? (d.available > 0 ? "In Stock" : "Out Of Stock"),
+    }));
+
+    renderStockTable();
+    buildCharts();
+    updateStatCards();
+
+    // Update sidebar badge
+    const badge = document.getElementById("stock-badge");
+    if (badge) badge.textContent = STOCK.length;
+
+    // Update export preview
+    updateExportPreview();
+
+  } catch (err) {
+    toast("warn", `Failed to load stock: ${err.message}`);
+    console.error("[fetchStock]", err);
+
+    // Show error state in table
+    const sb = document.getElementById("stock-body");
+    if (sb) sb.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--rose);font-size:13px">
+      ⚠ Could not load data — ${err.message}
+    </td></tr>`;
+  }
+}
+
+/**
+ * POST /inventory_record/
+ * Adds a single item. Called from the modal form.
+ */
+async function addItem() {
+  const code = document.getElementById("m-code").value.trim();
+  const name = document.getElementById("m-name").value.trim();
+  const qty  = parseInt(document.getElementById("m-qty").value, 10);
+
+  if (!code || !name || !qty || qty < 1) {
+    toast("warn", "Please fill all fields with valid values");
+    return;
+  }
+
+  const btn = document.getElementById("modal-submit-btn");
+  btn.textContent = "Saving…";
+  btn.disabled = true;
+
+  try {
+    await apiFetch("/inventory_record/", {
+      method: "POST",
+      body: JSON.stringify({ code, item: name, total: qty }),
+    });
+
+    toast("success", `"${name}" added to warehouse`);
+    closeModal();
+    ["m-code", "m-name", "m-qty"].forEach(id => document.getElementById(id).value = "");
+    await fetchStock();   // refresh with live server data
+
+  } catch (err) {
+    toast("warn", err.message);
+    console.error("[addItem]", err);
+  } finally {
+    btn.textContent = "Add to Warehouse";
+    btn.disabled = false;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   CSV UPLOAD  →  POST each row to /inventory_record/
+   ═══════════════════════════════════════════════════════ */
+
+function handleCSV(inp) {
+  const f = inp.files[0];
+  if (!f) return;
+  if (f.size > 10 * 1024 * 1024) { toast("warn", "File exceeds 10 MB limit"); return; }
+
+  const r = new FileReader();
+  r.onload = e => {
+    document.getElementById("csv-preview").style.display = "block";
+    document.getElementById("csv-text").textContent = e.target.result;
+    document.getElementById("csv-filename").textContent = f.name;
+    toast("success", `"${f.name}" loaded — review then click Process`);
+  };
+  r.readAsText(f);
+}
+
+async function processCSV() {
+  const raw = document.getElementById("csv-text").textContent.trim();
+  if (!raw) { toast("warn", "No CSV content to process"); return; }
+
+  const lines  = raw.split("\n").map(l => l.trim()).filter(Boolean);
+  const header = lines[0].toLowerCase().split(",").map(h => h.trim());
+  const rows   = lines.slice(1);
+
+  const codeIdx = header.findIndex(h => h.includes("code"));
+  const nameIdx = header.findIndex(h => h.includes("name"));
+  const qtyIdx  = header.findIndex(h => h.includes("qty") || h.includes("quantity"));
+
+  if (codeIdx < 0 || nameIdx < 0 || qtyIdx < 0) {
+    toast("warn", "CSV must have columns: stock_code, stock_name, quantity");
+    return;
+  }
+
+  const btn = document.getElementById("process-btn");
+  btn.textContent = "Uploading…";
+  btn.disabled = true;
+
+  let ok = 0, fail = 0;
+
+  for (const line of rows) {
+    const cols  = line.split(",").map(c => c.trim());
+    const code  = cols[codeIdx];
+    const item  = cols[nameIdx];
+    const total = parseInt(cols[qtyIdx], 10);
+    if (!code || !item || isNaN(total)) { fail++; continue; }
+
+    try {
+      await apiFetch("/inventory_record/", {
+        method: "POST",
+        body: JSON.stringify({ code, item, total }),
+      });
+      ok++;
+    } catch (err) {
+      console.error(`[processCSV] "${line}":`, err.message);
+      fail++;
     }
   }
 
-const STOCK = [
-  {code:'ITEM001',name:'USB Keyboard',   total:50,  allocated:20},
-  {code:'ITEM002',name:'HDMI Cable',     total:100, allocated:40},
-  {code:'ITEM003',name:'Wireless Mouse', total:75,  allocated:30},
-  {code:'ITEM004',name:'Monitor Stand',  total:30,  allocated:5},
-  {code:'ITEM005',name:'USB-C Hub',      total:120, allocated:30},
-  {code:'ITEM006',name:'Laptop Stand',   total:40,  allocated:12},
-  {code:'ITEM007',name:'Webcam HD',      total:60,  allocated:25},
-  {code:'ITEM008',name:'Headset',        total:55,  allocated:18},
-];
+  btn.textContent = "Process Upload";
+  btn.disabled = false;
+  document.getElementById("csv-preview").style.display = "none";
+  document.getElementById("csv-in").value = "";
 
-const ALLOCS = [
-  {email:'user1@company.com', item:'USB Keyboard',   code:'ITEM001', qty:5,  status:'reserved',    date:'2025-01-15'},
-  {email:'user1@company.com', item:'Wireless Mouse',  code:'ITEM003', qty:2, status:'reserved',    date:'2025-01-16'},
-  {email:'user2@company.com', item:'HDMI Cable',      code:'ITEM002', qty:10,status:'checked_out', date:'2025-01-08'},
-  {email:'user3@company.com', item:'Monitor Stand',   code:'ITEM004', qty:1, status:'reserved',    date:'2025-01-15'},
-  {email:'user2@company.com', item:'USB-C Hub',       code:'ITEM005', qty:8, status:'checked_out', date:'2025-01-12'},
-  {email:'user4@company.com', item:'Headset',         code:'ITEM008', qty:3, status:'reserved',    date:'2025-01-17'},
-];
+  toast(
+    fail === 0 ? "success" : "warn",
+    fail === 0
+      ? `All ${ok} rows uploaded successfully!`
+      : `${ok} rows uploaded, ${fail} skipped.`
+  );
+  await fetchStock();
+}
 
-const FEED = [
-  {icon:`<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>`, bg:'#eff6ff', color:'#2563eb', text:'<strong>CSV Uploaded</strong> — 5 items updated by sarah@company.com', time:'2 min ago'},
-  {icon:`<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`, bg:'#ecfeff', color:'#0891b2', text:'<strong>user1@company.com</strong> reserved 5× USB Keyboard', time:'15 min ago'},
-  {icon:`<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`, bg:'#ecfdf5', color:'#059669', text:'<strong>user2@company.com</strong> checked out 10× HDMI Cable', time:'1 hr ago'},
-  {icon:`<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`, bg:'#fffbeb', color:'#d97706', text:'New user <strong>user5@company.com</strong> registered', time:'3 hrs ago'},
-  {icon:`<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`, bg:'#ecfeff', color:'#0891b2', text:'<strong>user3@company.com</strong> reserved 1× Monitor Stand', time:'5 hrs ago'},
-  {icon:`<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>`, bg:'#eff6ff', color:'#2563eb', text:'<strong>CSV Uploaded</strong> — 3 new items added, 2 updated', time:'Yesterday'},
-];
+/* ═══════════════════════════════════════════════════════
+   EXPORT
+   ═══════════════════════════════════════════════════════ */
 
-const PAGES = {dashboard:'Dashboard',stock:'Stock Overview',upload:'Load CSV',allocations:'User Allocations',export:'Export Reports'};
+function exportCSV() {
+  const type = document.getElementById("export-type")?.value ?? "full";
+
+  let rows = STOCK;
+  if (type === "instock") rows = STOCK.filter(d => d.status === "In Stock");
+  if (type === "oos")     rows = STOCK.filter(d => d.status === "Out Of Stock");
+
+  const header = ["stock_code", "stock_name", "total", "allocated", "available", "utilization%", "status"];
+  const csv = [header, ...rows.map(d => [
+    d.code, d.name, d.total, d.allocated, d.available, d.utilization, d.status
+  ])].map(r => r.join(",")).join("\n");
+
+  const a = Object.assign(document.createElement("a"), {
+    href:     URL.createObjectURL(new Blob([csv], { type: "text/csv" })),
+    download: `stockvault_${type}_${new Date().toISOString().slice(0,10)}.csv`,
+  });
+  a.click();
+  URL.revokeObjectURL(a.href);
+  toast("success", "Report downloaded");
+}
+
+function updateExportPreview() {
+  const pre = document.getElementById("export-preview");
+  if (!pre || !STOCK.length) return;
+  const lines = ["stock_code,stock_name,total,allocated,available,utilization,status",
+    ...STOCK.slice(0, 5).map(d =>
+      `${d.code},${d.name},${d.total},${d.allocated},${d.available},${d.utilization}%,${d.status}`)
+  ];
+  if (STOCK.length > 5) lines.push(`…and ${STOCK.length - 5} more rows`);
+  pre.textContent = lines.join("\n");
+}
+
+function dlSample() {
+  const csv = "stock_code,stock_name,quantity\nITEM001,USB Keyboard,50\nITEM002,HDMI Cable,100\nITEM003,Wireless Mouse,75";
+  const a = Object.assign(document.createElement("a"), {
+    href:     URL.createObjectURL(new Blob([csv], { type: "text/csv" })),
+    download: "sample_stock.csv",
+  });
+  a.click();
+  toast("success", "Sample CSV downloaded");
+}
+
+/* ═══════════════════════════════════════════════════════
+   SIGN OUT  →  POST /auth/logout/
+   ═══════════════════════════════════════════════════════ */
+
+async function handleSignOut() {
+  if (!confirm("Are you sure you want to sign out?")) return;
+
+  try {
+    await apiFetch("/auth/logout/", { method: "POST" });
+  } catch (err) {
+    console.warn("[handleSignOut] server error (still clearing session):", err.message);
+  } finally {
+    localStorage.removeItem("session_token");
+    localStorage.removeItem("email");
+    window.location.href = "/";
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   UI HELPERS — NAVIGATION
+   ═══════════════════════════════════════════════════════ */
 
 function goPage(id, el) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page-'+id)?.classList.add('active');
+  document.getElementById('page-' + id)?.classList.add('active');
   document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
-  el?.classList.add('active');
+  if (el && el.classList) el.classList.add('active');
   document.getElementById('page-title').textContent = PAGES[id] || id;
   closeSidebar();
 }
 
-function openSidebar() {
-  document.getElementById('sidebar').classList.add('open');
-  document.getElementById('sidebar-overlay').classList.add('show');
+function openSidebar()  { document.getElementById('sidebar').classList.add('open'); document.getElementById('sidebar-overlay').classList.add('show'); }
+function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebar-overlay').classList.remove('show'); }
+function setBottomNav(activeId) { document.querySelectorAll('.bnav-item').forEach(i => i.classList.remove('active')); document.getElementById(activeId)?.classList.add('active'); }
+
+/* ═══════════════════════════════════════════════════════
+   UI HELPERS — TABLE
+   ═══════════════════════════════════════════════════════ */
+
+function filterTbl(input, tbodyId) {
+  const q = input.value.toLowerCase();
+  document.querySelectorAll('#' + tbodyId + ' tr').forEach(r => {
+    r.style.display = r.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
 }
 
-function closeSidebar() {
-  document.getElementById('sidebar').classList.remove('open');
-  document.getElementById('sidebar-overlay').classList.remove('show');
+function globalSearch(q) {
+  if (!q) return;
+  // Auto-navigate to stock page and filter
+  goPage('stock', document.querySelector('.nav-link:nth-child(2)'));
+  document.querySelectorAll('#stock-body tr').forEach(r => {
+    r.style.display = r.textContent.toLowerCase().includes(q.toLowerCase()) ? '' : 'none';
+  });
 }
 
-function setBottomNav(activeId) {
-  document.querySelectorAll('.bnav-item').forEach(i => i.classList.remove('active'));
-  document.getElementById(activeId)?.classList.add('active');
+/* ═══════════════════════════════════════════════════════
+   UI HELPERS — MODAL
+   ═══════════════════════════════════════════════════════ */
+
+function openModal()  { document.getElementById('modal').classList.add('open'); }
+function closeModal() { document.getElementById('modal').classList.remove('open'); }
+document.getElementById('modal').addEventListener('click', e => { if (e.target === document.getElementById('modal')) closeModal(); });
+
+/* ═══════════════════════════════════════════════════════
+   UI HELPERS — TOAST
+   ═══════════════════════════════════════════════════════ */
+
+const TOAST_ICONS = {
+  success: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`,
+  warn:    `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>`,
+};
+let _toastTimer;
+function toast(type, msg) {
+  clearTimeout(_toastTimer);
+  document.getElementById('t-ic').innerHTML  = TOAST_ICONS[type] || TOAST_ICONS.success;
+  document.getElementById('t-msg').textContent = msg;
+  document.getElementById('toast').classList.add('show');
+  _toastTimer = setTimeout(() => document.getElementById('toast').classList.remove('show'), 3400);
 }
 
-window.addEventListener('load', () => { buildCharts(); buildTables(); });
+/* ═══════════════════════════════════════════════════════
+   CHARTS & STAT CARDS (driven by STOCK array)
+   ═══════════════════════════════════════════════════════ */
 
-function buildCharts() {
-  const spSets = [[30,45,40,60,55,70,65,80],[20,30,25,40,45,50,48,55],[60,50,55,40,45,35,40,30],[8,10,12,11,14,15,16,18]];
+function updateStatCards() {
+  if (!STOCK.length) return;
+
+  const totalItems  = STOCK.reduce((s, d) => s + d.total,     0);
+  const totalAlloc  = STOCK.reduce((s, d) => s + d.allocated, 0);
+  const totalAvail  = STOCK.reduce((s, d) => s + d.available, 0);
+  const pctAlloc    = totalItems ? Math.round(totalAlloc / totalItems * 100) : 0;
+  const pctAvail    = totalItems ? Math.round(totalAvail / totalItems * 100) : 0;
+
+  document.getElementById("stat-total").textContent     = totalItems.toLocaleString();
+  document.getElementById("stat-allocated").textContent = totalAlloc.toLocaleString();
+  document.getElementById("stat-available").textContent = totalAvail.toLocaleString();
+  document.getElementById("stat-skus").textContent      = STOCK.length;
+
+  document.getElementById("pill-total").textContent     = `${STOCK.length} SKUs`;
+  document.getElementById("pill-allocated").textContent = `${pctAlloc}%`;
+  document.getElementById("pill-available").textContent = `${pctAvail}%`;
+  document.getElementById("pill-skus").textContent      = `${STOCK.filter(d => d.status === "In Stock").length} active`;
+
+  // Sparklines (simple relative bars from STOCK data)
+  const spData = [
+    STOCK.slice(0,8).map(d => d.total),
+    STOCK.slice(0,8).map(d => d.allocated),
+    STOCK.slice(0,8).map(d => d.available),
+    STOCK.slice(0,8).map(d => d.utilization),
+  ];
   const spColors = ['#93c5fd','#67e8f9','#6ee7b7','#fcd34d'];
-  spSets.forEach((d,i) => {
-    const el = document.getElementById('sp'+(i+1)); if(!el) return;
-    const mx = Math.max(...d);
+  spData.forEach((d, i) => {
+    const el = document.getElementById('sp' + (i + 1));
+    if (!el || !d.length) return;
+    const mx = Math.max(...d) || 1;
     el.innerHTML = d.map(v => `<div class="sp-bar" style="height:${Math.round(v/mx*100)}%;background:${spColors[i]}"></div>`).join('');
   });
-
-  const bc = document.getElementById('bar-chart'); if(!bc) return;
-  const mx = Math.max(...STOCK.map(d=>d.total));
-  bc.innerHTML = STOCK.slice(0,6).map(d => {
-    const av = d.total-d.allocated, H = n => Math.round(n/mx*130);
-    return `<div class="bar-group">
-      <div class="bar-cols">
-        <div class="bar" style="height:${H(d.total)}px;background:#2563eb" title="Total: ${d.total}"></div>
-        <div class="bar" style="height:${H(d.allocated)}px;background:#0891b2" title="Allocated: ${d.allocated}"></div>
-        <div class="bar" style="height:${H(av)}px;background:#059669" title="Available: ${av}"></div>
-      </div>
-      <div class="bar-code">${d.code.replace('ITEM','I')}</div>
-    </div>`;
-  }).join('');
-
-  const svg = document.getElementById('donut'); if(!svg) return;
-  const segs = [{v:57.7,c:'#2563eb'},{v:18.3,c:'#0891b2'},{v:24,c:'#059669'}];
-  const R=38, C=2*Math.PI*R; let cum=0;
-  svg.innerHTML = segs.map(s => {
-    const d=(s.v/100)*C, off=C-(cum/100)*C; cum+=s.v;
-    return `<circle cx="50" cy="50" r="${R}" fill="none" stroke="${s.c}" stroke-width="10" stroke-dasharray="${d} ${C-d}" stroke-dashoffset="${off}" stroke-linecap="round"/>`;
-  }).join('');
-
-  const feed = document.getElementById('activity-feed'); if(!feed) return;
-  feed.innerHTML = FEED.map(f => `
-    <div class="feed-item">
-      <div class="feed-icon" style="background:${f.bg};color:${f.color}">${f.icon}</div>
-      <div><div class="feed-text">${f.text}</div><div class="feed-time">${f.time}</div></div>
-    </div>`).join('');
 }
 
-function buildTables() {
-  const sb = document.getElementById('stock-body'); if(sb) sb.innerHTML = STOCK.map(d => {
-    const av=d.total-d.allocated, pct=Math.round(d.allocated/d.total*100);
-    const badge = av>20 ? `<span class="badge badge-green"><div class="badge-dot"></div>In Stock</span>` : av>5 ? `<span class="badge badge-amber"><div class="badge-dot"></div>Low Stock</span>` : `<span class="badge badge-rose"><div class="badge-dot"></div>Critical</span>`;
-    const color = pct>70?'#2563eb':pct>40?'#0891b2':'#059669';
+function buildCharts() {
+  // Bar chart
+  const bc = document.getElementById('bar-chart');
+  if (bc) {
+    if (!STOCK.length) {
+      bc.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;width:100%;color:var(--gray-300);font-size:13px">No data yet</div>';
+    } else {
+      const mx = Math.max(...STOCK.map(d => d.total)) || 1;
+      bc.innerHTML = STOCK.slice(0, 6).map(d => {
+        const H = n => Math.max(3, Math.round(n / mx * 130));
+        return `<div class="bar-group">
+          <div class="bar-cols">
+            <div class="bar" style="height:${H(d.total)}px;background:#2563eb" title="Total: ${d.total}"></div>
+            <div class="bar" style="height:${H(d.allocated)}px;background:#0891b2" title="Allocated: ${d.allocated}"></div>
+            <div class="bar" style="height:${H(d.available)}px;background:#059669" title="Available: ${d.available}"></div>
+          </div>
+          <div class="bar-code">${d.code.replace('ITEM','I')}</div>
+        </div>`;
+      }).join('');
+    }
+  }
+
+  // Donut chart
+  const svg = document.getElementById('donut');
+  if (svg && STOCK.length) {
+    const totalItems = STOCK.reduce((s, d) => s + d.total, 0) || 1;
+    const totalAvail = STOCK.reduce((s, d) => s + d.available, 0);
+    const totalAlloc = STOCK.reduce((s, d) => s + d.allocated, 0);
+    const totalOOS   = STOCK.filter(d => d.status === "Out Of Stock").length;
+    const pctAvail   = Math.round(totalAvail / totalItems * 100);
+
+    document.getElementById("donut-pct").textContent = `${pctAvail}%`;
+    document.getElementById("d-avail").textContent   = totalAvail.toLocaleString();
+    document.getElementById("d-alloc").textContent   = totalAlloc.toLocaleString();
+    document.getElementById("d-oos").textContent     = `${totalOOS} SKU${totalOOS !== 1 ? "s" : ""}`;
+
+    const segs = [
+      { v: pctAvail,           c: '#059669' },
+      { v: 100 - pctAvail,     c: '#0891b2' },
+    ];
+    const R = 38, C = 2 * Math.PI * R;
+    let cum = 0;
+    svg.innerHTML = segs.map(s => {
+      const d = (s.v / 100) * C;
+      const off = C - (cum / 100) * C;
+      cum += s.v;
+      return `<circle cx="50" cy="50" r="${R}" fill="none" stroke="${s.c}" stroke-width="10" stroke-dasharray="${d} ${C - d}" stroke-dashoffset="${off}" stroke-linecap="round"/>`;
+    }).join('');
+  }
+
+  // Activity feed — built from STOCK (most recently added items)
+  const feed = document.getElementById('activity-feed');
+  if (feed && STOCK.length) {
+    const recent = STOCK.slice(-5).reverse();
+    feed.innerHTML = recent.map(d => `
+      <div class="feed-item">
+        <div class="feed-icon" style="background:#eff6ff;color:#2563eb">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/></svg>
+        </div>
+        <div>
+          <div class="feed-text"><strong>${d.code}</strong> — ${d.name}: ${d.total} total, ${d.available} available</div>
+          <div class="feed-time">${d.status === "In Stock" ? "✓ In Stock" : "✗ Out of Stock"} · ${d.utilization}% utilized</div>
+        </div>
+      </div>`).join('');
+  }
+}
+
+function renderStockTable() {
+  const sb = document.getElementById('stock-body');
+  if (!sb) return;
+
+  if (!STOCK.length) {
+    sb.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--gray-400);font-size:13px">
+      No stock items found. Add one or upload a CSV.
+    </td></tr>`;
+    return;
+  }
+
+  sb.innerHTML = STOCK.map(d => {
+    const pct   = d.utilization;
+    const color = pct > 70 ? '#2563eb' : pct > 40 ? '#0891b2' : '#059669';
+    const badge = d.available > 20
+      ? `<span class="badge badge-green"><div class="badge-dot"></div>In Stock</span>`
+      : d.available > 0
+        ? `<span class="badge badge-amber"><div class="badge-dot"></div>Low Stock</span>`
+        : `<span class="badge badge-rose"><div class="badge-dot"></div>Out of Stock</span>`;
+
     return `<tr>
       <td><span class="code-tag">${d.code}</span></td>
       <td style="font-weight:600;color:var(--gray-900)">${d.name}</td>
       <td style="font-family:'JetBrains Mono',monospace">${d.total}</td>
       <td style="font-family:'JetBrains Mono',monospace;color:#0891b2">${d.allocated}</td>
-      <td style="font-family:'JetBrains Mono',monospace;color:#059669;font-weight:600">${av}</td>
+      <td style="font-family:'JetBrains Mono',monospace;color:#059669;font-weight:600">${d.available}</td>
       <td><div class="prog-wrap"><div class="prog-track"><div class="prog-fill" style="width:${pct}%;background:${color}"></div></div><span class="prog-pct">${pct}%</span></div></td>
       <td>${badge}</td>
     </tr>`;
   }).join('');
-
-  const ab = document.getElementById('alloc-body'); if(ab) ab.innerHTML = ALLOCS.map(a => `
-    <tr>
-      <td style="font-size:13px;color:var(--gray-700)">${a.email}</td>
-      <td style="font-weight:600;color:var(--gray-900)">${a.item}</td>
-      <td><span class="code-tag">${a.code}</span></td>
-      <td style="font-family:'JetBrains Mono',monospace;font-weight:600">${a.qty}</td>
-      <td>${a.status==='checked_out'?'<span class="badge badge-green"><div class="badge-dot"></div>Checked Out</span>':'<span class="badge badge-amber"><div class="badge-dot"></div>Reserved</span>'}</td>
-      <td style="color:var(--gray-400);font-family:'JetBrains Mono',monospace;font-size:12px">${a.date}</td>
-    </tr>`).join('');
 }
 
-function filterTbl(input, tbodyId) {
-  const q = input.value.toLowerCase();
-  document.querySelectorAll('#'+tbodyId+' tr').forEach(r => { r.style.display = r.textContent.toLowerCase().includes(q)?'':'none'; });
-}
+/* ═══════════════════════════════════════════════════════
+   DRAG-AND-DROP CSV
+   ═══════════════════════════════════════════════════════ */
 
-function handleCSV(inp) {
-  const f=inp.files[0]; if(!f) return;
-  const r=new FileReader(); r.onload=e=>{
-    document.getElementById('csv-preview').style.display='block';
-    document.getElementById('csv-text').textContent=e.target.result;
-    toast('success',`"${f.name}" loaded — review then click Process`);
-  }; r.readAsText(f);
-}
+(function setupDragDrop() {
+  const zone = document.getElementById('drop-zone');
+  if (!zone) return;
 
-function processCSV() { document.getElementById('csv-preview').style.display='none'; document.getElementById('csv-in').value=''; toast('success','Stock updated from CSV!'); }
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+  zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+  zone.addEventListener('drop', e => {
+    e.preventDefault();
+    zone.classList.remove('drag-over');
+    const file = e.dataTransfer.files[0];
+    if (!file) return;
+    if (!file.name.endsWith('.csv')) { toast("warn", "Only .csv files are accepted"); return; }
+    const inp = document.getElementById('csv-in');
+    // Manually set the file on the hidden input
+    const dt = new DataTransfer();
+    dt.items.add(file);
+    inp.files = dt.files;
+    handleCSV(inp);
+  });
+})();
 
-function dlSample() {
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(new Blob(['stock_code,stock_name,quantity\nITEM001,USB Keyboard,50\nITEM002,HDMI Cable,100'],{type:'text/csv'}));
-  a.download='sample_stock.csv'; a.click();
-  toast('success','Sample CSV downloaded');
-}
+/* ═══════════════════════════════════════════════════════
+   BOOTSTRAP
+   ═══════════════════════════════════════════════════════ */
 
-function exportCSV() {
-  const csv='user_email,stock_code,stock_name,qty_allocated\n'+ALLOCS.map(a=>`${a.email},${a.code},${a.item},${a.qty}`).join('\n');
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
-  a.download='allocation_report.csv'; a.click();
-  toast('success','Report exported successfully');
-}
+(function init() {
+  // Redirect to login if no token
+  if (!getToken()) {
+    window.location.href = "/";
+    return;
+  }
 
-function openModal()  { document.getElementById('modal').classList.add('open'); }
-function closeModal() { document.getElementById('modal').classList.remove('open'); }
-function addItem() {
-  const code=document.getElementById('m-code').value;
-  const name=document.getElementById('m-name').value;
-  const qty=parseInt(document.getElementById('m-qty').value);
-  if(!code||!name||!qty) { toast('warn','Please fill all fields'); return; }
-  STOCK.push({code,name,total:qty,allocated:0});
-  buildTables(); closeModal();
-  toast('success',`${name} added to warehouse`);
-}
-document.getElementById('modal').addEventListener('click', e => { if(e.target===document.getElementById('modal')) closeModal(); });
+  // Populate header with stored email
+  const email = localStorage.getItem("email") || "";
+  const first  = email ? email.charAt(0).toUpperCase() : "A";
+  const display = email ? first + email.slice(1) : "Admin";
 
-let _t;
-const toastIcons = {
-  success:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`,
-  warn:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>`,
-};
-function toast(type, msg) {
-  clearTimeout(_t);
-  document.getElementById('t-ic').innerHTML = toastIcons[type]||toastIcons.success;
-  document.getElementById('t-msg').textContent = msg;
-  document.getElementById('toast').classList.add('show');
-  _t = setTimeout(()=>document.getElementById('toast').classList.remove('show'), 3400);
-}
+  const usernameEl  = document.getElementById("username");
+  const username1El = document.getElementById("username1");
+  const avatarEl    = document.getElementById("profile-avatar");
+
+  if (usernameEl)  usernameEl.textContent  = `Welcome back, ${display} 👋`;
+  if (username1El) username1El.textContent  = display;
+  if (avatarEl)    avatarEl.textContent     = first;
+
+  // Load live data from backend
+  fetchStock();
+})();
 </script>
 </body>
 </html>
