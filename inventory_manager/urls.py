@@ -40,7 +40,6 @@ urlpatterns = [
     path("request-otp/", request_otp, name="request-otp"),
     path("setpassword/", set_password, name="setpassword"),
     path("set-password/", SetPasswordView.as_view(), name="set-password"),
-    path("inventory_record/",InventoryView.as_view(),name='record-inventory'),
     path("request_report", RequestReportView.as_view(),name='request_report'),
 
     # HTML page (browser navigation)

@@ -322,18 +322,6 @@ class InventoryView(APIView):
                 status=status.HTTP_201_CREATED
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    permission_classes=[AllowAny]
-    def get(self,request):
-        return render(request,'admin_dashboard.html')
-    
-    def post(self,request):
-    
-        serializer=inventoryserializer(data=request.data)
-        if serializer.is_valid():
-            record=serializer.save()
-
-            return Response({'message':'recorded successfully'})
-        return Response(serializer.errors, status=400)
     
 
 class RequestReportView(APIView):

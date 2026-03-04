@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User,OTPCode,inventory,report_request
+from .models import User, OTPCode, inventory
 
 
 class RegisterSerializer(serializers.Serializer):
@@ -72,31 +72,22 @@ class SetPasswordSerializer(serializers.Serializer):
 
         user.set_password(password)
         user.save()
-
         return user
-    
+
+
 class inventoryserializer(serializers.ModelSerializer):
     total = serializers.IntegerField(required=True)
+
     class Meta:
-<<<<<<< HEAD
         model = inventory
         fields = ['code', 'item', 'total', 'allocated', 'available', 'utilization', 'status']
-=======
-        model  = inventory
-        fields = ['code', 'item', 'total', 'allocated', 'available', 'utilization', 'status', 'created_at']
-        read_only_fields = ['allocated', 'available', 'utilization', 'status', 'created_at']
-        
->>>>>>> 28bdc0ddfccf9bc57bc0928f58aac1146813c476
+        read_only_fields = ['allocated', 'available', 'utilization', 'status']
+
     def create(self, validated_data):
-        record = inventory.objects.create(**validated_data) 
+        record = inventory.objects.create(**validated_data)
         return record
 
 
-class ReportRequestSerializer(serializers.ModelSerializer):
-    class Meta:
-        model=report_request
-        fields=['report_configuration','date_range','export_format']
-
-
-
-
+class ReportRequestSerializer(serializers.Serializer):
+    report_type = serializers.CharField(max_length=50, required=False, default="full")
+    email = serializers.EmailField(required=False)
