@@ -12,6 +12,7 @@ from .authentication import SessionTokenAuthentication
 from .permissions import IsAdmin, IsRegularUser
 from .sms import send_otp_sms
 from django.shortcuts import render
+from django.http import HttpResponse
 import random
 import csv
 
@@ -357,8 +358,23 @@ class RequestReportView(APIView):
             elif date_range == 'This Month':
                 report = report.filter(created_at__gte=now.replace(day=1, hour=0, minute=0, second=0, microsecond=0))
 
-            inventory_serializer = inventoryserializer(report, many=True)
-            return Response(inventory_serializer.data, status=status.HTTP_200_OK)
+            response = HttpResponse(content_type='text/csv')  # ← define first
+            response['Content-Disposition'] = 'attachment; filename="allocation_report.csv"'
+            writer = csv.writer(response)
+            writer.writerow(['Code', 'Item', 'Total', 'Allocated', 'Available', 'Utilization', 'Status'])
+
+            for item in report:
+                writer.writerow([
+                    item.code,
+                    item.item,
+                    item.total,
+                    item.allocated,
+                    item.available,
+                    item.utilization,
+                    item.status,
+                ])
+
+            return response
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
