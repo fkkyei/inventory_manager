@@ -159,45 +159,53 @@ class report_request(models.Model):
     export_format        = models.CharField(max_length=50,  choices=export_format_choices, default='csv')
 
 class reservation(models.Model):
-    status_choices=[
-        ('Pending','Pending'),
-        ('Checked Out','Checked Out'),
+    status_choices = [
+        ('Pending', 'Pending'),
+        ('Checked Out', 'Checked Out'),
     ]
-
-    email = models.ForeignKey(
+    user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='email_reservations'
+        related_name='user_reservations'
     )
-    item = models.ForeignKey(
+    inventory = models.ForeignKey(
         inventory,
         on_delete=models.CASCADE,
         related_name='item_reservations'
     )
-    quantity= models.IntegerField(null=False)
-    date = models.DateTimeField(auto_now_add=True,null=False)
-    status=models.CharField(max_length=256,choices=status_choices,default='Pending')
+    quantity = models.IntegerField(null=False)
+    date = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=256, choices=status_choices, default='Pending')
 
     def save(self, *args, **kwargs):
-        if self.pk:  # only runs on UPDATE (status change)
+        if self.pk:
             old = reservation.objects.get(pk=self.pk)
-            
+
             # Pending → Checked Out: allocate stock
             if old.status == 'Pending' and self.status == 'Checked Out':
-                if self.quantity > self.item.available:
+                if self.quantity > self.inventory.available:
                     raise ValueError("Quantity exceeds available stock")
-                self.item.allocated += self.quantity
-                self.item.save()
-        
-        # Checked Out → Pending: reverse allocation
-        elif old.status == 'Checked Out' and self.status == 'Pending':
-            self.item.allocated -= self.quantity
-            self.item.save()
+                self.inventory.allocated += self.quantity
+                self.inventory.save()
 
-        super().save(*args, **kwargs)  # always runs — saves the reservation
+            # Checked Out → Pending: reverse allocation
+            elif old.status == 'Checked Out' and self.status == 'Pending':
+                self.inventory.allocated -= self.quantity
+                self.inventory.save()
+
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.user.email} — {self.inventory.item} x{self.quantity}"
 
     class Meta:
         app_label = "inventory"
+
+        # always runs — saves the reservation
+
+    
+
+            
     
 
 

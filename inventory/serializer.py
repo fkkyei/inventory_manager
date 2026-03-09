@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, OTPCode, inventory
+from .models import User, OTPCode, inventory,reservation
 
 
 class RegisterSerializer(serializers.Serializer):
@@ -93,3 +93,40 @@ class ReportRequestSerializer(serializers.Serializer):
     email = serializers.EmailField(required=False)
 
 
+class ReservationSerializer(serializers.ModelSerializer):
+    user_email = serializers.EmailField(source='user.email', read_only=True)
+    item_available = serializers.IntegerField(source='inventory.available', read_only=True)
+    inventory = serializers.PrimaryKeyRelatedField(
+        queryset=inventory.objects.filter(status='In Stock')
+    )
+
+    class Meta:
+        model = reservation
+        fields = [
+            'id',
+            'user_email',
+            'inventory',
+            'quantity',
+            'date',
+            'status',
+        ]
+        read_only_fields = ['id', 'user_email','date', 'status']
+
+    def validate(self, data):
+        inventory_item = data.get('inventory')
+        quantity = data.get('quantity')
+
+        if quantity <= 0:
+            raise serializers.ValidationError("Quantity must be greater than zero.")
+
+        if quantity > inventory_item.available:
+            raise serializers.ValidationError(
+                f"Only {inventory_item.available} units available for {inventory_item.item}."
+            )
+
+        return data
+
+    def create(self, validated_data):
+        validated_data['user'] = self.context['request'].user
+        return super().create(validated_data)
+    
