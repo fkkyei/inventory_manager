@@ -6,8 +6,8 @@ from django.core.mail import send_mail
 from django.utils import timezone
 from datetime import timedelta
 from django.conf import settings
-from .models import User, SessionToken, OTPCode, PasswordResetOTP,report_request,inventory
-from .serializer import RegisterSerializer, UserSerializer,PasswordResetRequestSerializer,PasswordResetVerifySerializer,SetPasswordSerializer,inventoryserializer,ReportRequestSerializer
+from .models import User, SessionToken, OTPCode, PasswordResetOTP,report_request,inventory,reservation
+from .serializer import RegisterSerializer, UserSerializer,PasswordResetRequestSerializer,PasswordResetVerifySerializer,SetPasswordSerializer,inventoryserializer,ReportRequestSerializer,ReservationSerializer
 from .authentication import SessionTokenAuthentication
 from .permissions import IsAdmin, IsRegularUser
 from .sms import send_otp_sms
@@ -383,6 +383,22 @@ class RequestReportView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-    
+class ReservationView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = ReservationSerializer(
+            data=request.data,
+            context={'request': request}
+        )
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def get(self, request):
+        reservations = reservation.objects.filter(user=request.user)
+        serializer = ReservationSerializer(reservations, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)    
 
     
