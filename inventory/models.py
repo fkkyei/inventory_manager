@@ -158,6 +158,47 @@ class report_request(models.Model):
     date_range           = models.CharField(max_length=256, choices=date_range_choices, default='All Time')
     export_format        = models.CharField(max_length=50,  choices=export_format_choices, default='csv')
 
+class reservation(models.Model):
+    status_choices=[
+        ('Pending','Pending'),
+        ('Checked Out','Checked Out'),
+    ]
+
+    email = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='email_reservations'
+    )
+    item = models.ForeignKey(
+        inventory,
+        on_delete=models.CASCADE,
+        related_name='item_reservations'
+    )
+    quantity= models.IntegerField(null=False)
+    date = models.DateTimeField(auto_now_add=True,null=False)
+    status=models.CharField(max_length=256,choices=status_choices,default='Pending')
+
+    def save(self, *args, **kwargs):
+        if self.pk:  # only runs on UPDATE (status change)
+            old = reservation.objects.get(pk=self.pk)
+            
+            # Pending → Checked Out: allocate stock
+            if old.status == 'Pending' and self.status == 'Checked Out':
+                if self.quantity > self.item.available:
+                    raise ValueError("Quantity exceeds available stock")
+                self.item.allocated += self.quantity
+                self.item.save()
+        
+        # Checked Out → Pending: reverse allocation
+        elif old.status == 'Checked Out' and self.status == 'Pending':
+            self.item.allocated -= self.quantity
+            self.item.save()
+
+        super().save(*args, **kwargs)  # always runs — saves the reservation
+
+    class Meta:
+        app_label = "inventory"
+    
 
 
 

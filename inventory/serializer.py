@@ -91,3 +91,5 @@ class inventoryserializer(serializers.ModelSerializer):
 class ReportRequestSerializer(serializers.Serializer):
     report_type = serializers.CharField(max_length=50, required=False, default="full")
     email = serializers.EmailField(required=False)
+
+
