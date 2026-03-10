@@ -95,10 +95,11 @@ class ReportRequestSerializer(serializers.Serializer):
 
 class ReservationSerializer(serializers.ModelSerializer):
     user_email = serializers.EmailField(source='user.email', read_only=True)
-    item_available = serializers.IntegerField(source='inventory.available', read_only=True)
-    inventory = serializers.PrimaryKeyRelatedField(
-        queryset=inventory.objects.filter(status='In Stock')
+    inventory = serializers.SlugRelatedField(
+        queryset=inventory.objects.filter(status='In Stock'),
+        slug_field='item'
     )
+    available_items = serializers.SerializerMethodField()
 
     class Meta:
         model = reservation
@@ -106,11 +107,17 @@ class ReservationSerializer(serializers.ModelSerializer):
             'id',
             'user_email',
             'inventory',
+            'available_items',
             'quantity',
             'date',
             'status',
         ]
-        read_only_fields = ['id', 'user_email','date', 'status']
+        read_only_fields = ['id', 'user_email', 'available_items', 'date', 'status']
+
+    def get_available_items(self, obj):
+        return list(
+            inventory.objects.filter(status='In Stock').values('id', 'item', 'available')
+        )
 
     def validate(self, data):
         inventory_item = data.get('inventory')

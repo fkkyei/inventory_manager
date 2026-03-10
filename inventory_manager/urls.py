@@ -23,7 +23,7 @@ from inventory.views import (
     RegisterView, LoginView, LogoutView,
     PasswordResetRequestView, PasswordResetVerifyView, SetPasswordView,
     set_password, request_otp, login_view, admin_dashboard,
-    signup_view, user_dashboard, reset_otp, InventoryView
+    signup_view, user_dashboard, reset_otp, InventoryView,ReservationView
 )
 
 urlpatterns = [
@@ -47,4 +47,5 @@ urlpatterns = [
 
     # Pure JSON API endpoint (used by the dashboard JS)
     path("inventory_record/", InventoryView.as_view(), name="record-inventory"),
+    path("reservation/",ReservationView.as_view(),name='reservation')
 ]

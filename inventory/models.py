@@ -21,6 +21,9 @@ class User(models.Model):
     phone_number = models.CharField(max_length=15)
     two_factor_enabled = models.BooleanField(default=False)
 
+    def is_authenticated(self):
+        return True
+
     def set_password(self, raw_password):
         self.password = make_password(raw_password)
 
@@ -130,6 +133,9 @@ class inventory(models.Model):
 
         
         self.status = "In Stock" if self.available > 0 else "Out Of Stock"
+    
+    def __str__(self):
+        return self.item
 
     
 

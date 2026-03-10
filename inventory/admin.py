@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User,OTPCode,SessionToken,inventory
+from .models import User,OTPCode,SessionToken,inventory,reservation
 from django.contrib.auth.hashers import make_password, check_password
 
 # Register your models here.
@@ -21,4 +21,10 @@ class InventoryAdmin(admin.ModelAdmin):
     fields=('code','item','total','allocated','available','utilization','status')
 
 admin.site.register(inventory,InventoryAdmin)
+
+class ReservationAdmin(admin.ModelAdmin):
+    list_display=('user','status','inventory','quantity')
+    fields=('user','status','inventory','quantity')
+
+admin.site.register(reservation,ReservationAdmin)
 
