@@ -15,19 +15,20 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from inventory.views import RegisterView,LoginView,LogoutView,PasswordResetRequestView,PasswordResetVerifyView,SetPasswordView,set_password,request_otp,login_view,admin_dashboard,signup_view,user_dashboard,reset_otp,InventoryView,RequestReportView
+from inventory.views import RegisterView,LoginView,LogoutView,PasswordResetRequestView,PasswordResetVerifyView,SetPasswordView,set_password,request_otp,login_view,signup_view,user_dashboard,reset_otp,InventoryView,RequestReportView,AdminReservationView
+from inventory.views import stock_view,upload_view,admin_dashboard_view,allocations_view,export_view
 from django.urls import path
 
 
-from inventory.views import (
-    RegisterView, LoginView, LogoutView,
-    PasswordResetRequestView, PasswordResetVerifyView, SetPasswordView,
-    set_password, request_otp, login_view, admin_dashboard,
-    signup_view, user_dashboard, reset_otp, InventoryView,ReservationView
-)
+# from inventory.views import (
+#     RegisterView, LoginView, LogoutView,
+#     PasswordResetRequestView, PasswordResetVerifyView, SetPasswordView,
+#     set_password, request_otp, login_view, admin_dashboard,
+#     signup_view, user_dashboard, reset_otp, InventoryView,ReservationView
+# )
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    
     path("auth/register/", RegisterView.as_view(), name="register"),
     path("auth/login/", LoginView.as_view(), name="login"),
     path("auth/logout/", LogoutView.as_view(), name="logout"),
@@ -41,11 +42,18 @@ urlpatterns = [
     path("setpassword/", set_password, name="setpassword"),
     path("set-password/", SetPasswordView.as_view(), name="set-password"),
     path("request_report", RequestReportView.as_view(),name='request_report'),
-
+    path("admin/reservations/",AdminReservationView.as_view(),name="admin-reservation"),
+    path("admin/reservations/<int:pk>/", AdminReservationView.as_view(),name="reservation_pk"),
+    path("admin-dashboard/", admin_dashboard_view,  name="admin-dashboard"),
+    path("stock/", stock_view,name="stock"),
+    path("upload/",upload_view,name="upload"),
+    path("allocations/", allocations_view,name="allocations"),
+    path("export/",export_view,name="export"),
+    path('admin/', admin.site.urls),
     # HTML page (browser navigation)
-    path("admin-dashboard/", admin_dashboard, name="admin_dashboard"),
+    # path("admin-dashboard/", admin_dashboard, name="admin_dashboard"),
 
     # Pure JSON API endpoint (used by the dashboard JS)
     path("inventory_record/", InventoryView.as_view(), name="record-inventory"),
-    path("reservation/",ReservationView.as_view(),name='reservation')
+    # path("reservation/",ReservationView.as_view(),name='reservation')
 ]

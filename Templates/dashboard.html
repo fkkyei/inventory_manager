@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StockVault — Dashboard</title>
+{% load static %}
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+{% include 'shared.css' %}
+</style>
+</head>
+<body>
+
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-top">
+    <a class="logo" href="/admin-dashboard" style="text-decoration: none;">
+      <div class="logo-icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg></div>
+      <div class="logo-name">Stock<span>Vault</span></div>
+    </a>
+    <div class="sidebar-profile">
+      <div class="profile-avatar" id="profile-avatar">A</div>
+      <div>
+        <div class="profile-name" id="username1">Admin</div>
+        <div class="profile-role">Administrator</div>
+      </div>
+    </div>
+  </div>
+  <nav class="nav" >
+    <div class="nav-section">
+      <div class="nav-section-label">Overview</div>
+      <a class="nav-link active" href="/admin-dashboard" style="text-decoration: none;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+        Dashboard
+      </a>
+      <a class="nav-link" href="/stock" style="text-decoration: none;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+        Stock Overview
+        <span class="nav-badge" id="stock-badge">—</span>
+      </a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">Management</div>
+      <a class="nav-link" href="/upload" style="text-decoration: none;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+        Load CSV
+      </a>
+      <a class="nav-link" href="/allocations" style="text-decoration: none;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        User Allocations
+      </a>
+      <a class="nav-link" href="/export" style="text-decoration: none;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+        Export Reports
+      </a>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <button class="signout-btn" onclick="handleSignOut()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+      Sign Out
+    </button>
+  </div>
+</aside>
+
+<div class="main">
+  <header class="topbar">
+    <div class="hamburger" onclick="openSidebar()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" x2="21" y1="6" y2="6"/><line x1="3" x2="21" y1="12" y2="12"/><line x1="3" x2="21" y1="18" y2="18"/></svg>
+    </div>
+    <div class="topbar-title">Dashboard</div>
+    <div class="topbar-right">
+      <a class="btn btn-ghost" href="/upload" style="text-decoration: none;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+        Upload CSV
+      </a>
+      <a class="btn btn-primary" href="/export" style="text-decoration: none;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+        Export
+      </a>
+    </div>
+  </header>
+
+  <div class="content">
+    <div class="page-header">
+      <div class="page-heading" id="welcome-msg">Welcome back 👋</div>
+      <div class="page-sub">Here's what's happening in your warehouse today.</div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-stripe" style="background:linear-gradient(90deg,#2563eb,#93c5fd)"></div>
+        <div class="stat-header">
+          <div class="stat-icon" style="background:#eff6ff;color:#2563eb">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+          </div>
+          <div class="stat-pill pill-up" id="pill-total">—</div>
+        </div>
+        <div class="stat-val" id="stat-total">—</div>
+        <div class="stat-lbl">Total Stock Items</div>
+        <div class="sparkline" id="sp1"></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-stripe" style="background:linear-gradient(90deg,#0891b2,#67e8f9)"></div>
+        <div class="stat-header">
+          <div class="stat-icon" style="background:#ecfeff;color:#0891b2">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div class="stat-pill pill-info" id="pill-allocated">—</div>
+        </div>
+        <div class="stat-val" id="stat-allocated">—</div>
+        <div class="stat-lbl">Units Allocated</div>
+        <div class="sparkline" id="sp2"></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-stripe" style="background:linear-gradient(90deg,#059669,#6ee7b7)"></div>
+        <div class="stat-header">
+          <div class="stat-icon" style="background:#ecfdf5;color:#059669">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2Z"/><path d="M12 12h.01"/><path d="M17 12h.01"/><path d="M7 12h.01"/></svg>
+          </div>
+          <div class="stat-pill pill-up" id="pill-available">—</div>
+        </div>
+        <div class="stat-val" id="stat-available">—</div>
+        <div class="stat-lbl">Available Stock</div>
+        <div class="sparkline" id="sp3"></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-stripe" style="background:linear-gradient(90deg,#d97706,#fcd34d)"></div>
+        <div class="stat-header">
+          <div class="stat-icon" style="background:#fffbeb;color:#d97706">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div class="stat-pill pill-info" id="pill-skus">—</div>
+        </div>
+        <div class="stat-val" id="stat-skus">—</div>
+        <div class="stat-lbl">Unique SKUs</div>
+        <div class="sparkline" id="sp4"></div>
+      </div>
+    </div>
+
+    <div class="charts-row">
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <div class="card-title">Stock Distribution</div>
+            <div class="card-desc">Total · Allocated · Available per item</div>
+          </div>
+        </div>
+        <div style="padding:18px 22px 10px">
+          <div class="bar-grid" id="bar-chart"></div>
+          <div class="chart-legend">
+            <div class="leg-item"><div class="leg-swatch" style="background:#2563eb"></div>Total</div>
+            <div class="leg-item"><div class="leg-swatch" style="background:#0891b2"></div>Allocated</div>
+            <div class="leg-item"><div class="leg-swatch" style="background:#059669"></div>Available</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <div class="card-title">Utilization</div>
+            <div class="card-desc">Warehouse breakdown</div>
+          </div>
+        </div>
+        <div class="donut-outer">
+          <div class="donut-ring">
+            <svg class="donut-svg" viewBox="0 0 100 100" id="donut"></svg>
+            <div class="donut-center">
+              <div class="donut-val" id="donut-pct">—</div>
+              <div class="donut-sub">Available</div>
+            </div>
+          </div>
+          <div class="donut-rows">
+            <div class="donut-row"><div class="donut-label"><div class="donut-swatch" style="background:#059669"></div>Available</div><div class="donut-num" id="d-avail">—</div></div>
+            <div class="donut-row"><div class="donut-label"><div class="donut-swatch" style="background:#0891b2"></div>Allocated</div><div class="donut-num" id="d-alloc">—</div></div>
+            <div class="donut-row"><div class="donut-label"><div class="donut-swatch" style="background:#e11d48"></div>Out of Stock</div><div class="donut-num" id="d-oos">—</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title">Recent Activity</div>
+        <a class="card-link" href="/stock">View all stock <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+      </div>
+      <div id="activity-feed">
+        <div class="empty-state">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+          <p>Loading activity…</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <div class="bottom-nav-inner">
+    <a class="bnav-item active" href="/admin-dashboard"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>Home</a>
+    <a class="bnav-item" href="/stock"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/></svg>Stock</a>
+    <a class="bnav-item" href="/upload"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>Upload</a>
+    <a class="bnav-item" href="/allocations"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Users</a>
+    <a class="bnav-item" href="/export"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>Export</a>
+  </div>
+</nav>
+
+<div id="toast"><span id="t-ic"></span><span id="t-msg"></span></div>
+
+<script>
+const API_BASE = "";
+function getToken() { return localStorage.getItem("session_token"); }
+function getCookie(name) { const v = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)'); return v ? v.pop() : ''; }
+async function apiFetch(path, options = {}) {
+  const token = getToken();
+   const headers = {
+    "Content-Type": "application/json",
+    "X-CSRFToken": getCookie("csrftoken"),
+    ...(token ? { "Authorization": `Bearer ${token}` } : {}),
+    ...(options.headers || {})
+  };
+
+  const res = await fetch(`${API_BASE}${path}`, { ...options, headers });
+
+  let data = {};
+  try { data = await res.json(); } catch (_) {}
+
+  if (!res.ok) {
+    const msg =
+      data.message ||
+      data.error ||
+      data.detail ||
+      Object.values(data).flat().join(" ") ||
+      `HTTP ${res.status}`;
+    throw new Error(msg);
+  }
+
+  return data;
+}
+function openSidebar() { document.getElementById("sidebar").classList.add("open"); document.getElementById("sidebar-overlay").classList.add("show"); }
+function closeSidebar() { document.getElementById("sidebar").classList.remove("open"); document.getElementById("sidebar-overlay").classList.remove("show"); }
+async function handleSignOut() {
+  if (!confirm("Are you sure you want to sign out?")) return;
+  try { await apiFetch("/auth/logout/", { method: "POST" }); } catch (_) {}
+  localStorage.removeItem("session_token"); localStorage.removeItem("email");
+  window.location.href = "/";
+}
+const TOAST_ICONS = {
+  success: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`,
+  warn: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>`,
+};
+let _tt;
+function toast(type, msg) {
+  clearTimeout(_tt);
+  document.getElementById("t-ic").innerHTML = TOAST_ICONS[type] || TOAST_ICONS.success;
+  document.getElementById("t-msg").textContent = msg;
+  document.getElementById("toast").classList.add("show");
+  _tt = setTimeout(() => document.getElementById("toast").classList.remove("show"), 3400);
+}
+
+let STOCK = [];
+
+async function fetchStock() {
+  try {
+    const data = await apiFetch("/inventory_record/", { method: "GET" });
+    STOCK = (Array.isArray(data) ? data : data.results ?? []).map(d => ({
+      code: d.code, name: d.item, total: d.total ?? 0, allocated: d.allocated ?? 0,
+      available: d.available ?? (d.total - d.allocated),
+      utilization: d.utilization ?? (d.total > 0 ? Math.round((d.allocated / d.total) * 100) : 0),
+      status: d.status ?? (d.available > 0 ? "In Stock" : "Out Of Stock"),
+    }));
+    updateStatCards(); buildCharts();
+    const badge = document.getElementById("stock-badge");
+    if (badge) badge.textContent = STOCK.length;
+  } catch (err) {
+    toast("warn", `Failed to load stock: ${err.message}`);
+  }
+}
+
+function updateStatCards() {
+  if (!STOCK.length) return;
+  const totalItems = STOCK.reduce((s, d) => s + d.total, 0);
+  const totalAlloc = STOCK.reduce((s, d) => s + d.allocated, 0);
+  const totalAvail = STOCK.reduce((s, d) => s + d.available, 0);
+  const pctAlloc   = totalItems ? Math.round(totalAlloc / totalItems * 100) : 0;
+  const pctAvail   = totalItems ? Math.round(totalAvail / totalItems * 100) : 0;
+  document.getElementById("stat-total").textContent     = totalItems.toLocaleString();
+  document.getElementById("stat-allocated").textContent = totalAlloc.toLocaleString();
+  document.getElementById("stat-available").textContent = totalAvail.toLocaleString();
+  document.getElementById("stat-skus").textContent      = STOCK.length;
+  document.getElementById("pill-total").textContent     = `${STOCK.length} SKUs`;
+  document.getElementById("pill-allocated").textContent = `${pctAlloc}%`;
+  document.getElementById("pill-available").textContent = `${pctAvail}%`;
+  document.getElementById("pill-skus").textContent      = `${STOCK.filter(d => d.status === "In Stock").length} active`;
+  const spColors = ['#93c5fd','#67e8f9','#6ee7b7','#fcd34d'];
+  [STOCK.map(d=>d.total),STOCK.map(d=>d.allocated),STOCK.map(d=>d.available),STOCK.map(d=>d.utilization)].forEach((d,i)=>{
+    const el = document.getElementById('sp'+(i+1));
+    if (!el || !d.length) return;
+    const slice = d.slice(0,8); const mx = Math.max(...slice)||1;
+    el.innerHTML = slice.map(v=>`<div class="sp-bar" style="height:${Math.round(v/mx*100)}%;background:${spColors[i]}"></div>`).join('');
+  });
+}
+
+function buildCharts() {
+  const bc = document.getElementById('bar-chart');
+  if (bc) {
+    if (!STOCK.length) { bc.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;width:100%;color:var(--gray-300);font-size:13px">No data yet</div>'; }
+    else {
+      const mx = Math.max(...STOCK.map(d=>d.total))||1;
+      bc.innerHTML = STOCK.slice(0,6).map(d => {
+        const H = n => Math.max(3, Math.round(n/mx*130));
+        return `<div class="bar-group"><div class="bar-cols"><div class="bar" style="height:${H(d.total)}px;background:#2563eb" title="Total: ${d.total}"></div><div class="bar" style="height:${H(d.allocated)}px;background:#0891b2" title="Allocated: ${d.allocated}"></div><div class="bar" style="height:${H(d.available)}px;background:#059669" title="Available: ${d.available}"></div></div><div class="bar-code">${d.code.replace('ITEM','I')}</div></div>`;
+      }).join('');
+    }
+  }
+  const svg = document.getElementById('donut');
+  if (svg && STOCK.length) {
+    const totalItems = STOCK.reduce((s,d)=>s+d.total,0)||1;
+    const totalAvail = STOCK.reduce((s,d)=>s+d.available,0);
+    const totalAlloc = STOCK.reduce((s,d)=>s+d.allocated,0);
+    const totalOOS   = STOCK.filter(d=>d.status==="Out Of Stock").length;
+    const pctAvail   = Math.round(totalAvail/totalItems*100);
+    document.getElementById("donut-pct").textContent = `${pctAvail}%`;
+    document.getElementById("d-avail").textContent   = totalAvail.toLocaleString();
+    document.getElementById("d-alloc").textContent   = totalAlloc.toLocaleString();
+    document.getElementById("d-oos").textContent     = `${totalOOS} SKU${totalOOS!==1?"s":""}`;
+    const R=38, C=2*Math.PI*R; let cum=0;
+    svg.innerHTML = [{v:pctAvail,c:'#059669'},{v:100-pctAvail,c:'#0891b2'}].map(s=>{
+      const d=(s.v/100)*C, off=C-(cum/100)*C; cum+=s.v;
+      return `<circle cx="50" cy="50" r="${R}" fill="none" stroke="${s.c}" stroke-width="10" stroke-dasharray="${d} ${C-d}" stroke-dashoffset="${off}" stroke-linecap="round"/>`;
+    }).join('');
+  }
+  const feed = document.getElementById('activity-feed');
+  if (feed && STOCK.length) {
+    feed.innerHTML = STOCK.slice(-5).reverse().map(d=>`
+      <div class="feed-item">
+        <div class="feed-icon" style="background:#eff6ff;color:#2563eb"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/></svg></div>
+        <div><div class="feed-text"><strong>${d.code}</strong> — ${d.name}: ${d.total} total, ${d.available} available</div>
+        <div class="feed-time">${d.status==="In Stock"?"✓ In Stock":"✗ Out of Stock"} · ${d.utilization}% utilized</div></div>
+      </div>`).join('');
+  } else if (feed) {
+    feed.innerHTML = `<div class="empty-state"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg><p>No data loaded yet</p></div>`;
+  }
+}
+
+(function init() {
+  if (!getToken()) { window.location.href = "/"; return; }
+  const email   = localStorage.getItem("email") || "";
+  const first   = email ? email.charAt(0).toUpperCase() : "A";
+  const display = email ? first + email.slice(1) : "Admin";
+  const av = document.getElementById("profile-avatar");
+  const nm = document.getElementById("username1");
+  const wm = document.getElementById("welcome-msg");
+  if (av) av.textContent = first;
+  if (nm) nm.textContent = display;
+  if (wm) wm.textContent = `Welcome back, ${display} 👋`;
+  fetchStock();
+})();
+</script>
+</body>
+</html>

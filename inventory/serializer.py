@@ -123,8 +123,15 @@ class ReservationSerializer(serializers.ModelSerializer):
         inventory_item = data.get('inventory')
         quantity = data.get('quantity')
 
+        if quantity is None:
+            raise serializers.ValidationError("Quantity is required.")
+
         if quantity <= 0:
             raise serializers.ValidationError("Quantity must be greater than zero.")
+
+        # inventory_item should be a model instance because SlugRelatedField returns instance
+        if inventory_item is None:
+            raise serializers.ValidationError("Inventory item is required.")
 
         if quantity > inventory_item.available:
             raise serializers.ValidationError(
@@ -134,6 +141,13 @@ class ReservationSerializer(serializers.ModelSerializer):
         return data
 
     def create(self, validated_data):
-        validated_data['user'] = self.context['request'].user
+        # Prefer user passed via save(user=...), fallback to context
+        user = self.context.get('request').user if self.context.get('request') else None
+        # If view passed user explicitly, it will be in validated_data (see below)
+        user = validated_data.pop('user', user)
+
+        if not user or not getattr(user, 'is_authenticated', False):
+            raise serializers.ValidationError("Authentication required to create a reservation.")
+
+        validated_data['user'] = user
         return super().create(validated_data)
-    

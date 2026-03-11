@@ -278,9 +278,20 @@ class SetPasswordView(APIView):
         
     
 
-def admin_dashboard(request):
+def admin_dashboard_view(request):
+    return render(request, "dashboard.html")
 
-    return render(request, "admin_dashboard.html",)
+def stock_view(request):
+    return render(request, "stock.html")
+
+def upload_view(request):
+    return render(request, "upload.html")
+
+def allocations_view(request):
+    return render(request, "allocations.html")
+
+def export_view(request):
+    return render(request, "export.html")
     
 def login_view(request):
 
@@ -403,3 +414,45 @@ class ReservationView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)    
 
     
+class AdminReservationView(APIView):
+    authentication_classes = [SessionTokenAuthentication]
+    permission_classes = [IsAdmin]
+
+    def get(self, request):
+        reservations = reservation.objects.select_related('user', 'inventory').all().order_by('-date')
+        data = [
+            {
+                "id":         r.id,
+                "user_email": r.user.email,
+                "item":       r.inventory.item,
+                "code":       r.inventory.code,
+                "quantity":   r.quantity,
+                "status":     r.status,
+                "date":       r.date.strftime("%Y-%m-%d %H:%M"),
+            }
+            for r in reservations
+        ]
+        return Response(data, status=status.HTTP_200_OK)
+
+    def patch(self, request, pk):
+        """
+        PATCH /admin/reservations/<pk>/
+        Allows admin to update a reservation's status
+        (e.g. Pending → Checked Out).
+        """
+        try:
+            res_obj = reservation.objects.select_related('inventory').get(pk=pk)
+        except reservation.DoesNotExist:
+            return Response({"error": "Reservation not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        new_status = request.data.get("status")
+        if new_status not in dict(reservation.status_choices):
+            return Response({"error": "Invalid status value"}, status=status.HTTP_400_BAD_REQUEST)
+
+        res_obj.status = new_status
+        try:
+            res_obj.save()
+        except ValueError as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({"message": "Status updated", "status": res_obj.status})

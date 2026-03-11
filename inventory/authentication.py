@@ -6,17 +6,26 @@ from .models import SessionToken
 
 class SessionTokenAuthentication(BaseAuthentication):
     def authenticate(self, request):
-        token = request.headers.get("Authorization")
+        auth = request.headers.get("Authorization")
 
-        if not token or not token.startswith("Bearer "):
+        if not auth:
             return None
 
-        raw_token = token.split(" ")[1]
+        parts = auth.split(" ")
+
+        if len(parts) != 2:
+            return None
+
+        prefix, raw_token = parts
+
+        # Accept both Bearer and Token formats
+        if prefix not in ["Bearer", "Token"]:
+            return None
 
         try:
             session = SessionToken.objects.select_related("user").get(
                 token=raw_token,
-                is_active=True,
+                is_active=True
             )
         except SessionToken.DoesNotExist:
             raise AuthenticationFailed("Invalid or expired session token")
