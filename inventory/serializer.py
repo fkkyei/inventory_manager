@@ -97,7 +97,7 @@ class ReservationSerializer(serializers.ModelSerializer):
     user_email = serializers.EmailField(source='user.email', read_only=True)
     inventory = serializers.SlugRelatedField(
         queryset=inventory.objects.filter(status='In Stock'),
-        slug_field='code'   # ← change from 'item' to 'code'
+        slug_field='item'   # ← change from 'item' to 'code'
     )
     available_items = serializers.SerializerMethodField()
 

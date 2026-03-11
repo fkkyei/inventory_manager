@@ -761,7 +761,7 @@ function adjQty(d) {
 
 function updateSummary() {
   const sel = document.getElementById('res-select');
-  const qty = parseInt(document.getElementById('res-qty').value) || 1;
+  const qty = parseInt(document.getElementById('res-qty').value) ;
   const empty = document.getElementById('summary-empty');
   const details = document.getElementById('summary-details');
   if (!sel.value) { empty.style.display = 'block'; details.style.display = 'none'; return; }
@@ -779,9 +779,11 @@ function updateSummary() {
 async function doReserve() {
   const sel = document.getElementById('res-select');
   if (!sel.value) { toast('warn', 'Please select an item first'); return; }
-  const [name, avail] = sel.value.split('|');
-  const qty = parseInt(document.getElementById('res-qty').value) || 1;
+  const [code, avail, name] = sel.value.split('|');
+  const qty = parseInt(document.getElementById('res-qty').value);
 
+  
+  if (qty <= 0) { toast('warn', 'Quantity must be greater than zero'); return; }
   if (qty > parseInt(avail)) { toast('warn', 'Quantity exceeds available stock'); return; }
 
   const btn = document.getElementById('reserve-btn');
@@ -789,7 +791,7 @@ async function doReserve() {
   btn.textContent = 'Reserving…';
 
   const result = await API.post('/reservation/', {
-    inventory: name,
+    inventory: code,   
     quantity: qty
   });
 
@@ -801,7 +803,6 @@ async function doReserve() {
     sel.value = '';
     document.getElementById('res-qty').value = 1;
     updateSummary();
-    // Refresh data
     await Promise.all([loadInventory(), loadMyReservations()]);
   } else {
     const errMsg = result.data?.non_field_errors?.[0]
