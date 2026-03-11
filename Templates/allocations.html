@@ -122,12 +122,12 @@ select.filter-sel{padding:7px 28px 7px 10px;border-radius:8px;border:1px solid v
           <thead>
             <tr>
               <th>#</th>
-              <th>User</th>
-              <th>Item</th>
-              <th>Code</th>
-              <th>Qty</th>
-              <th>Status</th>
               <th>Date</th>
+              <th>User</th>
+              <th>Status</th>
+              <th>Code</th>
+              <th>Item</th>
+              <th>Qty</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -246,22 +246,24 @@ function renderTable() {
       : `<span class="badge badge-blue"><div class="badge-dot"></div>Checked Out</span>`;
     const action = isPending
       ? `<button onclick="updateStatus(${r.id},'Checked Out',this)"
-           style="padding:5px 10px;border-radius:7px;border:1px solid var(--border);background:white;
+           style="padding:5px 10px;border-radius:7px;border:1px solid var(--border);background:#7FFFD4;
                   font-family:'Plus Jakarta Sans',sans-serif;font-size:11.5px;font-weight:600;
                   color:var(--blue-600);cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:background .15s"
-           onmouseover="this.style.background='var(--blue-50)'" onmouseout="this.style.background='white'">
-           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+           onmouseover="this.style.background='var(--blue-50)'" onmouseout="this.style.background='#7FFFD4'">
            Check Out
+           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
          </button>`
       : `<span style="font-size:11.5px;color:var(--gray-400)">—</span>`;
     return `<tr>
       <td style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--gray-400)">${start+i+1}</td>
-      <td style="font-size:13px">${r.user_email}</td>
-      <td style="font-weight:600;color:var(--gray-900)">${r.item}</td>
-      <td><span class="code-tag">${r.code}</span></td>
-      <td style="font-family:'JetBrains Mono',monospace;font-weight:600">${r.quantity}</td>
-      <td>${badge}</td>
       <td style="font-size:12px;color:var(--gray-500);font-family:'JetBrains Mono',monospace">${r.date}</td>
+      <td style="font-size:13px">${r.user_email}</td>
+      <td>${badge}</td>
+      <td><span class="code-tag">${r.code}</span></td>
+      <td style="font-weight:600;color:var(--gray-900)">${r.item}</td>
+      <td style="font-family:'JetBrains Mono',monospace;font-weight:600">${r.quantity}</td>
+      
+      
       <td>${action}</td>
     </tr>`;
   }).join("");
