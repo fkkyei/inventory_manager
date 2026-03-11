@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from inventory.views import RegisterView,LoginView,LogoutView,PasswordResetRequestView,PasswordResetVerifyView,SetPasswordView,set_password,request_otp,login_view,signup_view,user_dashboard,reset_otp,InventoryView,RequestReportView,AdminReservationView
-from inventory.views import stock_view,upload_view,admin_dashboard_view,allocations_view,export_view
+from inventory.views import stock_view,upload_view,admin_dashboard_view,allocations_view,export_view,ReservationView
 from django.urls import path
 
 
@@ -55,5 +55,5 @@ urlpatterns = [
 
     # Pure JSON API endpoint (used by the dashboard JS)
     path("inventory_record/", InventoryView.as_view(), name="record-inventory"),
-    # path("reservation/",ReservationView.as_view(),name='reservation')
+    path("reservation/",ReservationView.as_view(),name='reservation')
 ]

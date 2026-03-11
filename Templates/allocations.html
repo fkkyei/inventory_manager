@@ -306,7 +306,7 @@ function pageChange(delta) {
 
 async function updateStatus(id, newStatus, btn) {
   const orig = btn.innerHTML;
-  btn.disabled = true; btn.textContent = "…";
+  btn.disabled = true; btn.textContent = "Item checked out";
   try {
     await apiFetch(`/admin/reservations/${id}/`, { method:"PATCH", body:JSON.stringify({status:newStatus}) });
     const row = ALLOC.find(r=>r.id===id);

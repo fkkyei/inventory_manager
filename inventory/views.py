@@ -404,14 +404,32 @@ class ReservationView(APIView):
             context={'request': request}
         )
         if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            reservation = serializer.save()
+            # Return the created reservation with full details
+            return Response(
+                ReservationSerializer(reservation).data, 
+                status=status.HTTP_201_CREATED
+            )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def get(self, request):
-        reservations = reservation.objects.filter(user=request.user)
-        serializer = ReservationSerializer(reservations, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)    
+        reservations = reservation.objects.filter(user=request.user).select_related('inventory')
+        
+        # Format the data to match what your frontend expects
+        data = []
+        for res in reservations:
+            data.append({
+                'id': res.id,
+                'inventory': res.inventory.item,  # This matches what your frontend expects
+                'item': res.inventory.item,       # Adding both for compatibility
+                'code': res.inventory.code,
+                'quantity': res.quantity,
+                'status': res.status,
+                'date': res.date.isoformat(),
+                'user_email': res.user.email
+            })
+            
+        return Response(data, status=status.HTTP_200_OK)  
 
     
 class AdminReservationView(APIView):

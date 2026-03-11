@@ -97,7 +97,7 @@ class ReservationSerializer(serializers.ModelSerializer):
     user_email = serializers.EmailField(source='user.email', read_only=True)
     inventory = serializers.SlugRelatedField(
         queryset=inventory.objects.filter(status='In Stock'),
-        slug_field='item'
+        slug_field='code'   # ← change from 'item' to 'code'
     )
     available_items = serializers.SerializerMethodField()
 
@@ -126,10 +126,9 @@ class ReservationSerializer(serializers.ModelSerializer):
         if quantity is None:
             raise serializers.ValidationError("Quantity is required.")
 
-        if quantity <= 0:
+        if quantity <= 0:   # ← this was already correct, but needs the slug fix above to even reach here
             raise serializers.ValidationError("Quantity must be greater than zero.")
 
-        # inventory_item should be a model instance because SlugRelatedField returns instance
         if inventory_item is None:
             raise serializers.ValidationError("Inventory item is required.")
 
@@ -141,9 +140,7 @@ class ReservationSerializer(serializers.ModelSerializer):
         return data
 
     def create(self, validated_data):
-        # Prefer user passed via save(user=...), fallback to context
         user = self.context.get('request').user if self.context.get('request') else None
-        # If view passed user explicitly, it will be in validated_data (see below)
         user = validated_data.pop('user', user)
 
         if not user or not getattr(user, 'is_authenticated', False):

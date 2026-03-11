@@ -67,11 +67,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--gray-50);color:
 .nav-badge{margin-left:auto;font-size:10.5px;font-weight:700;padding:2px 6px;border-radius:20px;background:var(--blue-100);color:var(--blue-600)}
 .nav-link.active .nav-badge{background:rgba(255,255,255,.2);color:white}
 
-.sidebar-footer {
-  margin-top: auto;
-  padding-top: 20px;
-  padding-bottom: 70px; /* Adds extra space specifically for mobile browsers */
-}
+.sidebar-footer{margin-top:auto;padding:12px;padding-bottom:70px}
 .signout-btn{width:100%;display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:8px;background:transparent;border:1px solid var(--border);color:var(--gray-500);font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s}
 .signout-btn:hover{background:var(--rose-bg);border-color:#fda4af;color:var(--rose)}
 
@@ -84,11 +80,6 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--gray-50);color:
 .topbar{position:sticky;top:0;z-index:100;height:60px;padding:0 28px;background:rgba(255,255,255,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
 .topbar-title{font-size:16px;font-weight:700;color:var(--gray-900);letter-spacing:-.2px}
 .topbar-right{display:flex;align-items:center;gap:8px}
-.search-wrap{position:relative}
-.search-wrap input{padding:8px 14px 8px 36px;border-radius:8px;border:1px solid var(--border);background:var(--gray-50);font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;color:var(--gray-900);width:196px;outline:none;transition:all .2s}
-.search-wrap input:focus{border-color:var(--blue-400);background:white;box-shadow:0 0 0 3px rgba(59,130,246,.1)}
-.search-wrap input::placeholder{color:var(--gray-400)}
-.search-ico{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--gray-400);pointer-events:none}
 .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 15px;border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;border:none;white-space:nowrap}
 .btn-primary{background:var(--blue-600);color:white;box-shadow:0 2px 6px rgba(37,99,235,.3)}
 .btn-primary:hover{background:var(--blue-700);box-shadow:0 3px 10px rgba(37,99,235,.4)}
@@ -182,17 +173,21 @@ tbody tr:last-child td{border-bottom:none}
 .qty-inp{flex:1;height:42px;text-align:center;border:none;background:white;font-family:'JetBrains Mono',monospace;font-size:17px;font-weight:600;color:var(--gray-900);outline:none}
 .info-callout{background:var(--blue-50);border:1px solid var(--blue-100);border-radius:9px;padding:11px 14px;font-size:12.5px;color:var(--blue-700);display:flex;gap:8px;align-items:flex-start;margin-bottom:16px;line-height:1.6}
 
-/* ── PROGRESS ──────────────────────────────────────── */
-.prog-wrap{display:flex;align-items:center;gap:8px}
-.prog-track{height:5px;border-radius:3px;background:var(--gray-100);width:78px;overflow:hidden}
-.prog-fill{height:100%;border-radius:3px}
-.prog-pct{font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--gray-500)}
-
 /* ── SUMMARY BOX ───────────────────────────────────── */
 .summary-box{background:var(--blue-50);border:1px solid var(--blue-100);border-radius:12px;padding:20px;text-align:center}
 .summary-icon{width:48px;height:48px;border-radius:12px;background:white;border:1px solid var(--blue-100);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;color:var(--blue-500);box-shadow:var(--shadow-xs)}
 .summary-title{font-size:14px;font-weight:700;color:var(--gray-900);margin-bottom:4px}
 .summary-sub{font-size:12.5px;color:var(--gray-500)}
+
+/* ── LOADING ───────────────────────────────────────── */
+.skeleton{background:linear-gradient(90deg,var(--gray-100) 25%,var(--gray-50) 50%,var(--gray-100) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:6px;height:16px;margin-bottom:8px}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.loading-rows td{padding:12px 18px}
+
+/* ── EMPTY STATE ───────────────────────────────────── */
+.empty-state{text-align:center;padding:40px 20px;color:var(--gray-400)}
+.empty-state svg{margin-bottom:12px;opacity:.4}
+.empty-state p{font-size:14px}
 
 /* ── TOAST ─────────────────────────────────────────── */
 #toast{position:fixed;bottom:24px;right:24px;z-index:9999;background:var(--gray-900);color:white;border-radius:10px;padding:13px 18px;display:flex;align-items:center;gap:10px;box-shadow:var(--shadow-lg);font-size:13.5px;font-weight:500;min-width:240px;transform:translateY(56px);opacity:0;transition:all .3s cubic-bezier(.16,1,.3,1)}
@@ -204,63 +199,28 @@ tbody tr:last-child td{border-bottom:none}
 .bottom-nav-items{display:flex;justify-content:space-around;align-items:center}
 .bnav-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 12px;border-radius:8px;cursor:pointer;color:var(--gray-400);font-size:10px;font-weight:600;transition:all .15s;min-width:60px}
 .bnav-item.active{color:var(--blue-600)}
-.bnav-item svg{flex-shrink:0}
 
 /* ── RESPONSIVE ────────────────────────────────────── */
-@media (max-width: 768px) {
-  /* sidebar hidden off-screen on mobile */
+@media(max-width:768px){
   .sidebar{transform:translateX(-100%)}
   .sidebar.open{transform:translateX(0)}
-
-  /* main takes full width */
   .main{margin-left:0}
-
-  /* topbar */
   .topbar{padding:0 16px;gap:8px}
   .topbar-title{font-size:15px}
-  .search-wrap{display:none}
-
-  /* show hamburger */
   .hamburger{display:flex}
-
-  /* hide new reservation btn text on small screens */
   .btn-new-res span{display:none}
-
-  /* content padding */
-  .content{padding:16px}
-
-  /* stats grid 1 column on very small, 2 on medium */
+  .content{padding:16px;padding-bottom:80px}
   .stats-grid{grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px}
   .stat-val{font-size:22px}
-  .stat-lbl{font-size:11.5px}
   .stat-card{padding:14px}
-
-  /* two col becomes one col */
   .two-col{grid-template-columns:1fr;gap:14px}
-
-  /* page heading */
   .page-heading{font-size:18px}
-  .page-sub{font-size:12.5px}
-
-  /* res cards */
   .res-card{padding:10px 12px;gap:10px}
-  .res-name{font-size:13px}
-  .res-qty{font-size:18px}
-
-  /* show bottom nav */
   .bottom-nav{display:block}
-
-  /* add padding to content for bottom nav */
-  .content{padding-bottom:80px}
-
-  /* hide sidebar nav on mobile - use bottom nav instead */
-  .topbar .btn-primary{padding:7px 10px;font-size:12px}
 }
-
-@media (max-width: 480px) {
-  .stats-grid{grid-template-columns:1fr;gap:10px}
+@media(max-width:480px){
+  .stats-grid{grid-template-columns:1fr}
   .topbar{height:54px}
-  .res-icon{width:34px;height:34px}
   .tbl-search input{width:140px}
   #toast{left:16px;right:16px;bottom:80px;min-width:unset}
 }
@@ -268,10 +228,8 @@ tbody tr:last-child td{border-bottom:none}
 </head>
 <body>
 
-<!-- SIDEBAR OVERLAY -->
 <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
 
-<!-- SIDEBAR -->
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-top">
     <div class="logo">
@@ -281,9 +239,9 @@ tbody tr:last-child td{border-bottom:none}
       <div class="logo-name">Stock<span>Vault</span></div>
     </div>
     <div class="sidebar-profile">
-      <div class="profile-avatar" id="profile-avatar"></div>
+      <div class="profile-avatar" id="profile-avatar">?</div>
       <div>
-        <div class="profile-name" id="username1"></div>
+        <div class="profile-name" id="profile-name">Loading…</div>
         <div class="profile-role">Warehouse User</div>
       </div>
     </div>
@@ -310,7 +268,7 @@ tbody tr:last-child td{border-bottom:none}
       <div class="nav-link" onclick="goPage('my-alloc',this)">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
         My Allocations
-        <span class="nav-badge">3</span>
+        <span class="nav-badge" id="alloc-badge">0</span>
       </div>
     </div>
   </nav>
@@ -320,29 +278,21 @@ tbody tr:last-child td{border-bottom:none}
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
       Sign Out
     </button>
-</div>
+  </div>
 </aside>
 
-<!-- MAIN -->
 <div class="main">
   <header class="topbar">
-    <!-- hamburger for mobile -->
     <div class="hamburger" onclick="openSidebar()">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" x2="21" y1="6" y2="6"/><line x1="3" x2="21" y1="12" y2="12"/><line x1="3" x2="21" y1="18" y2="18"/></svg>
     </div>
     <div class="topbar-title" id="page-title">My Dashboard</div>
     <div class="topbar-right">
-      <div class="search-wrap">
-        <span class="search-ico">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-        </span>
-        <input placeholder="Search stock…">
-      </div>
       <div class="icon-btn" title="Notifications">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
         <div class="notif-dot"></div>
       </div>
-      <button class="btn btn-primary btn-new-res" onclick="goPage('reserve',document.querySelector('.nav-link:nth-child(1)'))">
+      <button class="btn btn-primary btn-new-res" onclick="goPage('reserve',document.querySelector('.nav-link:nth-of-type(3)'))">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="5" y2="19"/><line x1="5" x2="19" y1="12" y2="12"/></svg>
         <span>New Reservation</span>
       </button>
@@ -354,8 +304,8 @@ tbody tr:last-child td{border-bottom:none}
     <!-- ── MY DASHBOARD ────────────────────────────── -->
     <div class="page active" id="page-home">
       <div class="page-header">
-        <div class="page-heading" id="username"> </div>
-        <div class="page-sub">You have 2 pending reservations ready to check out.</div>
+        <div class="page-heading" id="welcome-msg">Welcome back 👋</div>
+        <div class="page-sub" id="home-sub">Loading your dashboard…</div>
       </div>
 
       <div class="stats-grid">
@@ -366,8 +316,8 @@ tbody tr:last-child td{border-bottom:none}
               <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
             </div>
           </div>
-          <div class="stat-val">2</div>
-          <div class="stat-lbl">Active Reservations</div>
+          <div class="stat-val" id="stat-pending">—</div>
+          <div class="stat-lbl">Pending Reservations</div>
         </div>
         <div class="stat-card">
           <div class="stat-stripe" style="background:linear-gradient(90deg,#059669,#6ee7b7)"></div>
@@ -376,7 +326,7 @@ tbody tr:last-child td{border-bottom:none}
               <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
             </div>
           </div>
-          <div class="stat-val">12</div>
+          <div class="stat-val" id="stat-checkedout">—</div>
           <div class="stat-lbl">Items Checked Out</div>
         </div>
         <div class="stat-card">
@@ -386,7 +336,7 @@ tbody tr:last-child td{border-bottom:none}
               <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2Z"/><path d="M12 12h.01"/><path d="M17 12h.01"/><path d="M7 12h.01"/></svg>
             </div>
           </div>
-          <div class="stat-val">1,644</div>
+          <div class="stat-val" id="stat-available">—</div>
           <div class="stat-lbl">Available in Warehouse</div>
         </div>
       </div>
@@ -400,39 +350,9 @@ tbody tr:last-child td{border-bottom:none}
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
             </span>
           </div>
-          <div class="res-card">
-            <div class="res-icon" style="background:#eff6ff;color:#2563eb">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="M6 8h.01M10 8h4"/></svg>
-            </div>
-            <div class="res-info">
-              <div class="res-name">USB Keyboard</div>
-              <div class="res-meta">ITEM001 · Jan 15</div>
-            </div>
-            <div>
-              <div class="res-qty" style="color:#2563eb">5</div>
-              <div class="res-unit">units</div>
-            </div>
-            <button class="btn btn-success" style="font-size:12px;padding:7px 13px" onclick="doCheckout('USB Keyboard')">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-              Checkout
-            </button>
-          </div>
-          <div class="res-card">
-            <div class="res-icon" style="background:#eff6ff;color:#2563eb">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            </div>
-            <div class="res-info">
-              <div class="res-name">Wireless Mouse</div>
-              <div class="res-meta">ITEM003 · Jan 16</div>
-            </div>
-            <div>
-              <div class="res-qty" style="color:#2563eb">2</div>
-              <div class="res-unit">units</div>
-            </div>
-            <button class="btn btn-success" style="font-size:12px;padding:7px 13px" onclick="doCheckout('Wireless Mouse')">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-              Checkout
-            </button>
+          <div id="pending-list">
+            <div class="skeleton" style="height:72px;border-radius:11px;margin-bottom:9px"></div>
+            <div class="skeleton" style="height:72px;border-radius:11px"></div>
           </div>
         </div>
 
@@ -440,33 +360,9 @@ tbody tr:last-child td{border-bottom:none}
           <div style="margin-bottom:16px">
             <div class="card-title">Recently Checked Out</div>
           </div>
-          <div class="res-card" style="cursor:default">
-            <div class="res-icon" style="background:var(--emerald-bg);color:var(--emerald)">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M15 2H9a1 1 0 0 0-1 1v2c0 .6.4 1 1 1h6c.6 0 1-.4 1-1V3c0-.6-.4-1-1-1z"/><path d="m9 12 2 2 4-4"/></svg>
-            </div>
-            <div class="res-info">
-              <div class="res-name">Monitor Stand</div>
-              <div class="res-meta">ITEM004 · Jan 10</div>
-            </div>
-            <div>
-              <div class="res-qty" style="color:var(--emerald)">1</div>
-              <div class="res-unit">unit</div>
-            </div>
-            <span class="badge badge-green"><div class="badge-dot"></div>Done</span>
-          </div>
-          <div class="res-card" style="cursor:default">
-            <div class="res-icon" style="background:var(--emerald-bg);color:var(--emerald)">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12V8a4 4 0 0 1 4-4h12"/><path d="M4 12v4a4 4 0 0 0 4 4h12"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>
-            </div>
-            <div class="res-info">
-              <div class="res-name">USB-C Hub</div>
-              <div class="res-meta">ITEM005 · Jan 12</div>
-            </div>
-            <div>
-              <div class="res-qty" style="color:var(--emerald)">3</div>
-              <div class="res-unit">units</div>
-            </div>
-            <span class="badge badge-green"><div class="badge-dot"></div>Done</span>
+          <div id="checkedout-list">
+            <div class="skeleton" style="height:72px;border-radius:11px;margin-bottom:9px"></div>
+            <div class="skeleton" style="height:72px;border-radius:11px"></div>
           </div>
         </div>
       </div>
@@ -491,7 +387,9 @@ tbody tr:last-child td{border-bottom:none}
         <div class="table-wrap">
           <table>
             <thead><tr><th>Code</th><th>Item Name</th><th>Available</th><th>Status</th><th>Action</th></tr></thead>
-            <tbody id="browse-body"></tbody>
+            <tbody id="browse-body">
+              <tr class="loading-rows"><td colspan="5"><div class="skeleton"></div><div class="skeleton" style="width:60%"></div></td></tr>
+            </tbody>
           </table>
         </div>
       </div>
@@ -514,12 +412,6 @@ tbody tr:last-child td{border-bottom:none}
             <label>Select Item</label>
             <select id="res-select" onchange="updateSummary()">
               <option value="">Choose a stock item…</option>
-              <option value="USB Keyboard|30">USB Keyboard — Available: 30</option>
-              <option value="HDMI Cable|60">HDMI Cable — Available: 60</option>
-              <option value="Wireless Mouse|45">Wireless Mouse — Available: 45</option>
-              <option value="Monitor Stand|25">Monitor Stand — Available: 25</option>
-              <option value="USB-C Hub|90">USB-C Hub — Available: 90</option>
-              <option value="Laptop Stand|28">Laptop Stand — Available: 28</option>
             </select>
           </div>
           <div class="fg">
@@ -530,12 +422,12 @@ tbody tr:last-child td{border-bottom:none}
               <button class="qty-btn" onclick="adjQty(1)">+</button>
             </div>
           </div>
-          <button class="btn btn-primary btn-full" onclick="doReserve()">
+          <button class="btn btn-primary btn-full" id="reserve-btn" onclick="doReserve()">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
             Confirm Reservation
           </button>
         </div>
-        <div class="card card-pad" id="reserve-summary">
+        <div class="card card-pad">
           <div class="card-title" style="margin-bottom:16px">Reservation Summary</div>
           <div class="summary-box" id="summary-empty">
             <div class="summary-icon">
@@ -583,48 +475,7 @@ tbody tr:last-child td{border-bottom:none}
           <table>
             <thead><tr><th>Item</th><th>Code</th><th>Quantity</th><th>Status</th><th>Date</th><th>Action</th></tr></thead>
             <tbody id="alloc-body">
-              <tr>
-                <td style="font-weight:600;color:var(--gray-900)">USB Keyboard</td>
-                <td><span class="code-tag">ITEM001</span></td>
-                <td style="font-family:'JetBrains Mono',monospace;font-weight:600">5</td>
-                <td><span class="badge badge-amber"><div class="badge-dot"></div>Reserved</span></td>
-                <td style="color:var(--gray-400);font-family:'JetBrains Mono',monospace;font-size:12px">2025-01-15</td>
-                <td>
-                  <button class="btn btn-success" style="font-size:12px;padding:6px 12px" onclick="doCheckout('USB Keyboard')">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                    Checkout
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td style="font-weight:600;color:var(--gray-900)">Wireless Mouse</td>
-                <td><span class="code-tag">ITEM003</span></td>
-                <td style="font-family:'JetBrains Mono',monospace;font-weight:600">2</td>
-                <td><span class="badge badge-amber"><div class="badge-dot"></div>Reserved</span></td>
-                <td style="color:var(--gray-400);font-family:'JetBrains Mono',monospace;font-size:12px">2025-01-16</td>
-                <td>
-                  <button class="btn btn-success" style="font-size:12px;padding:6px 12px" onclick="doCheckout('Wireless Mouse')">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                    Checkout
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td style="font-weight:600;color:var(--gray-900)">Monitor Stand</td>
-                <td><span class="code-tag">ITEM004</span></td>
-                <td style="font-family:'JetBrains Mono',monospace;font-weight:600">1</td>
-                <td><span class="badge badge-green"><div class="badge-dot"></div>Checked Out</span></td>
-                <td style="color:var(--gray-400);font-family:'JetBrains Mono',monospace;font-size:12px">2025-01-10</td>
-                <td><span style="color:var(--gray-300);font-size:13px">—</span></td>
-              </tr>
-              <tr>
-                <td style="font-weight:600;color:var(--gray-900)">USB-C Hub</td>
-                <td><span class="code-tag">ITEM005</span></td>
-                <td style="font-family:'JetBrains Mono',monospace;font-weight:600">3</td>
-                <td><span class="badge badge-green"><div class="badge-dot"></div>Checked Out</span></td>
-                <td style="color:var(--gray-400);font-family:'JetBrains Mono',monospace;font-size:12px">2025-01-12</td>
-                <td><span style="color:var(--gray-300);font-size:13px">—</span></td>
-              </tr>
+              <tr class="loading-rows"><td colspan="6"><div class="skeleton"></div><div class="skeleton" style="width:70%"></div></td></tr>
             </tbody>
           </table>
         </div>
@@ -634,22 +485,22 @@ tbody tr:last-child td{border-bottom:none}
   </div>
 </div>
 
-<!-- BOTTOM NAV (mobile only) -->
+<!-- BOTTOM NAV -->
 <nav class="bottom-nav">
   <div class="bottom-nav-items">
-    <div class="bnav-item active" id="bnav-home" onclick="goPage('home',this);setBottomNav('bnav-home')">
+    <div class="bnav-item active" id="bnav-home" onclick="goPage('home',null);setBottomNav('bnav-home')">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       Home
     </div>
-    <div class="bnav-item" id="bnav-browse" onclick="goPage('browse',this);setBottomNav('bnav-browse')">
+    <div class="bnav-item" id="bnav-browse" onclick="goPage('browse',null);setBottomNav('bnav-browse')">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
       Browse
     </div>
-    <div class="bnav-item" id="bnav-reserve" onclick="goPage('reserve',this);setBottomNav('bnav-reserve')">
+    <div class="bnav-item" id="bnav-reserve" onclick="goPage('reserve',null);setBottomNav('bnav-reserve')">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
       Reserve
     </div>
-    <div class="bnav-item" id="bnav-alloc" onclick="goPage('my-alloc',this);setBottomNav('bnav-alloc')">
+    <div class="bnav-item" id="bnav-alloc" onclick="goPage('my-alloc',null);setBottomNav('bnav-alloc')">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
       Allocations
     </div>
@@ -659,141 +510,364 @@ tbody tr:last-child td{border-bottom:none}
 <div id="toast"><span class="t-ic" id="t-ic"></span><span id="t-msg"></span></div>
 
 <script>
-  const email = localStorage.getItem("email");
-  document.getElementById("username").innerText = "Welcome back, " + email.charAt(0).toUpperCase()+email.slice(1) + " 👋";
-  document.getElementById("username1").innerText=email
-  document.getElementById("profile-avatar").innerHTML=email.charAt(0).toUpperCase()
-  function handleSignOut() {
-    // 1. Ask for confirmation
-    const confirmLogout = confirm("Are you sure you want to sign out?");
-    
-    if (confirmLogout) {
-        // 2. Clear local storage (security best practice)
-        localStorage.removeItem("access");
-        localStorage.removeItem("refresh");
-        localStorage.removeItem("session_token");
-        
-        // 3. Redirect to /login
-        window.location.href = "/";
-    }
-}
-const STOCK = [
-  {code:'ITEM001',name:'USB Keyboard',   total:50,  allocated:20},
-  {code:'ITEM002',name:'HDMI Cable',     total:100, allocated:40},
-  {code:'ITEM003',name:'Wireless Mouse', total:75,  allocated:30},
-  {code:'ITEM004',name:'Monitor Stand',  total:30,  allocated:5},
-  {code:'ITEM005',name:'USB-C Hub',      total:120, allocated:30},
-  {code:'ITEM006',name:'Laptop Stand',   total:40,  allocated:12},
-  {code:'ITEM007',name:'Webcam HD',      total:60,  allocated:25},
-  {code:'ITEM008',name:'Headset',        total:55,  allocated:18},
-];
+// ── AUTH ─────────────────────────────────────────────
+const SESSION_TOKEN = localStorage.getItem('session_token');
+const EMAIL = localStorage.getItem('email');
 
-const PAGES = {home:'My Dashboard', browse:'Browse Stock', reserve:'Reserve Items', 'my-alloc':'My Allocations'};
+if (!SESSION_TOKEN) {
+  window.location.href = '/';
+}
+
+const API = {
+  headers: () => ({
+    'Content-Type': 'application/json',
+    // Match whatever your SessionTokenAuthentication reads — common options:
+    // 'Authorization': `Token ${SESSION_TOKEN}`   ← DRF TokenAuthentication style
+    // 'Authorization': `Bearer ${SESSION_TOKEN}`  ← JWT style
+    // 'X-Session-Token': SESSION_TOKEN            ← custom header style
+    'Authorization': `Token ${SESSION_TOKEN}`
+  }),
+  get: (url) => fetch(url, { headers: API.headers() }).then(r => {
+    if (r.status === 401 || r.status === 403) { handleSignOut(); }
+    return r.json();
+  }),
+  post: (url, body) => fetch(url, {
+    method: 'POST',
+    headers: API.headers(),
+    body: JSON.stringify(body)
+  }).then(r => r.json().then(d => ({ ok: r.ok, status: r.status, data: d })))
+};
+
+// ── STATE ─────────────────────────────────────────────
+let inventoryItems = [];
+let myReservations = [];
+
+// ── INIT ──────────────────────────────────────────────
+const displayName = EMAIL
+  ? EMAIL.charAt(0).toUpperCase() + EMAIL.slice(1).split('@')[0]
+  : 'User';
+
+document.getElementById('profile-avatar').textContent = displayName.charAt(0).toUpperCase();
+document.getElementById('profile-name').textContent = EMAIL || 'User';
+document.getElementById('welcome-msg').textContent = `Welcome back, ${displayName} 👋`;
+
+// Load all data on start
+Promise.all([loadInventory(), loadMyReservations()]);
+
+// ── PAGE NAVIGATION ───────────────────────────────────
+const PAGES = { home: 'My Dashboard', browse: 'Browse Stock', reserve: 'Reserve Items', 'my-alloc': 'My Allocations' };
 
 function goPage(id, el) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page-'+id)?.classList.add('active');
+  document.getElementById('page-' + id)?.classList.add('active');
   document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
-  el?.classList.add('active');
+  if (el && el.classList && el.classList.contains('nav-link')) el.classList.add('active');
   document.getElementById('page-title').textContent = PAGES[id] || id;
   closeSidebar();
+
+  // Refresh data when switching pages
+  if (id === 'browse') loadInventory();
+  if (id === 'my-alloc') loadMyReservations();
 }
 
 function openSidebar() {
   document.getElementById('sidebar').classList.add('open');
   document.getElementById('sidebar-overlay').classList.add('show');
 }
-
 function closeSidebar() {
   document.getElementById('sidebar').classList.remove('open');
   document.getElementById('sidebar-overlay').classList.remove('show');
 }
-
 function setBottomNav(activeId) {
   document.querySelectorAll('.bnav-item').forEach(i => i.classList.remove('active'));
   document.getElementById(activeId)?.classList.add('active');
 }
 
-window.addEventListener('load', buildBrowse);
+// ── API CALLS ─────────────────────────────────────────
+async function loadInventory() {
+  try {
+    const data = await API.get('/inventory_record/');
+    inventoryItems = Array.isArray(data) ? data : [];
+    renderBrowse();
+    renderReserveSelect();
+    updateAvailableStat();
+  } catch (e) {
+    console.error('Failed to load inventory:', e);
+    document.getElementById('browse-body').innerHTML = `<tr><td colspan="5"><div class="empty-state"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg><p>Failed to load inventory</p></div></td></tr>`;
+  }
+}
 
-function buildBrowse() {
-  const tb = document.getElementById('browse-body'); if(!tb) return;
-  tb.innerHTML = STOCK.map(d => {
-    const av = d.total - d.allocated;
+async function loadMyReservations() {
+  try {
+    const data = await API.get('/reservation/');
+    myReservations = Array.isArray(data) ? data : [];
+    renderDashboard();
+    renderAllocations();
+    updateBadge();
+  } catch (e) {
+    console.error('Failed to load reservations:', e);
+  }
+}
+
+// ── RENDER: DASHBOARD ─────────────────────────────────
+function renderDashboard() {
+  const pending = myReservations.filter(r => r.status === 'Pending');
+  const checkedOut = myReservations.filter(r => r.status === 'Checked Out');
+
+  document.getElementById('stat-pending').textContent = pending.length;
+  document.getElementById('stat-checkedout').textContent = checkedOut.reduce((s, r) => s + r.quantity, 0);
+
+  const sub = pending.length === 0
+    ? 'No pending reservations. Ready to reserve new items!'
+    : `You have ${pending.length} pending reservation${pending.length > 1 ? 's' : ''} ready to check out.`;
+  document.getElementById('home-sub').textContent = sub;
+
+  // Pending list
+  const pendingEl = document.getElementById('pending-list');
+  if (pending.length === 0) {
+    pendingEl.innerHTML = `<div class="empty-state"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg><p>No pending reservations</p></div>`;
+  } else {
+    pendingEl.innerHTML = pending.slice(0, 3).map(r => `
+      <div class="res-card">
+        <div class="res-icon" style="background:#eff6ff;color:#2563eb">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="M6 8h.01M10 8h4"/></svg>
+        </div>
+        <div class="res-info">
+          <div class="res-name">${escHtml(r.item || r.inventory)}</div>
+          <div class="res-meta">${escHtml(r.code || '')} · ${formatDate(r.date)}</div>
+        </div>
+        <div>
+          <div class="res-qty" style="color:#2563eb">${r.quantity}</div>
+          <div class="res-unit">units</div>
+        </div>
+        <button class="btn btn-success" style="font-size:12px;padding:7px 13px" disabled title="Contact admin to check out">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          Pending
+        </button>
+      </div>`).join('');
+  }
+
+  // Checked out list
+  const checkedEl = document.getElementById('checkedout-list');
+  if (checkedOut.length === 0) {
+    checkedEl.innerHTML = `<div class="empty-state"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><p>No checked out items yet</p></div>`;
+  } else {
+    checkedEl.innerHTML = checkedOut.slice(0, 3).map(r => `
+      <div class="res-card" style="cursor:default">
+        <div class="res-icon" style="background:var(--emerald-bg);color:var(--emerald)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M15 2H9a1 1 0 0 0-1 1v2c0 .6.4 1 1 1h6c.6 0 1-.4 1-1V3c0-.6-.4-1-1-1z"/><path d="m9 12 2 2 4-4"/></svg>
+        </div>
+        <div class="res-info">
+          <div class="res-name">${escHtml(r.item || r.inventory)}</div>
+          <div class="res-meta">${escHtml(r.code || '')} · ${formatDate(r.date)}</div>
+        </div>
+        <div>
+          <div class="res-qty" style="color:var(--emerald)">${r.quantity}</div>
+          <div class="res-unit">units</div>
+        </div>
+        <span class="badge badge-green"><div class="badge-dot"></div>Done</span>
+      </div>`).join('');
+  }
+}
+
+// ── RENDER: BROWSE ────────────────────────────────────
+function renderBrowse() {
+  const tb = document.getElementById('browse-body');
+  if (inventoryItems.length === 0) {
+    tb.innerHTML = `<tr><td colspan="5"><div class="empty-state"><p>No inventory items found</p></div></td></tr>`;
+    return;
+  }
+  tb.innerHTML = inventoryItems.map(d => {
+    const av = d.available ?? 0;
     const badge = av > 20
       ? `<span class="badge badge-green"><div class="badge-dot"></div>Available</span>`
-      : `<span class="badge badge-amber"><div class="badge-dot"></div>Limited</span>`;
+      : av > 0
+        ? `<span class="badge badge-amber"><div class="badge-dot"></div>Limited</span>`
+        : `<span class="badge" style="background:#fee2e2;color:#dc2626"><div class="badge-dot"></div>Out of Stock</span>`;
+    const canReserve = av > 0;
     return `<tr>
-      <td><span class="code-tag">${d.code}</span></td>
-      <td style="font-weight:600;color:var(--gray-900)">${d.name}</td>
+      <td><span class="code-tag">${escHtml(d.code)}</span></td>
+      <td style="font-weight:600;color:var(--gray-900)">${escHtml(d.item)}</td>
       <td><span class="avail-num">${av}</span></td>
       <td>${badge}</td>
       <td>
-        <button class="btn btn-primary" style="font-size:12px;padding:6px 12px" onclick="quickReserve('${d.name}')">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="5" y2="19"/><line x1="5" x2="19" y1="12" y2="12"/></svg>
-          Reserve
-        </button>
+        ${canReserve
+          ? `<button class="btn btn-primary" style="font-size:12px;padding:6px 12px" onclick="quickReserveNav('${escHtml(d.item)}')">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="5" y2="19"/><line x1="5" x2="19" y1="12" y2="12"/></svg>
+              Reserve
+            </button>`
+          : `<span style="color:var(--gray-300);font-size:13px">Unavailable</span>`
+        }
       </td>
     </tr>`;
   }).join('');
 }
 
-function filterTbl(input, id) {
-  const q = input.value.toLowerCase();
-  document.querySelectorAll('#'+id+' tr').forEach(r => { r.style.display = r.textContent.toLowerCase().includes(q)?'':'none'; });
+// ── RENDER: RESERVE SELECT ────────────────────────────
+function renderReserveSelect() {
+  const sel = document.getElementById('res-select');
+  const current = sel.value;
+  sel.innerHTML = '<option value="">Choose a stock item…</option>';
+  inventoryItems.filter(d => d.available > 0).forEach(d => {
+    const opt = document.createElement('option');
+    opt.value = `${d.item}|${d.available}|${d.code}`;
+    opt.textContent = `${d.item} — Available: ${d.available}`;
+    sel.appendChild(opt);
+  });
+  if (current) sel.value = current;
+  updateSummary();
 }
 
+// ── RENDER: ALLOCATIONS ───────────────────────────────
+function renderAllocations() {
+  const tb = document.getElementById('alloc-body');
+  if (myReservations.length === 0) {
+    tb.innerHTML = `<tr><td colspan="6"><div class="empty-state"><p>No allocations found. Start by reserving some items.</p></div></td></tr>`;
+    return;
+  }
+  tb.innerHTML = myReservations.map(r => {
+    const isPending = r.status === 'Pending';
+    const badge = isPending
+      ? `<span class="badge badge-amber"><div class="badge-dot"></div>Reserved</span>`
+      : `<span class="badge badge-green"><div class="badge-dot"></div>Checked Out</span>`;
+    return `<tr>
+      <td style="font-weight:600;color:var(--gray-900)">${escHtml(r.item || r.inventory)}</td>
+      <td><span class="code-tag">${escHtml(r.code || '—')}</span></td>
+      <td style="font-family:'JetBrains Mono',monospace;font-weight:600">${r.quantity}</td>
+      <td>${badge}</td>
+      <td style="color:var(--gray-400);font-family:'JetBrains Mono',monospace;font-size:12px">${formatDate(r.date)}</td>
+      <td>${isPending ? `<span style="color:var(--gray-400);font-size:12px">Awaiting admin</span>` : `<span style="color:var(--gray-300);font-size:13px">—</span>`}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ── STATS ─────────────────────────────────────────────
+function updateAvailableStat() {
+  const total = inventoryItems.reduce((s, d) => s + (d.available || 0), 0);
+  document.getElementById('stat-available').textContent = total.toLocaleString();
+}
+
+function updateBadge() {
+  const pending = myReservations.filter(r => r.status === 'Pending').length;
+  document.getElementById('alloc-badge').textContent = pending;
+}
+
+// ── RESERVE FORM ──────────────────────────────────────
 function adjQty(d) {
   const el = document.getElementById('res-qty');
-  el.value = Math.max(1, parseInt(el.value||1)+d);
+  el.value = Math.max(1, parseInt(el.value || 1) + d);
   updateSummary();
 }
 
 function updateSummary() {
   const sel = document.getElementById('res-select');
-  const qty = parseInt(document.getElementById('res-qty').value)||1;
+  const qty = parseInt(document.getElementById('res-qty').value) || 1;
   const empty = document.getElementById('summary-empty');
   const details = document.getElementById('summary-details');
-  if (!sel.value) { empty.style.display='block'; details.style.display='none'; return; }
-  const [name, avail] = sel.value.split('|');
+  if (!sel.value) { empty.style.display = 'block'; details.style.display = 'none'; return; }
+  const [name, avail, code] = sel.value.split('|');
   const after = parseInt(avail) - qty;
-  empty.style.display='none';
-  details.style.display='block';
+  empty.style.display = 'none';
+  details.style.display = 'block';
   document.getElementById('sum-name').textContent = name;
-  document.getElementById('sum-code').textContent = 'ITEM00' + (sel.selectedIndex);
+  document.getElementById('sum-code').textContent = code || '';
   document.getElementById('sum-qty').textContent = qty;
   document.getElementById('sum-after').textContent = after >= 0 ? after : '⚠ Exceeds stock';
   document.getElementById('sum-after').style.color = after >= 0 ? 'var(--emerald)' : 'var(--rose)';
 }
 
-function doReserve() {
+async function doReserve() {
   const sel = document.getElementById('res-select');
-  if (!sel.value) { toast('warn','Please select an item first'); return; }
-  const [name] = sel.value.split('|');
-  const qty = document.getElementById('res-qty').value;
-  toast('success', `${qty}× ${name} reserved successfully`);
-  sel.value=''; document.getElementById('res-qty').value=1; updateSummary();
+  if (!sel.value) { toast('warn', 'Please select an item first'); return; }
+  const [name, avail] = sel.value.split('|');
+  const qty = parseInt(document.getElementById('res-qty').value) || 1;
+
+  if (qty > parseInt(avail)) { toast('warn', 'Quantity exceeds available stock'); return; }
+
+  const btn = document.getElementById('reserve-btn');
+  btn.disabled = true;
+  btn.textContent = 'Reserving…';
+
+  const result = await API.post('/reservation/', {
+    inventory: name,
+    quantity: qty
+  });
+
+  btn.disabled = false;
+  btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Confirm Reservation`;
+
+  if (result.ok) {
+    toast('success', `${qty}× ${name} reserved successfully`);
+    sel.value = '';
+    document.getElementById('res-qty').value = 1;
+    updateSummary();
+    // Refresh data
+    await Promise.all([loadInventory(), loadMyReservations()]);
+  } else {
+    const errMsg = result.data?.non_field_errors?.[0]
+      || result.data?.detail
+      || result.data?.inventory?.[0]
+      || result.data?.quantity?.[0]
+      || 'Reservation failed. Please try again.';
+    toast('warn', errMsg);
+  }
 }
 
-function doCheckout(name) {
-  toast('success', `${name} checked out successfully`);
+function quickReserveNav(itemName) {
+  // Pre-select item and navigate to reserve page
+  goPage('reserve', null);
+  setTimeout(() => {
+    const sel = document.getElementById('res-select');
+    for (let opt of sel.options) {
+      if (opt.value.startsWith(itemName + '|')) {
+        sel.value = opt.value;
+        break;
+      }
+    }
+    updateSummary();
+  }, 100);
 }
 
-function quickReserve(name) {
-  toast('success', `${name} added to your reservations`);
+// ── HELPERS ───────────────────────────────────────────
+function filterTbl(input, id) {
+  const q = input.value.toLowerCase();
+  document.querySelectorAll('#' + id + ' tr').forEach(r => {
+    r.style.display = r.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
 }
 
+function formatDate(dateStr) {
+  if (!dateStr) return '—';
+  const d = new Date(dateStr);
+  return isNaN(d) ? dateStr : d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+}
+
+function escHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function handleSignOut() {
+  if (confirm('Are you sure you want to sign out?')) {
+    API.post('/auth/logout/', {}).catch(() => {});
+    localStorage.removeItem('session_token');
+    localStorage.removeItem('email');
+    window.location.href = '/';
+  }
+}
+
+// ── TOAST ─────────────────────────────────────────────
 let _t;
 const icons = {
-  success:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`,
-  warn:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>`,
+  success: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`,
+  warn: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>`,
 };
 function toast(type, msg) {
   clearTimeout(_t);
-  document.getElementById('t-ic').innerHTML = icons[type]||icons.success;
+  document.getElementById('t-ic').innerHTML = icons[type] || icons.success;
   document.getElementById('t-msg').textContent = msg;
   document.getElementById('toast').classList.add('show');
-  _t = setTimeout(()=>document.getElementById('toast').classList.remove('show'), 3400);
+  _t = setTimeout(() => document.getElementById('toast').classList.remove('show'), 3400);
 }
 </script>
 </body>
