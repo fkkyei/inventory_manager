@@ -121,9 +121,7 @@ class inventory(models.Model):
 
             if add_stock:
                 self.total = old.total + self.total
-            else:
-                self.total = old.total
-
+            
         else:
             self.allocated = 0
 

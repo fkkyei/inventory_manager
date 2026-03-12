@@ -82,13 +82,19 @@ class inventoryserializer(serializers.ModelSerializer):
         model = inventory
         fields = ['code', 'item', 'total', 'allocated', 'available', 'utilization', 'status']
         read_only_fields = ['allocated', 'available', 'utilization', 'status']
+        extra_kwargs = {
+            'code': {'validators': []}  # disable unique validator
+        }
 
     def create(self, validated_data):
         existing = inventory.objects.filter(code=validated_data['code']).first()
+
         if existing:
-            existing.total = validated_data['total']  # amount to ADD
+            # ADD the new quantity to existing stock
+            existing.total += validated_data['total']
             existing.save()
             return existing
+
         else:
             instance = inventory(**validated_data)
             instance.save()
