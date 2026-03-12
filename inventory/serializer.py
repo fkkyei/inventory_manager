@@ -84,8 +84,15 @@ class inventoryserializer(serializers.ModelSerializer):
         read_only_fields = ['allocated', 'available', 'utilization', 'status']
 
     def create(self, validated_data):
-        record = inventory.objects.create(**validated_data)
-        return record
+        existing = inventory.objects.filter(code=validated_data['code']).first()
+        if existing:
+            existing.total = validated_data['total']  # amount to ADD
+            existing.save()
+            return existing
+        else:
+            instance = inventory(**validated_data)
+            instance.save()
+            return instance
 
 
 class ReportRequestSerializer(serializers.Serializer):
@@ -140,11 +147,6 @@ class ReservationSerializer(serializers.ModelSerializer):
         return data
 
     def create(self, validated_data):
-        user = self.context.get('request').user if self.context.get('request') else None
-        user = validated_data.pop('user', user)
-
-        if not user or not getattr(user, 'is_authenticated', False):
-            raise serializers.ValidationError("Authentication required to create a reservation.")
-
-        validated_data['user'] = user
+        request = self.context.get('request')
+        validated_data['user'] = request.user
         return super().create(validated_data)

@@ -114,24 +114,33 @@ class inventory(models.Model):
     status= models.CharField(max_length=250,choices=status_choices,default="In Stock")
     created_at  = models.DateTimeField(auto_now_add=True, null=True)
 
-    def save(self,*args,**kwargs):
-        
+    def save(self, *args, add_stock=False, **kwargs):
+
         if self.pk:
-            old=inventory.objects.get(pk=self.pk)
-            self.total=old.total+self.total
-            self.allocated = old.allocated + self.allocated
+            old = inventory.objects.get(pk=self.pk)
+
+            if add_stock:
+                self.total = old.total + self.total
+            else:
+                self.total = old.total
+
         else:
             self.allocated = 0
+
         self.cascade_update()
-        super().save(*args,**kwargs)
+        super().save(*args, **kwargs)
     
     def cascade_update(self):
-        if self.total is not None and self.allocated is not None:
-            self.available = self.total - self.allocated
-            self.utilization = int((self.allocated / self.total) * 100) if self.total > 0 else 0
-        
 
-        
+        if self.total is not None and self.allocated is not None:
+
+            self.available = max(self.total - self.allocated, 0)
+
+            if self.total > 0:
+                self.utilization = round((self.allocated / self.total) * 100, 2)
+            else:
+                 self.utilization = 0
+
         self.status = "In Stock" if self.available > 0 else "Out Of Stock"
     
     def __str__(self):
@@ -189,14 +198,17 @@ class reservation(models.Model):
 
             # Pending → Checked Out: allocate stock
             if old.status == 'Pending' and self.status == 'Checked Out':
+                
                 if self.quantity > self.inventory.available:
                     raise ValueError("Quantity exceeds available stock")
                 self.inventory.allocated += self.quantity
+                self.inventory.cascade_update()
                 self.inventory.save()
 
             # Checked Out → Pending: reverse allocation
             elif old.status == 'Checked Out' and self.status == 'Pending':
                 self.inventory.allocated -= self.quantity
+                self.inventory.cascade_update()
                 self.inventory.save()
 
         super().save(*args, **kwargs)

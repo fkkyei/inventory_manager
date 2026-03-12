@@ -404,12 +404,11 @@ class ReservationView(APIView):
             context={'request': request}
         )
         if serializer.is_valid():
-            reservation = serializer.save()
+            instance = serializer.save()
             # Return the created reservation with full details
             return Response(
-                ReservationSerializer(reservation).data, 
-                status=status.HTTP_201_CREATED
-            )
+                ReservationSerializer(instance, context={'request': request}).data,
+                status=status.HTTP_201_CREATED )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def get(self, request):
