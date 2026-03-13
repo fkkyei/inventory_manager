@@ -106,7 +106,7 @@ class inventory(models.Model):
     ]
     
     code= models.CharField(max_length=12, unique=True,null=False)
-    item = models.CharField(max_length=250,null=False)
+    item = models.CharField(max_length=250,null=False,unique=True)
     total= models.IntegerField(null=False,default=0)
     allocated = models.IntegerField(null=False, default=0)
     available= models.IntegerField(null=False,default=0)
