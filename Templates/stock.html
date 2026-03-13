@@ -229,7 +229,7 @@ function renderStockTable() {
 }
 
 async function addItem() {
-  const code = document.getElementById("m-code").value.trim();
+  const code = document.getElementById("m-code").value.trim().toUpperCase();
   const name = document.getElementById("m-name").value.trim();
   const qty  = parseInt(document.getElementById("m-qty").value, 10);
   if (!code || !name || !qty || qty < 1) { toast("warn", "Please fill all fields with valid values"); return; }
