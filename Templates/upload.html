@@ -191,9 +191,11 @@ async function processCSV() {
   const codeIdx = header.findIndex(h=>h.includes("code"));
   const nameIdx = header.findIndex(h=>h.includes("name"));
   const qtyIdx  = header.findIndex(h=>h.includes("qty")||h.includes("quantity"));
+
   if (codeIdx<0||nameIdx<0||qtyIdx<0) { toast("warn","CSV must have columns: stock_code, stock_name, quantity"); return; }
   const btn = document.getElementById("process-btn");
   btn.textContent = "Uploading…"; btn.disabled = true;
+  
   let ok=0, fail=0;
   for (const line of rows) {
     const cols = line.split(",").map(c=>c.trim());

@@ -83,7 +83,8 @@ class inventoryserializer(serializers.ModelSerializer):
         fields = ['code', 'item', 'total', 'allocated', 'available', 'utilization', 'status']
         read_only_fields = ['allocated', 'available', 'utilization', 'status']
         extra_kwargs = {
-            'code': {'validators': []}  # disable unique validator
+            'code': {'validators': []},
+              'item': {'validators': []}  # disable unique validator
         }
 
     def create(self, validated_data):
