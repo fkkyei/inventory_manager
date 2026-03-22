@@ -14,8 +14,38 @@ from .sms import send_otp_sms
 from django.shortcuts import render
 from django.http import HttpResponse
 import random
+import os
 import csv
+import smtplib
+import threading
+from email.mime.text import MIMEText
+from dotenv import load_dotenv
 
+load_dotenv()
+
+def send_registration_email(to_email):
+    try:
+        email_user = os.getenv('EMAIL_HOST_USER')
+        email_pass = os.getenv('EMAIL_HOST_PASSWORD')
+        email_host = os.getenv('EMAIL_HOST')
+        email_port = int(os.getenv('EMAIL_PORT'))
+
+        msg = MIMEText(f'Hi {to_email}, your account was created successfully.')
+        msg['Subject'] = 'Account Created'
+        msg['From'] = email_user
+        msg['To'] = to_email
+
+        server = smtplib.SMTP(email_host, email_port)
+        server.starttls()
+        server.login(email_user, email_pass)
+        server.send_message(msg)
+        server.quit()
+
+        print("✅ Email sent!")
+
+    except Exception as e:
+        print("❌ Error:", e)
+        
 class RegisterView(APIView):
     permission_classes = [AllowAny]
     def get(self, request):
@@ -25,12 +55,15 @@ class RegisterView(APIView):
         if serializer.is_valid():
             user = serializer.save()
 
-            send_mail(
-                subject="Account Created Successfully",
-                message=f"Hi {user.email},\n\nYour account has been created successfully.\n\nWelcome aboard!",
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=[user.email],
-            )
+            threading.Thread(
+                target=send_mail,
+                kwargs={
+                    'subject': 'Account Created Successfully',
+                    'message': f'Hi {user.email},\n\nYour account has been created successfully.\n\nWelcome aboard!',
+                    'from_email': settings.DEFAULT_FROM_EMAIL,
+                    'recipient_list': [user.email],
+                }
+            ).start()
 
             return Response({
                 "message": "User Registered Successfully",
