@@ -4,10 +4,200 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>StockVault — Dashboard</title>
-{% load static %}
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-{% include 'shared.css' %}
+/* ── Reset & Base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #f8fafc; --surface: #ffffff; --border: #e2e8f0; --border-light: #f1f5f9;
+  --text: #0f172a; --text-2: #475569; --text-3: #94a3b8;
+  --primary: #2563eb; --primary-light: #eff6ff; --primary-dim: #dbeafe;
+  --radius: 14px; --radius-sm: 8px;
+  --shadow: 0 1px 3px rgba(0,0,0,.06), 0 4px 12px rgba(0,0,0,.04);
+  --shadow-md: 0 4px 16px rgba(0,0,0,.08), 0 1px 4px rgba(0,0,0,.04);
+  --sidebar-w: 240px;
+}
+body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+/* ── Sidebar ── */
+.sidebar {
+  position: fixed; inset: 0 auto 0 0; width: var(--sidebar-w);
+  background: var(--surface); border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; z-index: 200;
+  transition: transform .25s ease;
+}
+.sidebar-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,.35);
+  z-index: 199; backdrop-filter: blur(2px);
+}
+.sidebar-overlay.show { display: block; }
+.sidebar-top { padding: 20px 18px 14px; border-bottom: 1px solid var(--border-light); }
+.logo { display: flex; align-items: center; gap: 9px; margin-bottom: 20px; }
+.logo-icon { width: 32px; height: 32px; background: var(--primary); border-radius: 8px; display: grid; place-items: center; color: #fff; flex-shrink: 0; }
+.logo-name { font-size: 16px; font-weight: 800; color: var(--text); letter-spacing: -.3px; }
+.logo-name span { color: var(--primary); }
+.sidebar-profile { display: flex; align-items: center; gap: 10px; }
+.profile-avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--primary); color: #fff; display: grid; place-items: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+.profile-name { font-size: 13px; font-weight: 600; color: var(--text); }
+.profile-role { font-size: 11px; color: var(--text-3); margin-top: 1px; }
+.nav { flex: 1; overflow-y: auto; padding: 14px 10px; }
+.nav-section { margin-bottom: 20px; }
+.nav-section-label { font-size: 10px; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: .08em; padding: 0 8px 7px; }
+.nav-link {
+  display: flex; align-items: center; gap: 9px; padding: 9px 10px; border-radius: var(--radius-sm);
+  font-size: 13.5px; font-weight: 500; color: var(--text-2); cursor: pointer;
+  transition: all .15s; text-decoration: none; margin-bottom: 2px;
+}
+.nav-link:hover { background: var(--bg); color: var(--text); }
+.nav-link.active { background: var(--primary-light); color: var(--primary); font-weight: 600; }
+.nav-badge { margin-left: auto; background: var(--primary-dim); color: var(--primary); font-size: 11px; font-weight: 600; padding: 2px 7px; border-radius: 20px; }
+.sidebar-footer { padding: 14px 10px; border-top: 1px solid var(--border-light); }
+.signout-btn {
+  width: 100%; display: flex; align-items: center; gap: 9px; padding: 9px 10px;
+  background: none; border: none; border-radius: var(--radius-sm); font-size: 13.5px;
+  font-weight: 500; color: var(--text-2); cursor: pointer; font-family: inherit; transition: all .15s;
+}
+.signout-btn:hover { background: #fef2f2; color: #dc2626; }
+
+/* ── Main ── */
+.main { margin-left: var(--sidebar-w); min-height: 100vh; display: flex; flex-direction: column; }
+
+/* ── Topbar ── */
+.topbar {
+  position: sticky; top: 0; z-index: 100; height: 58px;
+  background: rgba(248,250,252,.85); backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border); display: flex; align-items: center;
+  padding: 0 24px; gap: 12px;
+}
+.hamburger { display: none; cursor: pointer; padding: 6px; border-radius: 8px; color: var(--text-2); transition: background .15s; }
+.hamburger:hover { background: var(--border-light); }
+.topbar-title { font-size: 15px; font-weight: 700; color: var(--text); flex: 1; }
+.topbar-right { display: flex; gap: 8px; }
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; font-family: inherit; transition: all .15s; text-decoration: none; }
+.btn-ghost { background: var(--surface); border: 1px solid var(--border); color: var(--text-2); }
+.btn-ghost:hover { border-color: var(--primary); color: var(--primary); }
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:hover { background: #1d4ed8; }
+
+/* ── Content ── */
+.content { flex: 1; padding: 24px; padding-bottom: 90px; max-width: 1200px; width: 100%; }
+.page-header { margin-bottom: 22px; }
+.page-heading { font-size: 22px; font-weight: 800; color: var(--text); letter-spacing: -.4px; }
+.page-sub { font-size: 13.5px; color: var(--text-3); margin-top: 4px; }
+
+/* ── Stat Cards ── */
+.stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-bottom: 20px; }
+.stat-card { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; padding: 18px 18px 14px; box-shadow: var(--shadow); position: relative; }
+.stat-stripe { position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+.stat-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.stat-icon { width: 36px; height: 36px; border-radius: 9px; display: grid; place-items: center; }
+.stat-pill { font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 20px; }
+.pill-up { background: #dcfce7; color: #15803d; }
+.pill-info { background: #dbeafe; color: #1d4ed8; }
+.stat-val { font-size: 26px; font-weight: 800; letter-spacing: -.5px; color: var(--text); font-family: 'JetBrains Mono', monospace; }
+.stat-lbl { font-size: 12px; color: var(--text-3); margin-top: 3px; font-weight: 500; }
+.sparkline { display: flex; align-items: flex-end; gap: 2px; height: 28px; margin-top: 10px; }
+.sp-bar { flex: 1; border-radius: 2px; min-height: 3px; transition: height .3s; }
+
+/* ── Charts ── */
+.charts-row { display: grid; grid-template-columns: 1fr 340px; gap: 14px; margin-bottom: 20px; }
+.card { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow); overflow: hidden; }
+.card-head { display: flex; align-items: center; justify-content: space-between; padding: 18px 22px 14px; border-bottom: 1px solid var(--border-light); }
+.card-title { font-size: 14px; font-weight: 700; color: var(--text); }
+.card-desc { font-size: 12px; color: var(--text-3); margin-top: 2px; }
+.card-link { font-size: 12.5px; font-weight: 600; color: var(--primary); display: flex; align-items: center; gap: 4px; text-decoration: none; }
+.card-link:hover { text-decoration: underline; }
+.bar-grid { display: flex; gap: 10px; align-items: flex-end; height: 150px; padding-bottom: 4px; }
+.bar-group { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+.bar-cols { display: flex; gap: 3px; align-items: flex-end; height: 130px; }
+.bar { border-radius: 3px 3px 0 0; min-width: 10px; flex: 1; transition: height .4s ease; cursor: pointer; }
+.bar:hover { opacity: .8; }
+.bar-code { font-size: 10px; color: var(--text-3); font-family: 'JetBrains Mono', monospace; }
+.chart-legend { display: flex; gap: 14px; margin-top: 10px; flex-wrap: wrap; }
+.leg-item { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--text-2); }
+.leg-swatch { width: 10px; height: 10px; border-radius: 2px; }
+.donut-outer { display: flex; align-items: center; gap: 20px; padding: 18px 22px; flex-wrap: wrap; }
+.donut-ring { position: relative; width: 120px; height: 120px; flex-shrink: 0; }
+.donut-svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.donut-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.donut-val { font-size: 20px; font-weight: 800; font-family: 'JetBrains Mono', monospace; color: var(--text); }
+.donut-sub { font-size: 10px; color: var(--text-3); }
+.donut-rows { display: flex; flex-direction: column; gap: 10px; flex: 1; }
+.donut-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
+.donut-label { display: flex; align-items: center; gap: 7px; color: var(--text-2); font-weight: 500; }
+.donut-swatch { width: 9px; height: 9px; border-radius: 50%; }
+.donut-num { font-weight: 700; color: var(--text); font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+.empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 40px; color: var(--text-3); font-size: 13px; }
+.feed-item { display: flex; gap: 12px; padding: 14px 22px; border-bottom: 1px solid var(--border-light); align-items: flex-start; }
+.feed-item:last-child { border-bottom: none; }
+.feed-icon { width: 32px; height: 32px; border-radius: 8px; display: grid; place-items: center; flex-shrink: 0; }
+.feed-text { font-size: 13px; color: var(--text); line-height: 1.5; }
+.feed-time { font-size: 11.5px; color: var(--text-3); margin-top: 3px; }
+#toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px); background: #1e293b; color: #f1f5f9; padding: 10px 16px; border-radius: 10px; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 8px; opacity: 0; transition: all .25s; z-index: 999; pointer-events: none; white-space: nowrap; }
+#toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ─────────────────────────────────────────
+   BOTTOM NAV  — always a single horizontal row
+───────────────────────────────────────── */
+.bottom-nav {
+  display: none; /* hidden on desktop, shown on mobile */
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  z-index: 150;
+  height: 64px;
+}
+.bottom-nav-inner {
+  display: flex;            /* horizontal flex row */
+  flex-direction: row;      /* force row — never column */
+  align-items: center;
+  justify-content: space-around;
+  height: 100%;
+  padding: 0 4px;
+}
+.bnav-item {
+  display: flex;
+  flex-direction: column;   /* icon on top, label below */
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  flex: 1;
+  height: 100%;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-3);
+  text-decoration: none;
+  transition: color .15s;
+  padding: 0 2px;
+  white-space: nowrap;
+  min-width: 0;
+}
+.bnav-item svg { flex-shrink: 0; }
+.bnav-item:hover,
+.bnav-item.active { color: var(--primary); }
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .charts-row { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); }
+  .main { margin-left: 0; }
+  .topbar { padding: 0 16px; }
+  .hamburger { display: flex; }
+  .content { padding: 16px; padding-bottom: 80px; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .bottom-nav { display: block; }    /* show on mobile */
+  .topbar-right .btn-ghost { display: none; }
+}
+@media (max-width: 420px) {
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+  .stat-val { font-size: 20px; }
+  /* Slightly shrink label text so 5 items fit comfortably */
+  .bnav-item { font-size: 9px; }
+}
 </style>
 </head>
 <body>
@@ -28,7 +218,7 @@
       </div>
     </div>
   </div>
-  <nav class="nav" >
+  <nav class="nav">
     <div class="nav-section">
       <div class="nav-section-label">Overview</div>
       <a class="nav-link active" href="/admin-dashboard" style="text-decoration: none;">
@@ -196,14 +386,29 @@
   </div>
 </div>
 
-<!-- BOTTOM NAV -->
+<!-- BOTTOM NAV — horizontal row, always -->
 <nav class="bottom-nav">
   <div class="bottom-nav-inner">
-    <a class="bnav-item active" href="/admin-dashboard"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>Home</a>
-    <a class="bnav-item" href="/stock"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/></svg>Stock</a>
-    <a class="bnav-item" href="/upload"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>Upload</a>
-    <a class="bnav-item" href="/allocations"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Users</a>
-    <a class="bnav-item" href="/export"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>Export</a>
+    <a class="bnav-item active" href="/admin-dashboard">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+      Home
+    </a>
+    <a class="bnav-item" href="/stock">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/></svg>
+      Stock
+    </a>
+    <a class="bnav-item" href="/upload">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+      Upload
+    </a>
+    <a class="bnav-item" href="/allocations">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+      Users
+    </a>
+    <a class="bnav-item" href="/export">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+      Export
+    </a>
   </div>
 </nav>
 
@@ -215,28 +420,19 @@ function getToken() { return localStorage.getItem("session_token"); }
 function getCookie(name) { const v = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)'); return v ? v.pop() : ''; }
 async function apiFetch(path, options = {}) {
   const token = getToken();
-   const headers = {
+  const headers = {
     "Content-Type": "application/json",
     "X-CSRFToken": getCookie("csrftoken"),
     ...(token ? { "Authorization": `Bearer ${token}` } : {}),
     ...(options.headers || {})
   };
-
   const res = await fetch(`${API_BASE}${path}`, { ...options, headers });
-
   let data = {};
   try { data = await res.json(); } catch (_) {}
-
   if (!res.ok) {
-    const msg =
-      data.message ||
-      data.error ||
-      data.detail ||
-      Object.values(data).flat().join(" ") ||
-      `HTTP ${res.status}`;
+    const msg = data.message || data.error || data.detail || Object.values(data).flat().join(" ") || `HTTP ${res.status}`;
     throw new Error(msg);
   }
-
   return data;
 }
 function openSidebar() { document.getElementById("sidebar").classList.add("open"); document.getElementById("sidebar-overlay").classList.add("show"); }
