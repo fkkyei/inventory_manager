@@ -5,102 +5,35 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Create Account</title>
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family: Arial, Helvetica, sans-serif;
+*{ margin:0; padding:0; box-sizing:border-box; font-family: Arial, Helvetica, sans-serif; }
+body{ min-height:100vh; display:flex; justify-content:center; align-items:center; background:#f3f4f6; padding:20px; }
+.card{ width:100%; max-width:420px; background:white; padding:40px 30px; border-radius:16px; box-shadow:0 10px 25px rgba(0,0,0,0.08); }
+.card h1{ text-align:center; margin-bottom:10px; color:#1f2937; }
+.card p{ text-align:center; margin-bottom:30px; color:#6b7280; }
+.form-group{ margin-bottom:18px; }
+label{ display:block; margin-bottom:6px; font-weight:500; color:#374151; }
+input{ width:100%; padding:12px 14px; border-radius:8px; border:1px solid #d1d5db; font-size:14px; outline:none; transition:0.3s; }
+input:focus{ border-color:#2563eb; box-shadow:0 0 0 3px rgba(37,99,235,0.1); }
+.password-wrapper{ position:relative; }
+.password-wrapper input{ padding-right:42px; }
+.toggle-password{
+    position:absolute; right:12px; top:50%; transform:translateY(-50%);
+    cursor:pointer; color:#9ca3af; background:none; border:none; padding:2px;
+    display:flex; align-items:center; justify-content:center;
+    border-radius:4px; transition:color .2s;
 }
-body{
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    background:#f3f4f6;
-    padding:20px;
-}
-.card{
-    width:100%;
-    max-width:420px;
-    background:white;
-    padding:40px 30px;
-    border-radius:16px;
-    box-shadow:0 10px 25px rgba(0,0,0,0.08);
-}
-.card h1{
-    text-align:center;
-    margin-bottom:10px;
-    color:#1f2937;
-}
-.card p{
-    text-align:center;
-    margin-bottom:30px;
-    color:#6b7280;
-}
-.form-group{
-    margin-bottom:18px;
-}
-label{
-    display:block;
-    margin-bottom:6px;
-    font-weight:500;
-    color:#374151;
-}
-input{
-    width:100%;
-    padding:12px 14px;
-    border-radius:8px;
-    border:1px solid #d1d5db;
-    font-size:14px;
-    outline:none;
-    transition:0.3s;
-}
-input:focus{
-    border-color:#2563eb;
-    box-shadow:0 0 0 3px rgba(37,99,235,0.1);
-}
-.password-wrapper{
-    position:relative;
-}
-.toggle{
-    position:absolute;
-    right:12px;
-    top:50%;
-    transform:translateY(-50%);
-    cursor:pointer;
-    font-size:14px;
-}
-button{
-    width:100%;
-    padding:14px;
-    border:none;
-    border-radius:10px;
-    background:linear-gradient(90deg,#2563eb,#1d4ed8);
-    color:white;
-    font-weight:600;
-    font-size:15px;
-    cursor:pointer;
-    margin-top:10px;
-}
-button:hover{
-    opacity:0.9;
-}
-.footer{
-    text-align:center;
-    margin-top:20px;
-    font-size:14px;
-    color:#6b7280;
-}
-.footer a{
-    color:#2563eb;
-    text-decoration:none;
-    font-weight:600;
-}
-@media(max-width:480px){
-    .card{
-        padding:30px 20px;
-    }
-}
+.toggle-password:hover{ color:#374151; }
+.toggle-password svg{ display:block; pointer-events:none; }
+.toggle-password .icon-eye-off{ display:none; }
+.toggle-password.visible .icon-eye{ display:none; }
+.toggle-password.visible .icon-eye-off{ display:block; }
+
+button[type="submit"]{ width:100%; padding:14px; border:none; border-radius:10px; background:linear-gradient(90deg,#2563eb,#1d4ed8); color:white; font-weight:600; font-size:15px; cursor:pointer; margin-top:10px; transition:opacity .2s; }
+button[type="submit"]:hover{ opacity:0.9; }
+.footer{ text-align:center; margin-top:20px; font-size:14px; color:#6b7280; }
+.footer a{ color:#2563eb; text-decoration:none; font-weight:600; }
+.footer a:hover{ text-decoration:underline; }
+@media(max-width:480px){ .card{ padding:30px 20px; } }
 </style>
 </head>
 <body>
@@ -112,7 +45,7 @@ button:hover{
     <form id="registerForm">
         <div class="form-group">
             <label>Full Name</label>
-            <input type="text" placeholder="John Doe">  <!-- no id, ignored -->
+            <input type="text" placeholder="John Doe">
         </div>
 
         <div class="form-group">
@@ -129,7 +62,17 @@ button:hover{
             <label>Password</label>
             <div class="password-wrapper">
                 <input type="password" id="password" placeholder="Create a strong password" required>
-                <span class="toggle" onclick="togglePassword('password')">👁</span>
+                <button type="button" class="toggle-password" onclick="togglePassword('password', this)" aria-label="Show password">
+                    <svg class="icon-eye" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                    <svg class="icon-eye-off" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+                        <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+                        <line x1="1" y1="1" x2="23" y2="23"/>
+                    </svg>
+                </button>
             </div>
         </div>
 
@@ -137,7 +80,17 @@ button:hover{
             <label>Confirm Password</label>
             <div class="password-wrapper">
                 <input type="password" id="confirmPassword" placeholder="Confirm your password" required>
-                <span class="toggle" onclick="togglePassword('confirmPassword')">👁</span>
+                <button type="button" class="toggle-password" onclick="togglePassword('confirmPassword', this)" aria-label="Show password">
+                    <svg class="icon-eye" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                    <svg class="icon-eye-off" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+                        <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+                        <line x1="1" y1="1" x2="23" y2="23"/>
+                    </svg>
+                </button>
             </div>
         </div>
 
@@ -153,14 +106,16 @@ button:hover{
 </div>
 
 <script>
-function togglePassword(id) {
+function togglePassword(id, btn) {
     const field = document.getElementById(id);
-    field.type = field.type === "password" ? "text" : "password";
+    const isHidden = field.type === 'password';
+    field.type = isHidden ? 'text' : 'password';
+    btn.classList.toggle('visible', isHidden);
+    btn.setAttribute('aria-label', isHidden ? 'Hide password' : 'Show password');
 }
 
 document.getElementById('registerForm').addEventListener('submit', async function(e) {
     e.preventDefault();
-
     const email = document.getElementById('email').value;
     const phone_number = document.getElementById('phone_number').value;
     const password = document.getElementById('password').value;
@@ -183,23 +138,16 @@ document.getElementById('registerForm').addEventListener('submit', async functio
     try {
         const response = await fetch('/auth/register/', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password, phone_number })
         });
-
         const data = await response.json();
-
         if (response.ok) {
             successMessage.textContent = data.message || 'Account created successfully!';
-            setTimeout(() => {
-                window.location.href = '/';
-            }, 2000);
+            setTimeout(() => { window.location.href = '/'; }, 2000);
         } else {
             errorMessage.textContent = data.email?.[0] || data.password?.[0] || data.error || 'Registration failed.';
         }
-
     } catch (error) {
         errorMessage.textContent = 'Something went wrong. Please try again.';
     } finally {
